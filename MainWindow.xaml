@@ -1,0 +1,19 @@
+﻿<Window x:Class="BassPlayer.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:BassPlayer.Controls"
+        Title="BassPlayer" Height="480" Width="854">
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo x:Name="Taskbar" ProgressState="Normal"/>
+    </Window.TaskbarItemInfo>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="90"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <local:Player Grid.Row="0"
+                      x:Name="Player"/>
+        <local:PlayList Grid.Row="1"
+                        x:Name="Playlist"/>
+    </Grid>
+</Window>
