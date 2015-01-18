@@ -11,13 +11,41 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Menu Grid.Row="0">
-            <MenuItem Header="Add">
-                <MenuItem Header="Files..."
+            <MenuItem Header="Load / Add">
+                <MenuItem Header="Load Playlist..."
+                          x:Name="MenLoadPlaylist"
+                          Click="MenLoadPlaylist_Click"/>
+                <Separator/>
+                <MenuItem Header="Add Files..."
                           x:Name="MenAddFiles"
                           Click="MenAddFiles_Click"/>
-                <MenuItem Header="Folder..."
+                <MenuItem Header="Add Folder..."
                           x:Name="MenAddFolder"
                           Click="MenAddFolder_Click"/>
+            </MenuItem>
+            <MenuItem Header="Sort">
+                <MenuItem Header="By Artist - Title"
+                          x:Name="MenSortArtistTitle"
+                          Click="MenSortArtistTitle_Click"/>
+                <MenuItem Header="By Artist"
+                          x:Name="MenSortArtist"
+                          Click="MenSortArtist_Click"/>
+                <MenuItem Header="By Title"
+                          x:Name="MenSortTitle"
+                          Click="MenSortTitle_Click"/>
+                <MenuItem Header="By Length"
+                          x:Name="MenSortLength"
+                          Click="MenSortLength_Click"/>
+                <MenuItem Header="By File name"
+                          x:Name="MenSortFileName"
+                          Click="MenSortFileName_Click"/>
+                <Separator/>
+                <MenuItem Header="Random"
+                          x:Name="MenSortRandom"
+                          Click="MenSortRandom_Click"/>
+                <MenuItem Header="Reverse"
+                          x:Name="MenSortReverse"
+                          Click="MenSortReverse_Click"/>
             </MenuItem>
         </Menu>
         

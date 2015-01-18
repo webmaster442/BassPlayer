@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,7 +20,15 @@ namespace BassPlayer.Classes
 
         public string ArtistTitle
         {
-            get { return string.Format("{0} - {1}", Artist, Title); }
+            get
+            {
+                if (string.IsNullOrEmpty(Artist) && string.IsNullOrEmpty(Title))
+                {
+                    if (File.StartsWith("http://")) return File;
+                    else return Path.GetFileName(File);
+                }
+                return string.Format("{0} - {1}", Artist, Title);
+            }
         }
 
         public string TimeString
@@ -34,6 +43,11 @@ namespace BassPlayer.Classes
         public static PlayListEntry FromFile(string filename)
         {
             PlayListEntry entry = new PlayListEntry();
+            if (filename.StartsWith("http://"))
+            {
+                entry.File = filename;
+                return entry;
+            }
             var tags = BassTags.BASS_TAG_GetFromFile(filename);
             entry.Artist = tags.artist;
             entry.Title = tags.title;

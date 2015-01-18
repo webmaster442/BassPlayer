@@ -26,5 +26,21 @@ namespace BassPlayer
             Playlist.AudioPlayerControls = Player;
             Player.PlayList = Playlist;
         }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            ProcessArguments();
+        }
+
+        public void ProcessArguments(IEnumerable<string> args = null)
+        {
+            if (args == null) args = Environment.GetCommandLineArgs();
+
+            foreach (var file in args)
+            {
+
+            }
+
+        }
     }
 }
