@@ -9,6 +9,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Xml.Serialization;
 
 
 namespace BassPlayer.Controls
@@ -19,7 +20,9 @@ namespace BassPlayer.Controls
     public partial class PlayList : UserControl
     {
         private ObservableCollection<PlayListEntry> _playlist;
+        private ObservableCollection<string> _files;
         private readonly string _supportedformats;
+        private TreeViewItem dummyNode = null;
 
         public Player AudioPlayerControls { get; set; }
 
@@ -28,7 +31,67 @@ namespace BassPlayer.Controls
             InitializeComponent();
             _supportedformats = "*.mp3;*.mp4;*.m4a;*.m4b;*.aac;*.flac;*.ac3;*.wv";
             _playlist = new ObservableCollection<PlayListEntry>();
+            _files = new ObservableCollection<string>();
             LbList.ItemsSource = _playlist;
+            LbFiles.ItemsSource = _files;
+        }
+
+        #region Private Functions
+        private void LoadM3u(string file)
+        {
+            string filedir = System.IO.Path.GetDirectoryName(file);
+            string line;
+            using (var content = File.OpenText(file))
+            {
+                do
+                {
+                    line = content.ReadLine();
+                    if (line == null) continue;
+                    if (line.StartsWith("#")) continue;
+                    if (line.StartsWith("http://"))
+                    {
+                        _playlist.Add(PlayListEntry.FromFile(line));
+                    }
+                    else if (line.Contains(":\\") || line.StartsWith("\\\\"))
+                    {
+                        if (!File.Exists(line)) continue;
+                        _playlist.Add(PlayListEntry.FromFile(line));
+                    }
+                    else
+                    {
+                        string f = System.IO.Path.Combine(filedir, line);
+                        if (!File.Exists(f)) continue;
+                        _playlist.Add(PlayListEntry.FromFile(f));
+                    }
+                }
+                while (line != null);
+            }
+        }
+
+        private void LoadBPL(string file)
+        {
+            var targetdir = Path.GetDirectoryName(file);
+            XmlSerializer xs = new XmlSerializer(typeof(PlayListEntry[]));
+            using (var content = File.OpenRead(file))
+            {
+                var array = (PlayListEntry[])xs.Deserialize(content);
+                foreach (var item in array)
+                {
+                    if (item.File.StartsWith("http://")) _playlist.Add(item);
+                    else if (item.File.Contains(":\\") || item.File.StartsWith("\\\\"))
+                    {
+                        if (!File.Exists(item.File)) continue;
+                        _playlist.Add(item);
+                    }
+                    else
+                    {
+                        var newitem = item;
+                        string f = System.IO.Path.Combine(targetdir, item.File);
+                        newitem.File = f;
+                        _playlist.Add(newitem);
+                    }
+                }
+            }
         }
 
         private void LbList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -39,6 +102,8 @@ namespace BassPlayer.Controls
                 AudioPlayerControls.Load(_playlist[index].File);
             }
         }
+
+        #endregion
 
         #region Public Functions
         public void SetCoverImage(ImageSource src)
@@ -85,48 +150,22 @@ namespace BassPlayer.Controls
         private void MenLoadPlaylist_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
-            ofd.Filter = "Playlist Files | *.m3u;*pls;*.txt";
+            ofd.Filter = "Playlist Files | *.m3u;*.bpl;*.txt";
             ofd.Multiselect = true;
             if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 foreach (var file in ofd.FileNames)
                 {
-                    string filedir = System.IO.Path.GetDirectoryName(file);
                     string extenssion = System.IO.Path.GetExtension(file);
-                    string line;
-                    using (var content = File.OpenText(file))
+                    switch (extenssion)
                     {
-                        switch (extenssion)
-                        {
-                            case ".txt":
-                            case ".m3u":
-                                do
-                                {
-                                    line = content.ReadLine();
-                                    if (line == null) continue;
-                                    if (line.StartsWith("#")) continue;
-                                    if (line.StartsWith("http://"))
-                                    {
-                                        _playlist.Add(PlayListEntry.FromFile(line));
-                                    }
-                                    else if (line.Contains(":\\") || line.StartsWith("\\\\"))
-                                    {
-                                        if (!File.Exists(line)) continue;
-                                        _playlist.Add(PlayListEntry.FromFile(line));
-                                    }
-                                    else
-                                    {
-                                        string f = System.IO.Path.Combine(filedir, line);
-                                        if (!File.Exists(f)) continue;
-                                        _playlist.Add(PlayListEntry.FromFile(f));
-                                    }
-                                }
-                                while (line != null);
-                                break;
-                            default:
-                                MessageBox.Show("Sorry, PLS is not yet supported");
-                                break;
-                        }
+                        case ".m3u":
+                        case ".txt":
+                            LoadM3u(file);
+                            break;
+                        case ".bpl":
+                            LoadBPL(file);
+                            break;
                     }
                 }
             }
@@ -183,5 +222,133 @@ namespace BassPlayer.Controls
             _playlist.AddRange(query);
         }
         #endregion
+
+        #region ManageMenu
+        private void MenManageSave_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.SaveFileDialog sfd = new System.Windows.Forms.SaveFileDialog();
+            sfd.Filter = "BassPlayer List|*.bpl|M3U list|*.m3u";
+            sfd.FilterIndex = 0;
+            sfd.AddExtension = true;
+            if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                var extension = Path.GetExtension(sfd.FileName);
+                var targetdir = Path.GetDirectoryName(sfd.FileName);
+                switch (extension)
+                {
+                    case ".m3u":
+                        using (var contents = File.CreateText(sfd.FileName))
+                        {
+                            foreach (var entry in _playlist)
+                            {
+                                var edir = Path.GetDirectoryName(entry.File);
+                                if (edir.StartsWith(targetdir))
+                                {
+                                    var line = edir.Replace(targetdir + "\\", "");
+                                    contents.WriteLine(line);
+                                }
+                                else contents.WriteLine(entry.File);
+                            }
+                        }
+                        break;
+                    case ".bpl":
+                        XmlSerializer xs = new XmlSerializer(typeof(PlayListEntry[]));
+                        using (var target = File.Create(sfd.FileName))
+                        {
+                            var array = _playlist.ToArray();
+                            for (int i = 0; i < array.Length; i++)
+                            {
+                                var fdir = Path.GetDirectoryName(array[i].File);
+                                if (fdir.StartsWith(targetdir))
+                                {
+                                    array[i].File = array[i].File.Replace(targetdir + "\\", "");
+                                }
+                            }
+                            xs.Serialize(target, array);
+                        }
+                        break;
+                }
+            }
+        }
+
+        private void MenManageClear_Click(object sender, RoutedEventArgs e)
+        {
+            _playlist.Clear();
+        }
+
+        private void MenManageDelete_Click(object sender, RoutedEventArgs e)
+        {
+            if (LbList.SelectedIndex < 0) return;
+            _playlist.RemoveAt(LbList.SelectedIndex);
+        }
+        #endregion
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            foreach (var drive in Directory.GetLogicalDrives())
+            {
+                CbDrives.Items.Add(drive);
+            }
+        }
+
+        private void CbDrives_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            string drive = CbDrives.SelectedItem.ToString();
+            TvDirs.Items.Clear();
+            string[] dirs = Directory.GetDirectories(drive);
+            foreach (var dir in dirs)
+            {
+                DirectoryInfo di = new DirectoryInfo(dir);
+                if ((di.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden) continue;
+                TreeViewItem item = new TreeViewItem();
+                item.Header = di.Name;
+                item.Tag = dir;
+                item.Items.Add(dummyNode);
+                item.Expanded += item_Expanded;
+                TvDirs.Items.Add(item);
+            }
+        }
+
+        private void item_Expanded(object sender, RoutedEventArgs e)
+        {
+            TreeViewItem item = (TreeViewItem)sender;
+            if (item.Items.Count == 1 && item.Items[0] == dummyNode)
+            {
+                item.Items.Clear();
+                try
+                {
+                    foreach (string s in Directory.GetDirectories(item.Tag.ToString()))
+                    {
+                        TreeViewItem subitem = new TreeViewItem();
+                        subitem.Header = s.Substring(s.LastIndexOf("\\") + 1);
+                        subitem.Tag = s;
+                        subitem.FontWeight = FontWeights.Normal;
+                        subitem.Items.Add(dummyNode);
+                        subitem.Expanded += item_Expanded;
+                        item.Items.Add(subitem);
+                    }
+                }
+                catch (Exception) { }
+            }
+        }
+
+        private void TvDirs_SelectedItemChanged(object sender, RoutedPropertyChangedEventArgs<object> e)
+        {
+            if (TvDirs.SelectedItem == null) return;
+            _files.Clear();
+            TreeViewItem selected = (TreeViewItem)TvDirs.SelectedItem;
+            List<string> files = new List<string>();
+            foreach (var filter in _supportedformats.Split(';'))
+            {
+                files.AddRange(Directory.GetFiles(selected.Tag.ToString(), filter));
+            }
+            files.Sort();
+            foreach (var file in files)
+            {
+                FileInfo fi = new FileInfo(file);
+                if ((fi.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden) continue;
+                _files.Add(fi.FullName);
+            }
+        }
     }
 }

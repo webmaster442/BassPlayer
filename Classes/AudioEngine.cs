@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Un4seen.Bass;
@@ -14,7 +13,7 @@ namespace BassPlayer.Classes
     /// <summary>
     /// Audio Output Engine
     /// </summary>
-    class AudioEngine : IDisposable
+    internal class AudioEngine : IDisposable
     {
         private bool _initialized;
         private string _file;

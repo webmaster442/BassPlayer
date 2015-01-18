@@ -9,7 +9,7 @@ using Un4seen.Bass.AddOn.Tags;
 namespace BassPlayer.Classes
 {
     [Serializable]
-    internal class PlayListEntry
+    public class PlayListEntry
     {
 
         public string Title { get; set; }

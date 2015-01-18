@@ -15,6 +15,7 @@ namespace BassPlayer.Controls
         private AudioEngine _engine;
         private bool _loaded;
         private DispatcherTimer _timer;
+        private float _vol;
 
         public PlayList PlayList { get; set; }
 
@@ -98,9 +99,23 @@ namespace BassPlayer.Controls
             _timer.IsEnabled = true;
         }
 
+        private void VolSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            if (!_loaded) return;
+            _engine.Volume = (float)VolSlider.Value;
+        }
+
         private void BtnMute_Click(object sender, RoutedEventArgs e)
         {
-
+            if ((bool)BtnMute.IsChecked)
+            {
+                _vol = _engine.Volume;
+                VolSlider.Value = 0;
+            }
+            else
+            {
+                VolSlider.Value = _vol;
+            }
         }
 
         private void BtnPrevious_Click(object sender, RoutedEventArgs e)
@@ -121,12 +136,6 @@ namespace BassPlayer.Controls
         private void BtnSuffle_Click(object sender, RoutedEventArgs e)
         {
 
-        }
-
-        private void VolSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
-        {
-            if (!_loaded) return;
-            _engine.Volume = (float)VolSlider.Value;
         }
     }
 }

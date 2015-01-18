@@ -37,6 +37,9 @@
   <PropertyGroup>
     <StartupObject>BassPlayer.App</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Bass.Net, Version=2.4.10.4, Culture=neutral, PublicKeyToken=b7566c273e6ef480, processorArchitecture=MSIL">
       <Private>True</Private>
@@ -183,6 +186,7 @@
     <Content Include="Engine\x86\tags.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="icon.ico" />
     <Resource Include="Images\stop-100.png" />
     <Resource Include="Images\audio_file-100.png" />
     <Resource Include="Images\end-100.png" />
