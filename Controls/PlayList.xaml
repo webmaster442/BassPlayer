@@ -17,6 +17,9 @@
                           x:Name="MenLoadPlaylist"
                           Click="MenLoadPlaylist_Click"/>
                 <Separator/>
+                <MenuItem Header="Add URL..."
+                          x:Name="MenAddUrl"
+                          Click="MenAddUrl_Click"/>
                 <MenuItem Header="Add Files..."
                           x:Name="MenAddFiles"
                           Click="MenAddFiles_Click"/>
@@ -151,6 +154,7 @@
                     <ListBox Grid.Column="2"
                              Grid.Row="1"
                              x:Name="LbFiles"
+                             MouseDoubleClick="LbFiles_MouseDoubleClick"
                              Background="Transparent">
                     </ListBox>
                 </Grid>

@@ -66,6 +66,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Controls\AddUrlDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\Player.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -85,6 +89,9 @@
     <Compile Include="Classes\AudioEngine.cs" />
     <Compile Include="Classes\Misc.cs" />
     <Compile Include="Classes\PlayListEntry.cs" />
+    <Compile Include="Controls\AddUrlDialog.xaml.cs">
+      <DependentUpon>AddUrlDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\Player.xaml.cs">
       <DependentUpon>Player.xaml</DependentUpon>
     </Compile>

@@ -32,6 +32,12 @@ namespace BassPlayer
             mw.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Normal;
         }
 
+        public static void PlayUndetTaskbar()
+        {
+            MainWindow mw = (MainWindow)App.Current.MainWindow;
+            mw.TaskbarItemInfo.ProgressState = System.Windows.Shell.TaskbarItemProgressState.Indeterminate;
+        }
+
         private const string Unique = "BassPlayer";
         
         [STAThread]

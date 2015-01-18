@@ -56,15 +56,20 @@ namespace BassPlayer.Controls
             TimeSpan pos = TimeSpan.FromSeconds(_engine.Position);
             TbPosition.Text = string.Format("{0} / {1}", pos.ToShortTime(), len.ToShortTime());
             TbArtistTitle.Text = _engine.Tags;
-            SPosition.Value = _engine.Position;
-            double progress = _engine.Position / _engine.Length;
-            App.SetTaskbarProgress(progress);
+            if (!_engine.IsNetStream)
+            {
+                SPosition.Value = _engine.Position;
+                double progress = _engine.Position / _engine.Length;
+                App.SetTaskbarProgress(progress);
+            }
         }
 
         public void Load(string file)
         {
             _engine.File = file;
             _engine.Play();
+            if (_engine.IsNetStream) App.PlayUndetTaskbar();
+            else App.PlayTaskbar();
             SPosition.Maximum = _engine.Length;
             _timer.IsEnabled = (bool)!BtnPlayPause.IsChecked;
             PlayList.SetCoverImage(_engine.ImageTag);

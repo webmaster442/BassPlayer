@@ -18,6 +18,8 @@ namespace BassPlayer.Classes
         private bool _initialized;
         private string _file;
         private int _source, _mixer;
+        private bool _netstream;
+        private DOWNLOADPROC _streamrip;
 
         /// <summary>
         /// Ctor
@@ -35,6 +37,7 @@ namespace BassPlayer.Classes
             Bass.BASS_PluginLoad(enginedir + "\\bassflac.dll");
             Bass.BASS_PluginLoad(enginedir + "\\basswma.dll");
             Bass.BASS_PluginLoad(enginedir + "\\basswv.dll");
+            _streamrip = new DOWNLOADPROC(DownloadStream);
         }
 
         /// <summary>
@@ -101,10 +104,28 @@ namespace BassPlayer.Classes
                     Bass.BASS_StreamFree(_source);
                     _source = 0;
                 }
-                _source = Bass.BASS_StreamCreateFile(_file, 0, 0, flags);
-                var mixerflags = BASSFlag.BASS_MIXER_DOWNMIX | BASSFlag.BASS_SAMPLE_FLOAT | BASSFlag.BASS_MIXER_POSEX;
+                if (_mixer != 0)
+                {
+                    Bass.BASS_StreamFree(_mixer);
+                    _mixer = 0;
+                }
+                var mixerflags = BASSFlag.BASS_MIXER_DOWNMIX | BASSFlag.BASS_SAMPLE_FLOAT | BASSFlag.BASS_MIXER_POSEX | BASSFlag.BASS_STREAM_AUTOFREE;
+                if (File.StartsWith("http://"))
+                {
+                    _source = Bass.BASS_StreamCreateURL(_file, 0, flags, _streamrip, IntPtr.Zero);
+                    _netstream = true;
+                }
+                else
+                {
+                    _source = Bass.BASS_StreamCreateFile(_file, 0, 0, flags);
+                    _netstream = false;
+                }
+                if (_source == 0)
+                {
+                    Error("Load failed");
+                    return;
+                }
                 var ch = Bass.BASS_ChannelGetInfo(_source);
-                _source = Bass.BASS_StreamCreateFile(_file, 0, 0, flags);
                 _mixer = BassMix.BASS_Mixer_StreamCreate(ch.freq, ch.chans, mixerflags);
                 if (_mixer == 0)
                 {
@@ -117,6 +138,34 @@ namespace BassPlayer.Classes
                     return;
                 }
             }
+        }
+
+        /// <summary>
+        /// Audio Stream ripper callback
+        /// </summary>
+        private void DownloadStream(IntPtr buffer, int length, IntPtr user)
+        {
+            /*if (_fs == null)
+            {
+                // create the file
+                _fs = File.OpenWrite("output.mp3");
+            }
+            if (buffer == IntPtr.Zero)
+            {
+                // finished downloading
+                _fs.Flush();
+                _fs.Close();
+            }
+            else
+            {
+                // increase the data buffer as needed 
+                if (_data == null || _data.Length < length)
+                    _data = new byte[length];
+                // copy from managed to unmanaged memory
+                Marshal.Copy(buffer, _data, 0, length);
+                // write to file
+                _fs.Write(_data, 0, length);
+            }*/
         }
 
         /// <summary>
@@ -160,9 +209,18 @@ namespace BassPlayer.Classes
         {
             get 
             {
+                if (_netstream) return 0;
                 var len = Bass.BASS_ChannelGetLength(_source);
                 return Bass.BASS_ChannelBytes2Seconds(_source, len);
             }
+        }
+
+        /// <summary>
+        /// Returns true, if currently playing a netstream
+        /// </summary>
+        public bool IsNetStream
+        {
+            get { return _netstream; }
         }
 
         /// <summary>
@@ -186,6 +244,7 @@ namespace BassPlayer.Classes
             }
             set
             {
+                if (_netstream) return;
                 var pos = Bass.BASS_ChannelSeconds2Bytes(_source, value);
                 Bass.BASS_ChannelSetPosition(_source, pos);
             }

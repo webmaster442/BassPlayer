@@ -103,6 +103,15 @@ namespace BassPlayer.Controls
             }
         }
 
+        private void LbFiles_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (AudioPlayerControls != null)
+            {
+                var index = LbFiles.SelectedIndex;
+                AudioPlayerControls.Load(_files[index]);
+            }
+        }
+
         #endregion
 
         #region Public Functions
@@ -168,6 +177,15 @@ namespace BassPlayer.Controls
                             break;
                     }
                 }
+            }
+        }
+
+        private void MenAddUrl_Click(object sender, RoutedEventArgs e)
+        {
+            AddUrlDialog url = new AddUrlDialog();
+            if (url.ShowDialog() == true)
+            {
+                _playlist.Add(PlayListEntry.FromFile(url.Url));
             }
         }
         #endregion
