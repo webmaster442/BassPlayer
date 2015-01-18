@@ -110,7 +110,7 @@ namespace BassPlayer.Classes
                     _mixer = 0;
                 }
                 var mixerflags = BASSFlag.BASS_MIXER_DOWNMIX | BASSFlag.BASS_SAMPLE_FLOAT | BASSFlag.BASS_MIXER_POSEX | BASSFlag.BASS_STREAM_AUTOFREE;
-                if (File.StartsWith("http://"))
+                if (_file.StartsWith("http://") || _file.StartsWith("https://"))
                 {
                     _source = Bass.BASS_StreamCreateURL(_file, 0, flags, _streamrip, IntPtr.Zero);
                     _netstream = true;
@@ -209,7 +209,7 @@ namespace BassPlayer.Classes
         {
             get 
             {
-                if (_netstream) return 0;
+                //if (_netstream) return 0;
                 var len = Bass.BASS_ChannelGetLength(_source);
                 return Bass.BASS_ChannelBytes2Seconds(_source, len);
             }

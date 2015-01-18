@@ -43,7 +43,7 @@ namespace BassPlayer.Classes
         public static PlayListEntry FromFile(string filename)
         {
             PlayListEntry entry = new PlayListEntry();
-            if (filename.StartsWith("http://"))
+            if (filename.StartsWith("http://") || filename.StartsWith("https://"))
             {
                 entry.File = filename;
                 return entry;
