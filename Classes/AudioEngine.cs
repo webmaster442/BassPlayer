@@ -139,6 +139,12 @@ namespace BassPlayer.Classes
                     _source = Bass.BASS_StreamCreateURL(_file, 0, flags, _streamrip, IntPtr.Zero);
                     _filetype = MediaType.Stream;
                 }
+                else if (_file.StartsWith("cd://"))
+                {
+                    string[] info = _file.Replace("cd://", "").Split('/');
+                    BassCd.BASS_CD_StreamCreate(Convert.ToInt32(info[0]), Convert.ToInt32(info[1]), flags);
+                    _filetype = MediaType.CD;
+                }
                 else
                 {
                     _source = Bass.BASS_StreamCreateFile(_file, 0, 0, flags);
@@ -318,6 +324,22 @@ namespace BassPlayer.Classes
                 if (device.IsEnabled) _devices.Add(device.name);
             }
             return _devices.ToArray();
+        }
+
+        public static PlayListEntry[] GetCdInfo(int drive)
+        {
+            List<PlayListEntry> list = new List<PlayListEntry>();
+            PlayListEntry entry = new PlayListEntry();
+            if (!BassCd.BASS_CD_IsReady(drive))
+            {
+                for (int i=0; i<BassCd.BASS_CD_GetTracks(drive); i++)
+                {
+                    entry.FileName = string.Format("cd://{0}/{1}", drive, i);
+                    entry.Time = BassCd.BASS_CD_GetTrackLengthSeconds(drive, i);
+                    list.Add(entry);
+                }
+            }
+            return list.ToArray();
         }
     }
 }

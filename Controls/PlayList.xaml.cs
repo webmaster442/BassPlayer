@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
@@ -24,7 +25,6 @@ namespace BassPlayer.Controls
         private readonly string _supportedformats;
         private TreeViewItem dummyNode = null;
         private int _index;
-        private bool _shuffle;
         private Random _rgen;
 
 
@@ -76,6 +76,39 @@ namespace BassPlayer.Controls
             }
         }
 
+        private void LoadPls(string file)
+        {
+            string filedir = System.IO.Path.GetDirectoryName(file);
+            string line;
+            string pattern = @"^(File)([0-9])+(=)";
+            using (var content = File.OpenText(file))
+            {
+                do
+                {
+                    line = content.ReadLine();
+                    if (line == null) continue;
+                    if (Regex.IsMatch(line, pattern)) line = Regex.Replace(line, pattern, "");
+                    else continue;
+                    if (line.StartsWith("http://") || line.StartsWith("https://"))
+                    {
+                        _playlist.Add(PlayListEntry.FromFile(line));
+                    }
+                    else if (line.Contains(":\\") || line.StartsWith("\\\\"))
+                    {
+                        if (!File.Exists(line)) continue;
+                        _playlist.Add(PlayListEntry.FromFile(line));
+                    }
+                    else
+                    {
+                        string f = System.IO.Path.Combine(filedir, line);
+                        if (!File.Exists(f)) continue;
+                        _playlist.Add(PlayListEntry.FromFile(f));
+                    }
+                }
+                while (line != null);
+            }
+        }
+
         private void LoadBPL(string file)
         {
             var targetdir = Path.GetDirectoryName(file);
@@ -85,7 +118,7 @@ namespace BassPlayer.Controls
                 var array = (PlayListEntry[])xs.Deserialize(content);
                 foreach (var item in array)
                 {
-                    if (item.FileName.StartsWith("http://") || line.StartsWith("https://")) _playlist.Add(item);
+                    if (item.FileName.StartsWith("http://") || item.FileName.StartsWith("https://")) _playlist.Add(item);
                     else if (item.FileName.Contains(":\\") || item.FileName.StartsWith("\\\\"))
                     {
                         if (!File.Exists(item.FileName)) continue;
@@ -143,7 +176,7 @@ namespace BassPlayer.Controls
             else
             {
                 if (Repeat) next = LbFiles.SelectedIndex;
-                else if (_shuffle) next = _rgen.Next(0, _files.Count);
+                else if (Shuffle) next = _rgen.Next(0, _files.Count);
                 else next = LbFiles.SelectedIndex + 1;
                 if (next > _files.Count - 1) next = 0;
                 AudioPlayerControls.Load(_files[next]);
@@ -165,7 +198,7 @@ namespace BassPlayer.Controls
             else
             {
                 if (Repeat) previous = LbFiles.SelectedIndex;
-                else if (_shuffle) previous = _rgen.Next(0, _files.Count);
+                else if (Shuffle) previous = _rgen.Next(0, _files.Count);
                 else previous = LbFiles.SelectedIndex - 1;
                 if (previous < 0) previous = _files.Count - 1;
                 AudioPlayerControls.Load(_files[previous]);
@@ -212,7 +245,7 @@ namespace BassPlayer.Controls
         private void MenLoadPlaylist_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
-            ofd.Filter = "Playlist Files | *.m3u;*.bpl;*.txt";
+            ofd.Filter = "Playlist Files | *.m3u;*.bpl;*.txt;*.pls";
             ofd.Multiselect = true;
             if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -227,6 +260,9 @@ namespace BassPlayer.Controls
                             break;
                         case ".bpl":
                             LoadBPL(file);
+                            break;
+                        case ".pls":
+                            LoadPls(file);
                             break;
                     }
                 }
