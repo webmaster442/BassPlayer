@@ -18,7 +18,7 @@
         <Menu Grid.Row="0"
               VerticalAlignment="Center"
               Background="Transparent">
-            <MenuItem Header="Load / Add">
+            <MenuItem Header="Add">
                 <MenuItem.Icon>
                     <Image Width="16"
                            Height="16"
@@ -61,6 +61,18 @@
                                Height="16"
                                Source="../Images/Menu/add_folder-50.png"/>
                     </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="Import CD"
+                          x:Name="MenLoadCD"
+                          Click="MenLoadCD_SubmenuOpened"
+                          SubmenuOpened="MenLoadCD_SubmenuOpened">
+                    <MenuItem.Icon>
+                        <Image Width="16"
+                               Height="16"
+                               Source="../Images/Menu/cd-50.png"/>
+                    </MenuItem.Icon>
+                    <MenuItem Header="No Disc"/>
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="Sort">

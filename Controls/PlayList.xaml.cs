@@ -140,6 +140,7 @@ namespace BassPlayer.Controls
             if (AudioPlayerControls != null)
             {
                 var index = LbList.SelectedIndex;
+                _index = index;
                 AudioPlayerControls.Load(_playlist[index].FileName);
             }
         }
@@ -149,7 +150,6 @@ namespace BassPlayer.Controls
             if (AudioPlayerControls != null)
             {
                 var index = LbFiles.SelectedIndex;
-                _index = index;
                 AudioPlayerControls.Load(_files[index]);
             }
         }
@@ -167,14 +167,17 @@ namespace BassPlayer.Controls
             var next = 0;
             if (TcView.SelectedIndex == 0)
             {
+                if (_playlist.Count < 1) return;
                 if (Repeat) next = _index;
                 else if (Shuffle) next = _rgen.Next(0, _playlist.Count);
                 else next = _index + 1;
                 if (next > _playlist.Count - 1) next = 0;
                 AudioPlayerControls.Load(_playlist[next].FileName);
+                _index = next;
             }
             else
             {
+                if (_files.Count < 1) return;
                 if (Repeat) next = LbFiles.SelectedIndex;
                 else if (Shuffle) next = _rgen.Next(0, _files.Count);
                 else next = LbFiles.SelectedIndex + 1;
@@ -189,14 +192,17 @@ namespace BassPlayer.Controls
             var previous = 0;
             if (TcView.SelectedIndex == 0)
             {
+                if (_playlist.Count < 1) return;
                 if (Repeat) previous = _index;
                 else if (Shuffle) previous = _rgen.Next(0, _playlist.Count);
                 else previous = _index - 1;
                 if (previous < 0) previous = _playlist.Count - 1;
                 AudioPlayerControls.Load(_playlist[previous].FileName);
+                _index = previous;
             }
             else
             {
+                if (_files.Count < 1) return;
                 if (Repeat) previous = LbFiles.SelectedIndex;
                 else if (Shuffle) previous = _rgen.Next(0, _files.Count);
                 else previous = LbFiles.SelectedIndex - 1;
@@ -267,6 +273,31 @@ namespace BassPlayer.Controls
                     }
                 }
             }
+        }
+
+        private void MenLoadCD_SubmenuOpened(object sender, RoutedEventArgs e)
+        {
+            MenLoadCD.Items.Clear();
+            var cds = from cd in DriveInfo.GetDrives() where cd.DriveType == DriveType.CDRom && cd.IsReady select cd.Name;
+            foreach (var cd in cds)
+            {
+                MenuItem drive = new MenuItem();
+                drive.Header = cd;
+                drive.Click += drive_Click;
+                MenLoadCD.Items.Add(drive);
+            }
+            if (cds.Count() < 1)
+            {
+                MenuItem drive = new MenuItem();
+                drive.Header = "No Discs found";
+                MenLoadCD.Items.Add(drive);
+            }
+        }
+
+        private void drive_Click(object sender, RoutedEventArgs e)
+        {
+            var drive = ((MenuItem)sender).Header.ToString();
+            _playlist.AddRange(AudioEngine.GetCdInfo(drive));
         }
 
         private void MenAddUrl_Click(object sender, RoutedEventArgs e)

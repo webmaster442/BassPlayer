@@ -142,7 +142,7 @@ namespace BassPlayer.Classes
                 else if (_file.StartsWith("cd://"))
                 {
                     string[] info = _file.Replace("cd://", "").Split('/');
-                    BassCd.BASS_CD_StreamCreate(Convert.ToInt32(info[0]), Convert.ToInt32(info[1]), flags);
+                    _source = BassCd.BASS_CD_StreamCreate(Convert.ToInt32(info[0]), Convert.ToInt32(info[1]), flags);
                     _filetype = MediaType.CD;
                 }
                 else
@@ -326,19 +326,40 @@ namespace BassPlayer.Classes
             return _devices.ToArray();
         }
 
-        public static PlayListEntry[] GetCdInfo(int drive)
+        /// <summary>
+        /// List tracks on a CD drive
+        /// </summary>
+        /// <param name="drive">CD drive path</param>
+        /// <returns>An array of playlist entry's</returns>
+        public static PlayListEntry[] GetCdInfo(string drive)
         {
             List<PlayListEntry> list = new List<PlayListEntry>();
-            PlayListEntry entry = new PlayListEntry();
-            if (!BassCd.BASS_CD_IsReady(drive))
+          
+            int drivecount = BassCd.BASS_CD_GetDriveCount(true);
+            int driveindex = 0;
+            for (int i = 0; i < drivecount; i++)
             {
-                for (int i=0; i<BassCd.BASS_CD_GetTracks(drive); i++)
+                var info = BassCd.BASS_CD_GetInfo(i);
+                if (info.DriveLetter == drive[0])
                 {
-                    entry.FileName = string.Format("cd://{0}/{1}", drive, i);
-                    entry.Time = BassCd.BASS_CD_GetTrackLengthSeconds(drive, i);
+                    driveindex = i;
+                    break;
+                }
+            }
+
+            if (BassCd.BASS_CD_IsReady(driveindex))
+            {
+                for (int i = 0; i < BassCd.BASS_CD_GetTracks(driveindex); i++)
+                {
+                    PlayListEntry entry = new PlayListEntry();
+                    entry.FileName = string.Format("cd://{0}/{1}", driveindex, i);
+                    entry.Artist = "CD";
+                    entry.Title = string.Format("Track #{0:00}", i);
+                    entry.Time = BassCd.BASS_CD_GetTrackLengthSeconds(driveindex, i);
                     list.Add(entry);
                 }
             }
+            BassCd.BASS_CD_Release(driveindex);
             return list.ToArray();
         }
     }

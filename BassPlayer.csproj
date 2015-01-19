@@ -197,6 +197,8 @@
     <Content Include="Engine\x86\tags.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Images\Menu\cd-50.png" />
+    <Resource Include="Images\Menu\youtube-50.png" />
     <Resource Include="Images\Menu\to_do-50.png" />
     <Resource Include="Images\Menu\plus-50.png" />
     <Resource Include="Images\Menu\add_file-50.png" />
