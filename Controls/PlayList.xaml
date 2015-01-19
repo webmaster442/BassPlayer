@@ -77,6 +77,7 @@
         
         <TabControl Grid.Row="1"
                     TabStripPlacement="Left"
+                    x:Name="TcView"
                     Background="Transparent">
             <TabItem Header="Playlist"
                      Background="Transparent">

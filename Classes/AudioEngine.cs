@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Un4seen.Bass;
+using Un4seen.Bass.AddOn.Cd;
 using Un4seen.Bass.AddOn.Mix;
 using Un4seen.Bass.AddOn.Tags;
 
@@ -18,8 +20,10 @@ namespace BassPlayer.Classes
         private bool _initialized;
         private string _file;
         private int _source, _mixer;
-        private bool _netstream;
+        private MediaType _filetype;
         private DOWNLOADPROC _streamrip;
+        private FileStream _writer;
+        private byte[] _data;
 
         /// <summary>
         /// Ctor
@@ -31,13 +35,24 @@ namespace BassPlayer.Classes
             else enginedir = Path.Combine(enginedir, @"Engine\x86");
             Bass.LoadMe(enginedir);
             BassMix.LoadMe(enginedir);
+            BassCd.LoadMe(enginedir);
             Bass.BASS_PluginLoad(enginedir + "\\bass_aac.dll");
             Bass.BASS_PluginLoad(enginedir + "\\bass_ac3.dll");
             Bass.BASS_PluginLoad(enginedir + "\\bass_alac.dll");
             Bass.BASS_PluginLoad(enginedir + "\\bassflac.dll");
             Bass.BASS_PluginLoad(enginedir + "\\basswma.dll");
             Bass.BASS_PluginLoad(enginedir + "\\basswv.dll");
+            _data = new byte[4096];
             _streamrip = new DOWNLOADPROC(DownloadStream);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (_initialized) Bass.BASS_Free();
+            BassCd.FreeMe();
+            BassMix.FreeMe();
+            Bass.BASS_PluginFree(0);
+            Bass.FreeMe();
         }
 
         /// <summary>
@@ -45,10 +60,7 @@ namespace BassPlayer.Classes
         /// </summary>
         public void Dispose()
         {
-            if (_initialized) Bass.BASS_Free();
-            Bass.BASS_PluginFree(0);
-            Bass.FreeMe();
-            BassMix.FreeMe();
+            Dispose(true);
         }
 
         /// <summary>
@@ -90,9 +102,21 @@ namespace BassPlayer.Classes
         }
 
         /// <summary>
+        /// Generates a File name from url
+        /// </summary>
+        /// <param name="url">Stream url</param>
+        private string GenerateRippName(string url, string ext)
+        {
+            string name = url.Replace("/", "-");
+            name = name.Replace(":", "_");
+            string timestamp = string.Format("{0}{1}{2}{3}{4}{6}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+            return string.Format("{0}-{1}.{2}", name, timestamp, ext);
+        }
+
+        /// <summary>
         /// Gets or sets the file or url to be played
         /// </summary>
-        public string File
+        public string FileName
         {
             get { return _file; }
             set
@@ -113,12 +137,12 @@ namespace BassPlayer.Classes
                 if (_file.StartsWith("http://") || _file.StartsWith("https://"))
                 {
                     _source = Bass.BASS_StreamCreateURL(_file, 0, flags, _streamrip, IntPtr.Zero);
-                    _netstream = true;
+                    _filetype = MediaType.Stream;
                 }
                 else
                 {
                     _source = Bass.BASS_StreamCreateFile(_file, 0, 0, flags);
-                    _netstream = false;
+                    _filetype = MediaType.File;
                 }
                 if (_source == 0)
                 {
@@ -140,32 +164,35 @@ namespace BassPlayer.Classes
             }
         }
 
+        public bool StreamRipEnabled { get; set; }
+        public string StreamRipFolder { get; set; }
+
         /// <summary>
         /// Audio Stream ripper callback
         /// </summary>
         private void DownloadStream(IntPtr buffer, int length, IntPtr user)
         {
-            /*if (_fs == null)
+            if (!StreamRipEnabled) return;
+            if (_writer == null)
             {
                 // create the file
-                _fs = File.OpenWrite("output.mp3");
+                _writer = System.IO.File.OpenWrite("output.mp3");
             }
             if (buffer == IntPtr.Zero)
             {
                 // finished downloading
-                _fs.Flush();
-                _fs.Close();
+                _writer.Flush();
+                _writer.Close();
             }
             else
             {
                 // increase the data buffer as needed 
-                if (_data == null || _data.Length < length)
-                    _data = new byte[length];
+                if (_data == null || _data.Length < length) _data = new byte[length];
                 // copy from managed to unmanaged memory
                 Marshal.Copy(buffer, _data, 0, length);
                 // write to file
-                _fs.Write(_data, 0, length);
-            }*/
+                _writer.Write(_data, 0, length);
+            }
         }
 
         /// <summary>
@@ -207,7 +234,7 @@ namespace BassPlayer.Classes
         /// </summary>
         public double Length
         {
-            get 
+            get
             {
                 //if (_netstream) return 0;
                 var len = Bass.BASS_ChannelGetLength(_source);
@@ -216,11 +243,11 @@ namespace BassPlayer.Classes
         }
 
         /// <summary>
-        /// Returns true, if currently playing a netstream
+        /// Returns the current media type
         /// </summary>
-        public bool IsNetStream
+        public MediaType MediaType
         {
-            get { return _netstream; }
+            get { return _filetype; }
         }
 
         /// <summary>
@@ -244,7 +271,10 @@ namespace BassPlayer.Classes
             }
             set
             {
-                if (_netstream) return;
+                if (_filetype == Classes.MediaType.Stream)
+                {
+                    if (Length == 0) return;
+                }
                 var pos = Bass.BASS_ChannelSeconds2Bytes(_source, value);
                 Bass.BASS_ChannelSetPosition(_source, pos);
             }

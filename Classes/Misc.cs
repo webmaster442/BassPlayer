@@ -4,6 +4,25 @@ using System.Collections.ObjectModel;
 
 namespace BassPlayer.Classes
 {
+    /// <summary>
+    /// Media type identification for engine
+    /// </summary>
+    internal enum MediaType
+    {
+        /// <summary>
+        /// Normal file
+        /// </summary>
+        File,
+        /// <summary>
+        /// Network stream
+        /// </summary>
+        Stream,
+        /// <summary>
+        /// CD Track
+        /// </summary>
+        CD
+    }
+
     internal static class Extensisons
     {
         /// <summary>

@@ -23,8 +23,13 @@ namespace BassPlayer.Controls
         private ObservableCollection<string> _files;
         private readonly string _supportedformats;
         private TreeViewItem dummyNode = null;
+        private int _index;
+
 
         public Player AudioPlayerControls { get; set; }
+
+        public bool Repeat { get; set; }
+        public bool Shuffle { get; set; }
 
         public PlayList()
         {
@@ -77,17 +82,17 @@ namespace BassPlayer.Controls
                 var array = (PlayListEntry[])xs.Deserialize(content);
                 foreach (var item in array)
                 {
-                    if (item.File.StartsWith("http://")) _playlist.Add(item);
-                    else if (item.File.Contains(":\\") || item.File.StartsWith("\\\\"))
+                    if (item.FileName.StartsWith("http://")) _playlist.Add(item);
+                    else if (item.FileName.Contains(":\\") || item.FileName.StartsWith("\\\\"))
                     {
-                        if (!File.Exists(item.File)) continue;
+                        if (!File.Exists(item.FileName)) continue;
                         _playlist.Add(item);
                     }
                     else
                     {
                         var newitem = item;
-                        string f = System.IO.Path.Combine(targetdir, item.File);
-                        newitem.File = f;
+                        string f = System.IO.Path.Combine(targetdir, item.FileName);
+                        newitem.FileName = f;
                         _playlist.Add(newitem);
                     }
                 }
@@ -99,7 +104,7 @@ namespace BassPlayer.Controls
             if (AudioPlayerControls != null)
             {
                 var index = LbList.SelectedIndex;
-                AudioPlayerControls.Load(_playlist[index].File);
+                AudioPlayerControls.Load(_playlist[index].FileName);
             }
         }
 
@@ -108,6 +113,7 @@ namespace BassPlayer.Controls
             if (AudioPlayerControls != null)
             {
                 var index = LbFiles.SelectedIndex;
+                _index = index;
                 AudioPlayerControls.Load(_files[index]);
             }
         }
@@ -118,6 +124,42 @@ namespace BassPlayer.Controls
         public void SetCoverImage(ImageSource src)
         {
             CoverImage.Source = src;
+        }
+
+        public void DoNextTrack()
+        {
+            var next = 0;
+            if (TcView.SelectedIndex == 0)
+            {
+                 next = _index + 1;
+                if (next > _playlist.Count - 1) next = 0;
+                AudioPlayerControls.Load(_playlist[next].FileName);
+            }
+            else
+            {
+                next = LbFiles.SelectedIndex + 1;
+                if (next > _files.Count - 1) next = 0;
+                AudioPlayerControls.Load(_files[next]);
+                LbFiles.SelectedIndex = next;
+            }
+        }
+
+        public void DoPreviousTrack()
+        {
+            var previous = 0;
+            if (TcView.SelectedIndex == 0)
+            {
+                previous = _index - 1;
+                if (previous < 0) previous = _playlist.Count - 1;
+                AudioPlayerControls.Load(_playlist[previous].FileName);
+            }
+            else
+            {
+                previous = LbFiles.SelectedIndex - 1;
+                if (previous < 0) previous = _files.Count - 1;
+                AudioPlayerControls.Load(_files[previous]);
+                LbFiles.SelectedIndex = previous;
+            }
         }
         #endregion
 
@@ -221,7 +263,7 @@ namespace BassPlayer.Controls
 
         private void MenSortFileName_Click(object sender, RoutedEventArgs e)
         {
-            var query = (from i in _playlist orderby i.File ascending select i).ToList();
+            var query = (from i in _playlist orderby i.FileName ascending select i).ToList();
             _playlist.Clear();
             _playlist.AddRange(query);
         }
@@ -259,13 +301,13 @@ namespace BassPlayer.Controls
                         {
                             foreach (var entry in _playlist)
                             {
-                                var edir = Path.GetDirectoryName(entry.File);
+                                var edir = Path.GetDirectoryName(entry.FileName);
                                 if (edir.StartsWith(targetdir))
                                 {
                                     var line = edir.Replace(targetdir + "\\", "");
                                     contents.WriteLine(line);
                                 }
-                                else contents.WriteLine(entry.File);
+                                else contents.WriteLine(entry.FileName);
                             }
                         }
                         break;
@@ -276,10 +318,10 @@ namespace BassPlayer.Controls
                             var array = _playlist.ToArray();
                             for (int i = 0; i < array.Length; i++)
                             {
-                                var fdir = Path.GetDirectoryName(array[i].File);
+                                var fdir = Path.GetDirectoryName(array[i].FileName);
                                 if (fdir.StartsWith(targetdir))
                                 {
-                                    array[i].File = array[i].File.Replace(targetdir + "\\", "");
+                                    array[i].FileName = array[i].FileName.Replace(targetdir + "\\", "");
                                 }
                             }
                             xs.Serialize(target, array);
@@ -300,6 +342,8 @@ namespace BassPlayer.Controls
             _playlist.RemoveAt(LbList.SelectedIndex);
         }
         #endregion
+
+        #region File Explorer
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
@@ -368,5 +412,6 @@ namespace BassPlayer.Controls
                 _files.Add(fi.FullName);
             }
         }
+        #endregion
     }
 }

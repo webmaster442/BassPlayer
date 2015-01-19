@@ -10,7 +10,7 @@ namespace BassPlayer.Controls
     /// <summary>
     /// Interaction logic for Player.xaml
     /// </summary>
-    public partial class Player : UserControl
+    public partial class Player : UserControl, IDisposable
     {
         private AudioEngine _engine;
         private bool _loaded;
@@ -52,28 +52,28 @@ namespace BassPlayer.Controls
 
         private void _timer_Tick(object sender, EventArgs e)
         {
-            TimeSpan len = TimeSpan.FromSeconds(_engine.Length);
-            TimeSpan pos = TimeSpan.FromSeconds(_engine.Position);
+            var elen = _engine.Length;
+            var epos = _engine.Position;
+            TimeSpan len = TimeSpan.FromSeconds(elen);
+            TimeSpan pos = TimeSpan.FromSeconds(epos);
             TbPosition.Text = string.Format("{0} / {1}", pos.ToShortTime(), len.ToShortTime());
             TbArtistTitle.Text = _engine.Tags;
-            if (!_engine.IsNetStream)
-            {
-                SPosition.Value = _engine.Position;
-                double progress = _engine.Position / _engine.Length;
-                App.SetTaskbarProgress(progress);
-            }
+            if (_engine.MediaType == MediaType.Stream && elen == 0) return;
+            SPosition.Value = epos;
+            double progress = epos / elen;
+            if (elen - epos < 1) PlayList.DoNextTrack();
+            App.SetTaskbarProgress(progress);
         }
 
         public void Load(string file)
         {
-            _engine.File = file;
+            _engine.FileName = file;
             _engine.Play();
-            if (_engine.IsNetStream) App.PlayUndetTaskbar();
+            if (_engine.MediaType == MediaType.Stream && _engine.Length == 0) App.PlayUndetTaskbar();
             else App.PlayTaskbar();
             SPosition.Maximum = _engine.Length;
             _timer.IsEnabled = (bool)!BtnPlayPause.IsChecked;
             PlayList.SetCoverImage(_engine.ImageTag);
-            
         }
 
         private void BtnPlayPause_Click(object sender, RoutedEventArgs e)
@@ -125,22 +125,32 @@ namespace BassPlayer.Controls
 
         private void BtnPrevious_Click(object sender, RoutedEventArgs e)
         {
-
+            PlayList.DoPreviousTrack();
         }
 
         private void BtnNext_Click(object sender, RoutedEventArgs e)
         {
-
+            PlayList.DoNextTrack();
         }
 
         private void BtnRepeat_Click(object sender, RoutedEventArgs e)
         {
-
+            PlayList.Repeat = (bool)BtnRepeat.IsChecked;
         }
 
         private void BtnSuffle_Click(object sender, RoutedEventArgs e)
         {
+            PlayList.Shuffle = (bool)BtnSuffle.IsChecked;
+        }
 
+        protected virtual void Dispose(bool disposing)
+        {
+            _engine.Dispose();
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
         }
     }
 }

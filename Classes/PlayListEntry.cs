@@ -15,7 +15,7 @@ namespace BassPlayer.Classes
         public string Title { get; set; }
         public string Artist { get; set; }
         public double Time { get; set; }
-        public string File { get; set; }
+        public string FileName { get; set; }
 
 
         public string ArtistTitle
@@ -24,8 +24,8 @@ namespace BassPlayer.Classes
             {
                 if (string.IsNullOrEmpty(Artist) && string.IsNullOrEmpty(Title))
                 {
-                    if (File.StartsWith("http://")) return File;
-                    else return Path.GetFileName(File);
+                    if (FileName.StartsWith("http://")) return FileName;
+                    else return Path.GetFileName(FileName);
                 }
                 return string.Format("{0} - {1}", Artist, Title);
             }
@@ -45,14 +45,14 @@ namespace BassPlayer.Classes
             PlayListEntry entry = new PlayListEntry();
             if (filename.StartsWith("http://") || filename.StartsWith("https://"))
             {
-                entry.File = filename;
+                entry.FileName = filename;
                 return entry;
             }
             var tags = BassTags.BASS_TAG_GetFromFile(filename);
             entry.Artist = tags.artist;
             entry.Title = tags.title;
             entry.Time = tags.duration;
-            entry.File = filename;
+            entry.FileName = filename;
             return entry;
         }
     }
