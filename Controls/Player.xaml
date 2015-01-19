@@ -6,7 +6,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="90" d:DesignWidth="854"
              Loaded="UserControl_Loaded">
-    <Grid Background="White">
+    <Grid Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="55"/>
             <ColumnDefinition Width="55"/>

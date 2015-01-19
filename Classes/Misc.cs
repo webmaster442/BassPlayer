@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Windows.Data;
 
 namespace BassPlayer.Classes
 {
@@ -57,6 +59,25 @@ namespace BassPlayer.Classes
         public static void AddRange<T>(this ObservableCollection<T> collection, IEnumerable<T> elements)
         {
             foreach (var e in elements) collection.Add(e);
+        }
+    }
+
+    /// <summary>
+    /// Gets file name of a path
+    /// </summary>
+    [ValueConversion(typeof(string), typeof(string))]
+    internal class FileNameConverter: IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value == null) return null;
+            string name = value.ToString();
+            return Path.GetFileName(name);
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return value;
         }
     }
 }

@@ -24,6 +24,8 @@ namespace BassPlayer.Controls
         private readonly string _supportedformats;
         private TreeViewItem dummyNode = null;
         private int _index;
+        private bool _shuffle;
+        private Random _rgen;
 
 
         public Player AudioPlayerControls { get; set; }
@@ -34,9 +36,10 @@ namespace BassPlayer.Controls
         public PlayList()
         {
             InitializeComponent();
-            _supportedformats = "*.mp3;*.mp4;*.m4a;*.m4b;*.aac;*.flac;*.ac3;*.wv";
+            _supportedformats = "*.mp3;*.mp4;*.m4a;*.m4b;*.aac;*.flac;*.ac3;*.wv;*.wav;*.wma;*.ogg";
             _playlist = new ObservableCollection<PlayListEntry>();
             _files = new ObservableCollection<string>();
+            _rgen = new Random();
             LbList.ItemsSource = _playlist;
             LbFiles.ItemsSource = _files;
         }
@@ -53,7 +56,7 @@ namespace BassPlayer.Controls
                     line = content.ReadLine();
                     if (line == null) continue;
                     if (line.StartsWith("#")) continue;
-                    if (line.StartsWith("http://"))
+                    if (line.StartsWith("http://") || line.StartsWith("https://"))
                     {
                         _playlist.Add(PlayListEntry.FromFile(line));
                     }
@@ -82,7 +85,7 @@ namespace BassPlayer.Controls
                 var array = (PlayListEntry[])xs.Deserialize(content);
                 foreach (var item in array)
                 {
-                    if (item.FileName.StartsWith("http://")) _playlist.Add(item);
+                    if (item.FileName.StartsWith("http://") || line.StartsWith("https://")) _playlist.Add(item);
                     else if (item.FileName.Contains(":\\") || item.FileName.StartsWith("\\\\"))
                     {
                         if (!File.Exists(item.FileName)) continue;
@@ -131,13 +134,17 @@ namespace BassPlayer.Controls
             var next = 0;
             if (TcView.SelectedIndex == 0)
             {
-                 next = _index + 1;
+                if (Repeat) next = _index;
+                else if (Shuffle) next = _rgen.Next(0, _playlist.Count);
+                else next = _index + 1;
                 if (next > _playlist.Count - 1) next = 0;
                 AudioPlayerControls.Load(_playlist[next].FileName);
             }
             else
             {
-                next = LbFiles.SelectedIndex + 1;
+                if (Repeat) next = LbFiles.SelectedIndex;
+                else if (_shuffle) next = _rgen.Next(0, _files.Count);
+                else next = LbFiles.SelectedIndex + 1;
                 if (next > _files.Count - 1) next = 0;
                 AudioPlayerControls.Load(_files[next]);
                 LbFiles.SelectedIndex = next;
@@ -149,13 +156,17 @@ namespace BassPlayer.Controls
             var previous = 0;
             if (TcView.SelectedIndex == 0)
             {
-                previous = _index - 1;
+                if (Repeat) previous = _index;
+                else if (Shuffle) previous = _rgen.Next(0, _playlist.Count);
+                else previous = _index - 1;
                 if (previous < 0) previous = _playlist.Count - 1;
                 AudioPlayerControls.Load(_playlist[previous].FileName);
             }
             else
             {
-                previous = LbFiles.SelectedIndex - 1;
+                if (Repeat) previous = LbFiles.SelectedIndex;
+                else if (_shuffle) previous = _rgen.Next(0, _files.Count);
+                else previous = LbFiles.SelectedIndex - 1;
                 if (previous < 0) previous = _files.Count - 1;
                 AudioPlayerControls.Load(_files[previous]);
                 LbFiles.SelectedIndex = previous;

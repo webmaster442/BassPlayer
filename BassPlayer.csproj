@@ -193,6 +193,18 @@
     <Content Include="Engine\x86\tags.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Images\Menu\to_do-50.png" />
+    <Resource Include="Images\Menu\plus-50.png" />
+    <Resource Include="Images\Menu\add_file-50.png" />
+    <Resource Include="Images\Menu\add_folder-50.png" />
+    <Resource Include="Images\Menu\add_link-50.png" />
+    <Resource Include="Images\Menu\add_list-50.png" />
+    <Resource Include="Images\Menu\alphabetical_sorting-50.png" />
+    <Resource Include="Images\Menu\delete-50.png" />
+    <Resource Include="Images\Menu\delete_sign-50.png" />
+    <Resource Include="Images\Menu\dice-50.png" />
+    <Resource Include="Images\Menu\generic_sorting_2-50.png" />
+    <Resource Include="Images\Menu\save-50.png" />
     <Resource Include="icon.ico" />
     <Resource Include="Images\stop-100.png" />
     <Resource Include="Images\audio_file-100.png" />
