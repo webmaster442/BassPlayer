@@ -1,0 +1,57 @@
+﻿<Window x:Class="BassPlayer.Controls.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Settings"
+        Height="320"
+        Width="350"
+        WindowStyle="ToolWindow"
+        Loaded="Window_Loaded">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="30"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Row="0"
+                    Grid.ColumnSpan="3">
+            <CheckBox Content="Network requires a Proxy"
+                      x:Name="CbProxyEnabled" Margin="10,10,0,10"/>
+            <GroupBox Header="Proxy Settings"
+                      IsEnabled="{Binding ElementName=CbProxyEnabled, Path=IsChecked}"
+                      Margin="20,0">
+                <StackPanel>
+                    <TextBlock Text="Url:"/>
+                    <TextBox x:Name="TbProxyUrl"
+                             Margin="5"/>
+                    <TextBlock Text="Port:"/>
+                    <TextBox x:Name="TbProxyPort"
+                             Margin="5"/>
+                    <TextBlock Text="User:"/>
+                    <TextBox x:Name="TbProxyUser"
+                             Margin="5"/>
+                    <TextBlock Text="Password:"/>
+                    <PasswordBox x:Name="TbbProxyPass"
+                                 Margin="5"/>
+                </StackPanel>
+            </GroupBox>
+        </StackPanel>
+        <Button Grid.Row="1"
+                Grid.Column="1"
+                x:Name="BtnOk"
+                Content="Ok"
+                VerticalAlignment="Center" 
+                Margin="10,0"
+                Click="BtnOk_Click"/>
+        <Button Grid.Row="1"
+                Grid.Column="2"
+                x:Name="BtnCancel"
+                Content="Cancel"
+                VerticalAlignment="Center" 
+                Margin="10,0"
+                Click="BtnCancel_Click"/>
+    </Grid>
+</Window>

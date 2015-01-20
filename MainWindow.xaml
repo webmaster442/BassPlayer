@@ -5,6 +5,7 @@
         Title="BassPlayer"
         Height="480"
         Width="854"
+        Closing="Window_Closing"
         Loaded="Window_Loaded">
     <Window.TaskbarItemInfo>
         <TaskbarItemInfo x:Name="Taskbar" ProgressState="Normal"/>
