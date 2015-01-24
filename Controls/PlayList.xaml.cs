@@ -22,7 +22,6 @@ namespace BassPlayer.Controls
     {
         private ObservableCollection<PlayListEntry> _playlist;
         private ObservableCollection<string> _files;
-        private readonly string _supportedformats;
         private TreeViewItem dummyNode = null;
         private int _index;
         private Random _rgen;
@@ -36,7 +35,6 @@ namespace BassPlayer.Controls
         public PlayList()
         {
             InitializeComponent();
-            _supportedformats = "*.mp3;*.mp4;*.m4a;*.m4b;*.aac;*.flac;*.ac3;*.wv;*.wav;*.wma;*.ogg";
             _playlist = new ObservableCollection<PlayListEntry>();
             _files = new ObservableCollection<string>();
             _rgen = new Random();
@@ -211,13 +209,36 @@ namespace BassPlayer.Controls
                 LbFiles.SelectedIndex = previous;
             }
         }
+
+        public void AppendFile(string file)
+        {
+            _playlist.Add(PlayListEntry.FromFile(file));
+        }
+
+        public void AppendPlaylist(string file)
+        {
+            string extenssion = Path.GetExtension(file);
+            switch (extenssion)
+            {
+                case ".m3u":
+                case ".txt":
+                    LoadM3u(file);
+                    break;
+                case ".bpl":
+                    LoadBPL(file);
+                    break;
+                case ".pls":
+                    LoadPls(file);
+                    break;
+            }
+        }
         #endregion
 
         #region Load / Add menu
         private void MenAddFiles_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
-            ofd.Filter = "Audio Files | " + _supportedformats;
+            ofd.Filter = "Audio Files | " + App.Formats;
             ofd.Multiselect = true;
             if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -230,7 +251,7 @@ namespace BassPlayer.Controls
 
         private void MenAddFolder_Click(object sender, RoutedEventArgs e)
         {
-            string[] filters = _supportedformats.Split(';');
+            string[] filters =  App.Formats.Split(';');
             System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();
             fbd.Description = "Select folder to be added";
             if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
@@ -257,20 +278,7 @@ namespace BassPlayer.Controls
             {
                 foreach (var file in ofd.FileNames)
                 {
-                    string extenssion = System.IO.Path.GetExtension(file);
-                    switch (extenssion)
-                    {
-                        case ".m3u":
-                        case ".txt":
-                            LoadM3u(file);
-                            break;
-                        case ".bpl":
-                            LoadBPL(file);
-                            break;
-                        case ".pls":
-                            LoadPls(file);
-                            break;
-                    }
+                    AppendPlaylist(file);
                 }
             }
         }
@@ -478,7 +486,7 @@ namespace BassPlayer.Controls
             _files.Clear();
             TreeViewItem selected = (TreeViewItem)TvDirs.SelectedItem;
             List<string> files = new List<string>();
-            foreach (var filter in _supportedformats.Split(';'))
+            foreach (var filter in App.Formats.Split(';'))
             {
                 files.AddRange(Directory.GetFiles(selected.Tag.ToString(), filter));
             }
@@ -489,6 +497,19 @@ namespace BassPlayer.Controls
                 if ((fi.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden) continue;
                 _files.Add(fi.FullName);
             }
+        }
+        #endregion
+
+        #region Bass Menu
+        private void MenBassSettings_Click(object sender, RoutedEventArgs e)
+        {
+            SettingsWindow sw = new SettingsWindow();
+            sw.ShowDialog();
+        }
+
+        private void MenBassExit_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.Shutdown();
         }
         #endregion
     }

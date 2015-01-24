@@ -5,6 +5,7 @@
         Title="BassPlayer"
         Height="480"
         Width="854"
+        Topmost="{Binding ElementName=Player, Path=AllwaysTop}"
         Closing="Window_Closing"
         Loaded="Window_Loaded">
     <Window.TaskbarItemInfo>

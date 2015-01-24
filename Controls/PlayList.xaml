@@ -18,6 +18,34 @@
         <Menu Grid.Row="0"
               VerticalAlignment="Center"
               Background="Transparent">
+            <MenuItem Header="BassPlayer">
+                <MenuItem.Icon>
+                    <Image Width="16"
+                           Height="16"
+                            Source="../Images/Menu/treble_clef-50.png"/>
+                </MenuItem.Icon>
+                <MenuItem Header="Settings..."
+                          x:Name="MenBassSettings"
+                          Click="MenBassSettings_Click">
+                    <MenuItem.Icon>
+                        <Image Width="16"
+                               Height="16"
+                               Source="../Images/Menu/settings-50.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="Exit"
+                          x:Name="MenBassExit"
+                          Click="MenBassExit_Click">
+                    <MenuItem.Icon>
+                        <Image Width="16"
+                               Height="16"
+                               Source="../Images/Menu/exit-50.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="|"
+                      IsEnabled="False"/>
             <MenuItem Header="Add">
                 <MenuItem.Icon>
                     <Image Width="16"

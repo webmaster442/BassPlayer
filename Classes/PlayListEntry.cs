@@ -47,11 +47,15 @@ namespace BassPlayer.Classes
                 entry.FileName = filename;
                 return entry;
             }
-            var tags = BassTags.BASS_TAG_GetFromFile(filename);
-            entry.Artist = tags.artist;
-            entry.Title = tags.title;
-            entry.Time = tags.duration;
             entry.FileName = filename;
+            try
+            {
+                var tags = BassTags.BASS_TAG_GetFromFile(filename);
+                entry.Artist = tags.artist;
+                entry.Title = tags.title;
+                entry.Time = tags.duration;
+            }
+            catch (Exception) { }
             return entry;
         }
     }

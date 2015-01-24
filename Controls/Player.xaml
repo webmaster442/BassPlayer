@@ -5,6 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
              d:DesignHeight="90" d:DesignWidth="854"
+             x:Name="Control"
              Loaded="UserControl_Loaded">
     <Grid Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}">
         <Grid.ColumnDefinitions>
@@ -45,6 +46,10 @@
                     Maximum="1"
                     Value="1"
                     ValueChanged="VolSlider_ValueChanged"/>
+            <CheckBox Content="Allways top"
+                      VerticalAlignment="Center"
+                      Margin="25,0"
+                      IsChecked="{Binding ElementName=Control, Path=AllwaysTop}"/>
         </StackPanel>
         
         <StackPanel Grid.Row="1"

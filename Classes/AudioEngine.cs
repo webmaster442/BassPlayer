@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BassPlayer.Properties;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
@@ -24,6 +25,7 @@ namespace BassPlayer.Classes
         private DOWNLOADPROC _streamrip;
         private FileStream _writer;
         private byte[] _data;
+        private IntPtr _proxyptr;
 
         /// <summary>
         /// Ctor
@@ -49,6 +51,7 @@ namespace BassPlayer.Classes
         protected virtual void Dispose(bool disposing)
         {
             if (_initialized) Bass.BASS_Free();
+            if (_proxyptr != IntPtr.Zero) Marshal.FreeHGlobal(_proxyptr);
             BassCd.FreeMe();
             BassMix.FreeMe();
             Bass.BASS_PluginFree(0);
@@ -114,6 +117,29 @@ namespace BassPlayer.Classes
         }
 
         /// <summary>
+        /// Creates a pointer to Proxy configuration
+        /// </summary>
+        private IntPtr CreateProxyPtr()
+        {
+            if (Settings.Default.ProxyEnabled)
+            {
+                //user:pass@server:port
+                string proxyconfig = string.Format("{0}:{1}@{2}:{3}", Settings.Default.ProxyUser,
+                                                                     Settings.Default.ProxyPassword,
+                                                                     Settings.Default.ProxyAddress,
+                                                                     Settings.Default.ProxyPort);
+                if (_proxyptr != IntPtr.Zero) Marshal.FreeHGlobal(_proxyptr);
+                _proxyptr = Marshal.StringToHGlobalAnsi(proxyconfig);
+                return _proxyptr;
+            }
+            else
+            {
+                if (_proxyptr != IntPtr.Zero) Marshal.FreeHGlobal(_proxyptr);
+                return IntPtr.Zero;
+            }
+        }
+
+        /// <summary>
         /// Gets or sets the file or url to be played
         /// </summary>
         public string FileName
@@ -136,6 +162,7 @@ namespace BassPlayer.Classes
                 var mixerflags = BASSFlag.BASS_MIXER_DOWNMIX | BASSFlag.BASS_SAMPLE_FLOAT | BASSFlag.BASS_MIXER_POSEX | BASSFlag.BASS_STREAM_AUTOFREE;
                 if (_file.StartsWith("http://") || _file.StartsWith("https://"))
                 {
+                    Bass.BASS_SetConfigPtr(BASSConfig.BASS_CONFIG_NET_PROXY, CreateProxyPtr());
                     _source = Bass.BASS_StreamCreateURL(_file, 0, flags, _streamrip, IntPtr.Zero);
                     _filetype = MediaType.Stream;
                 }

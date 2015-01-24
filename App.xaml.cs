@@ -1,4 +1,5 @@
-﻿using Microsoft.Shell;
+﻿using BassPlayer.Classes;
+using Microsoft.Shell;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -39,6 +40,12 @@ namespace BassPlayer
         }
 
         private const string Unique = "BassPlayer";
+
+        public const string Formats = "*.mp3;*.mp4;*.m4a;*.m4b;*.aac;*.flac;*.ac3;*.wv;*.wav;*.wma;*.ogg";
+
+        public const string Playlists = "*.pls;*.m3u;*.bpl";
+
+        internal static AudioEngine Engine;
         
         [STAThread]
         public static void Main()
@@ -46,6 +53,7 @@ namespace BassPlayer
             if (SingleInstance<App>.InitializeAsFirstInstance(Unique))
             {
                 var application = new App();
+                Engine = new AudioEngine();
                 application.InitializeComponent();
                 application.Run();
                 // Allow single instance code to perform cleanup operations

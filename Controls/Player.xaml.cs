@@ -12,10 +12,17 @@ namespace BassPlayer.Controls
     /// </summary>
     public partial class Player : UserControl, IDisposable
     {
-        private AudioEngine _engine;
         private bool _loaded;
         private DispatcherTimer _timer;
         private float _vol;
+
+        private static DependencyProperty AllwaysTopProperty = DependencyProperty.Register("AllwaysTop", typeof(bool?), typeof(Player), new PropertyMetadata(false));
+
+        public bool? AllwaysTop
+        {
+            get { return (bool?)GetValue(AllwaysTopProperty); }
+            set { SetValue(AllwaysTopProperty, value); }
+        }
 
         public PlayList PlayList { get; set; }
 
@@ -25,7 +32,7 @@ namespace BassPlayer.Controls
             if (DesignerProperties.GetIsInDesignMode(this)) return;
             _loaded = false;
             _timer = new DispatcherTimer();
-            _timer.Interval = TimeSpan.FromSeconds(1);
+            _timer.Interval = TimeSpan.FromMilliseconds(500);
             _timer.IsEnabled = false;
             _timer.Tick += _timer_Tick;
         }
@@ -33,32 +40,31 @@ namespace BassPlayer.Controls
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             if (DesignerProperties.GetIsInDesignMode(this)) return;
-            _engine = new AudioEngine();
-            var devs = _engine.GetDevices();
+            var devs = App.Engine.GetDevices();
             foreach (var dev in devs)
             {
                 CbDeviceList.Items.Add(dev);
             }
-            VolSlider.Value = _engine.Volume;
+            VolSlider.Value = App.Engine.Volume;
             _loaded = true;
         }
 
         private void CbDeviceList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             string devicename = CbDeviceList.SelectedItem.ToString();
-            _engine.ChangeDevice(devicename);
-            VolSlider.Value = _engine.Volume;
+            App.Engine.ChangeDevice(devicename);
+            VolSlider.Value = App.Engine.Volume;
         }
 
         private void _timer_Tick(object sender, EventArgs e)
         {
-            var elen = _engine.Length;
-            var epos = _engine.Position;
+            var elen = App.Engine.Length;
+            var epos = App.Engine.Position;
             TimeSpan len = TimeSpan.FromSeconds(elen);
             TimeSpan pos = TimeSpan.FromSeconds(epos);
             TbPosition.Text = string.Format("{0} / {1}", pos.ToShortTime(), len.ToShortTime());
-            TbArtistTitle.Text = _engine.Tags;
-            if (_engine.MediaType == MediaType.Stream && elen == 0) return;
+            TbArtistTitle.Text = App.Engine.Tags;
+            if (App.Engine.MediaType == MediaType.Stream && elen == 0) return;
             SPosition.Value = epos;
             double progress = epos / elen;
             if (elen - epos < 1) PlayList.DoNextTrack();
@@ -67,25 +73,25 @@ namespace BassPlayer.Controls
 
         public void Load(string file)
         {
-            _engine.FileName = file;
-            _engine.Play();
-            if (_engine.MediaType == MediaType.Stream && _engine.Length == 0) App.PlayUndetTaskbar();
+            App.Engine.FileName = file;
+            App.Engine.Play();
+            if (App.Engine.MediaType == MediaType.Stream && App.Engine.Length == 0) App.PlayUndetTaskbar();
             else App.PlayTaskbar();
-            SPosition.Maximum = _engine.Length;
+            SPosition.Maximum = App.Engine.Length;
             _timer.IsEnabled = (bool)!BtnPlayPause.IsChecked;
-            PlayList.SetCoverImage(_engine.ImageTag);
+            PlayList.SetCoverImage(App.Engine.ImageTag);
         }
 
         private void BtnPlayPause_Click(object sender, RoutedEventArgs e)
         {
             if ((bool)BtnPlayPause.IsChecked)
             {
-                _engine.Pause();
+                App.Engine.Pause();
                 App.PauseTaskbar();
             }
             else
             {
-                _engine.Play();
+                App.Engine.Play();
                 App.PlayTaskbar();
             }
             _timer.IsEnabled = (bool)!BtnPlayPause.IsChecked;
@@ -93,28 +99,29 @@ namespace BassPlayer.Controls
 
         private void BtnStrop_Click(object sender, RoutedEventArgs e)
         {
-            _engine.Stop();
+            App.Engine.Stop();
+            BtnPlayPause.IsChecked = false;
         }
 
         private void SPosition_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
             _timer.IsEnabled = false;
-            _engine.Position = SPosition.Value;
-            SPosition.Value = _engine.Position;
+            App.Engine.Position = SPosition.Value;
+            SPosition.Value = App.Engine.Position;
             _timer.IsEnabled = true;
         }
 
         private void VolSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (!_loaded) return;
-            _engine.Volume = (float)VolSlider.Value;
+            App.Engine.Volume = (float)VolSlider.Value;
         }
 
         private void BtnMute_Click(object sender, RoutedEventArgs e)
         {
             if ((bool)BtnMute.IsChecked)
             {
-                _vol = _engine.Volume;
+                _vol = App.Engine.Volume;
                 VolSlider.Value = 0;
             }
             else
@@ -145,7 +152,7 @@ namespace BassPlayer.Controls
 
         protected virtual void Dispose(bool disposing)
         {
-            _engine.Dispose();
+            App.Engine.Dispose();
         }
 
         public void Dispose()
