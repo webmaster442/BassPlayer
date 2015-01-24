@@ -1,18 +1,9 @@
 ﻿using BassPlayer.Properties;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.IO;
+using System.Linq;
+using System.Windows;
 
 namespace BassPlayer
 {
@@ -21,11 +12,15 @@ namespace BassPlayer
     /// </summary>
     public partial class MainWindow : Window
     {
+        private string[] _filters, _lists;
+
         public MainWindow()
         {
             InitializeComponent();
             Playlist.AudioPlayerControls = Player;
             Player.PlayList = Playlist;
+            _filters = App.Formats.Replace("*", "").Split(';');
+            _lists = App.Playlists.Replace("*", "").Split(';');
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -40,13 +35,11 @@ namespace BassPlayer
         public void ProcessArguments(IEnumerable<string> args = null)
         {
             if (args == null) args = Environment.GetCommandLineArgs();
-            string[] filters = App.Formats.Replace("*", "").Split(';');
-            string[] lists = App.Playlists.Replace("*", "").Split(';');
             foreach (var file in args)
             {
                 var extension = Path.GetExtension(file);
-                if (filters.Contains(extension)) Playlist.AppendFile(file);
-                else if (lists.Contains(extension)) Playlist.AppendPlaylist(file);
+                if (_filters.Contains(extension)) Playlist.AppendFile(file);
+                else if (_lists.Contains(extension)) Playlist.AppendPlaylist(file);
             }
 
         }
@@ -57,6 +50,15 @@ namespace BassPlayer
             Settings.Default.WindowTop = this.Top;
             Settings.Default.Save();
             e.Cancel = false;
+        }
+
+        private void Window_Drop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                ProcessArguments(files);
+            }
         }
     }
 }
