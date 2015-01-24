@@ -5,312 +5,316 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:classes="clr-namespace:BassPlayer.Classes"
              mc:Ignorable="d"
+             Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}"
              Loaded="UserControl_Loaded"
              d:DesignHeight="400" d:DesignWidth="800">
     <UserControl.Resources>
         <classes:FileNameConverter x:Key="NameConv"/>
     </UserControl.Resources>
-    <Grid Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="28"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <Menu Grid.Row="0"
-              VerticalAlignment="Center"
-              Background="Transparent">
-            <MenuItem Header="BassPlayer">
-                <MenuItem.Icon>
-                    <Image Width="16"
-                           Height="16"
-                            Source="../Images/Menu/treble_clef-50.png"/>
-                </MenuItem.Icon>
-                <MenuItem Header="Settings..."
-                          x:Name="MenBassSettings"
-                          Click="MenBassSettings_Click">
+    <Expander IsExpanded="True"
+              Collapsed="Expander_Collapsed"
+              Expanded="Expander_Expanded">
+        <Expander.Header>
+            <Menu Grid.Row="0"
+                  VerticalAlignment="Center"
+                  Background="Transparent">
+                <MenuItem Header="BassPlayer">
                     <MenuItem.Icon>
                         <Image Width="16"
                                Height="16"
-                               Source="../Images/Menu/settings-50.png"/>
+                               Source="../Images/Menu/treble_clef-50.png"/>
                     </MenuItem.Icon>
+                    <MenuItem Header="Settings..."
+                              x:Name="MenBassSettings"
+                              Click="MenBassSettings_Click">
+                        <MenuItem.Icon>
+                            <Image Width="16"
+                                   Height="16"
+                                   Source="../Images/Menu/settings-50.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator/>
+                    <MenuItem Header="Exit"
+                              x:Name="MenBassExit"
+                              Click="MenBassExit_Click">
+                        <MenuItem.Icon>
+                            <Image Width="16"
+                                   Height="16"
+                                   Source="../Images/Menu/exit-50.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
-                <Separator/>
-                <MenuItem Header="Exit"
-                          x:Name="MenBassExit"
-                          Click="MenBassExit_Click">
+                <MenuItem Header="|"
+                          IsEnabled="False"/>
+                <MenuItem Header="Add">
                     <MenuItem.Icon>
                         <Image Width="16"
                                Height="16"
-                               Source="../Images/Menu/exit-50.png"/>
+                               Source="../Images/Menu/plus-50.png"/>
                     </MenuItem.Icon>
+                    <MenuItem Header="Load Playlist..."
+                              x:Name="MenLoadPlaylist"
+                              Click="MenLoadPlaylist_Click">
+                        <MenuItem.Icon>
+                            <Image Width="16"
+                                   Height="16"
+                                   Source="../Images/Menu/add_list-50.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator/>
+                    <MenuItem Header="Add URL..."
+                              x:Name="MenAddUrl"
+                              Click="MenAddUrl_Click">
+                        <MenuItem.Icon>
+                            <Image Width="16"
+                                   Height="16"
+                                   Source="../Images/Menu/add_link-50.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Add Files..."
+                              x:Name="MenAddFiles"
+                              Click="MenAddFiles_Click">
+                        <MenuItem.Icon>
+                            <Image Width="16"
+                                   Height="16"
+                                   Source="../Images/Menu/add_file-50.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Add Folder..."
+                              x:Name="MenAddFolder"
+                              Click="MenAddFolder_Click">
+                        <MenuItem.Icon>
+                            <Image Width="16"
+                                   Height="16"
+                                   Source="../Images/Menu/add_folder-50.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator/>
+                    <MenuItem Header="Import CD"
+                              x:Name="MenLoadCD"
+                              Click="MenLoadCD_SubmenuOpened"
+                              SubmenuOpened="MenLoadCD_SubmenuOpened">
+                        <MenuItem.Icon>
+                            <Image Width="16"
+                                   Height="16"
+                                   Source="../Images/Menu/cd-50.png"/>
+                        </MenuItem.Icon>
+                        <MenuItem Header="No Disc"/>
+                    </MenuItem>
                 </MenuItem>
-            </MenuItem>
-            <MenuItem Header="|"
-                      IsEnabled="False"/>
-            <MenuItem Header="Add">
-                <MenuItem.Icon>
-                    <Image Width="16"
-                           Height="16"
-                           Source="../Images/Menu/plus-50.png"/>
-                </MenuItem.Icon>
-                <MenuItem Header="Load Playlist..."
-                          x:Name="MenLoadPlaylist"
-                          Click="MenLoadPlaylist_Click">
-                    <MenuItem.Icon>
-                        <Image Width="16"
-                               Height="16"
-                               Source="../Images/Menu/add_list-50.png"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <Separator/>
-                <MenuItem Header="Add URL..."
-                          x:Name="MenAddUrl"
-                          Click="MenAddUrl_Click">
-                    <MenuItem.Icon>
-                        <Image
-                            Width="16"
-                            Height="16"
-                            Source="../Images/Menu/add_link-50.png"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="Add Files..."
-                          x:Name="MenAddFiles"
-                          Click="MenAddFiles_Click">
-                    <MenuItem.Icon>
-                        <Image Width="16"
-                               Height="16"
-                               Source="../Images/Menu/add_file-50.png"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="Add Folder..."
-                          x:Name="MenAddFolder"
-                          Click="MenAddFolder_Click">
-                    <MenuItem.Icon>
-                        <Image Width="16"
-                               Height="16"
-                               Source="../Images/Menu/add_folder-50.png"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <Separator/>
-                <MenuItem Header="Import CD"
-                          x:Name="MenLoadCD"
-                          Click="MenLoadCD_SubmenuOpened"
-                          SubmenuOpened="MenLoadCD_SubmenuOpened">
-                    <MenuItem.Icon>
-                        <Image Width="16"
-                               Height="16"
-                               Source="../Images/Menu/cd-50.png"/>
-                    </MenuItem.Icon>
-                    <MenuItem Header="No Disc"/>
-                </MenuItem>
-            </MenuItem>
-            <MenuItem Header="Sort">
-                <MenuItem.Icon>
-                    <Image Width="16"
-                           Height="16"
-                           Source="../Images/Menu/generic_sorting_2-50.png"/>
-                </MenuItem.Icon>
-                <MenuItem Header="By Artist - Title"
-                          x:Name="MenSortArtistTitle"
-                          Click="MenSortArtistTitle_Click">
-                    <MenuItem.Icon>
-                        <Image Width="16"
-                               Height="16"
-                               Source="../Images/Menu/alphabetical_sorting-50.png"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="By Artist"
-                          x:Name="MenSortArtist"
-                          Click="MenSortArtist_Click">
-                    <MenuItem.Icon>
-                        <Image Width="16"
-                               Height="16"
-                               Source="../Images/Menu/alphabetical_sorting-50.png"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="By Title"
-                          x:Name="MenSortTitle"
-                          Click="MenSortTitle_Click">
-                    <MenuItem.Icon>
-                        <Image Width="16"
-                               Height="16"
-                               Source="../Images/Menu/alphabetical_sorting-50.png"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="By Length"
-                          x:Name="MenSortLength"
-                          Click="MenSortLength_Click">
-                    <MenuItem.Icon>
-                        <Image Width="16"
-                               Height="16"
-                               Source="../Images/Menu/alphabetical_sorting-50.png"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="By File name"
-                          x:Name="MenSortFileName"
-                          Click="MenSortFileName_Click">
-                    <MenuItem.Icon>
-                        <Image Width="16"
-                               Height="16"
-                               Source="../Images/Menu/alphabetical_sorting-50.png"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <Separator/>
-                <MenuItem Header="Random"
-                          x:Name="MenSortRandom"
-                          Click="MenSortRandom_Click">
-                    <MenuItem.Icon>
-                        <Image Width="16"
-                               Height="16"
-                               Source="../Images/Menu/dice-50.png"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="Reverse"
-                          x:Name="MenSortReverse"
-                          Click="MenSortReverse_Click">
+                <MenuItem Header="Sort">
                     <MenuItem.Icon>
                         <Image Width="16"
                                Height="16"
                                Source="../Images/Menu/generic_sorting_2-50.png"/>
                     </MenuItem.Icon>
+                    <MenuItem Header="By Artist - Title"
+                              x:Name="MenSortArtistTitle"
+                              Click="MenSortArtistTitle_Click">
+                        <MenuItem.Icon>
+                            <Image Width="16"
+                                   Height="16"
+                                   Source="../Images/Menu/alphabetical_sorting-50.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="By Artist"
+                              x:Name="MenSortArtist"
+                              Click="MenSortArtist_Click">
+                        <MenuItem.Icon>
+                            <Image Width="16"
+                                   Height="16"
+                                   Source="../Images/Menu/alphabetical_sorting-50.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="By Title"
+                              x:Name="MenSortTitle"
+                              Click="MenSortTitle_Click">
+                        <MenuItem.Icon>
+                            <Image Width="16"
+                                   Height="16"
+                                   Source="../Images/Menu/alphabetical_sorting-50.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="By Length"
+                              x:Name="MenSortLength"
+                              Click="MenSortLength_Click">
+                        <MenuItem.Icon>
+                            <Image Width="16"
+                                   Height="16"
+                                   Source="../Images/Menu/alphabetical_sorting-50.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="By File name"
+                              x:Name="MenSortFileName"
+                              Click="MenSortFileName_Click">
+                        <MenuItem.Icon>
+                            <Image Width="16"
+                                   Height="16"
+                                   Source="../Images/Menu/alphabetical_sorting-50.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator/>
+                    <MenuItem Header="Random"
+                              x:Name="MenSortRandom"
+                              Click="MenSortRandom_Click">
+                        <MenuItem.Icon>
+                            <Image Width="16"
+                                   Height="16"
+                                   Source="../Images/Menu/dice-50.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Reverse"
+                              x:Name="MenSortReverse"
+                              Click="MenSortReverse_Click">
+                        <MenuItem.Icon>
+                            <Image Width="16"
+                                   Height="16"
+                                   Source="../Images/Menu/generic_sorting_2-50.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
-            </MenuItem>
-            <MenuItem Header="Manage">
-                <MenuItem.Icon>
-                    <Image Width="16"
-                           Height="16"
-                           Source="../Images/Menu/to_do-50.png"/>
-                </MenuItem.Icon>
-                <MenuItem Header="Save list..."
-                          x:Name="MenManageSave"
-                          Click="MenManageSave_Click">
+                <MenuItem Header="Manage">
                     <MenuItem.Icon>
                         <Image Width="16"
                                Height="16"
-                               Source="../Images/Menu/save-50.png"/>
+                               Source="../Images/Menu/to_do-50.png"/>
                     </MenuItem.Icon>
+                    <MenuItem Header="Save list..."
+                              x:Name="MenManageSave"
+                              Click="MenManageSave_Click">
+                        <MenuItem.Icon>
+                            <Image Width="16"
+                                   Height="16"
+                                   Source="../Images/Menu/save-50.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator/>
+                    <MenuItem Header="Clear List"
+                              x:Name="MenManageClear"
+                              Click="MenManageClear_Click">
+                        <MenuItem.Icon>
+                            <Image Width="16"
+                                   Height="16"
+                                   Source="../Images/Menu/delete-50.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="Delete Selected"
+                              x:Name="MenManageDelete"
+                              Click="MenManageDelete_Click">
+                        <MenuItem.Icon>
+                            <Image Width="16"
+                                   Height="16"
+                                   Source="../Images/Menu/delete_sign-50.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                 </MenuItem>
-                <Separator/>
-                <MenuItem Header="Clear List"
-                          x:Name="MenManageClear"
-                          Click="MenManageClear_Click">
-                    <MenuItem.Icon>
-                        <Image Width="16"
-                               Height="16"
-                               Source="../Images/Menu/delete-50.png"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="Delete Selected"
-                          x:Name="MenManageDelete"
-                          Click="MenManageDelete_Click">
-                    <MenuItem.Icon>
-                        <Image Width="16"
-                               Height="16"
-                               Source="../Images/Menu/delete_sign-50.png"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-            </MenuItem>
-        </Menu>
+            </Menu>
+        </Expander.Header>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Image Width="150"
+                   Height="150"
+                   x:Name="CoverImage"
+                   Grid.RowSpan="2"
+                   Source="../Images/audio_file-100.png"
+                   VerticalAlignment="Bottom"
+                   Margin="20"
+                   Opacity="0.8"
+                   HorizontalAlignment="Right"/>
 
-        <Image Width="150"
-               Height="150"
-               x:Name="CoverImage"
-               Grid.RowSpan="2"
-               Source="../Images/audio_file-100.png"
-               VerticalAlignment="Bottom"
-               Margin="20"
-               Opacity="0.8"
-               HorizontalAlignment="Right"/>
-
-        <TabControl Grid.Row="1"
-                    TabStripPlacement="Left"
-                    x:Name="TcView"
-                    Background="Transparent">
-            <TabItem Header="Playlist"
-                     Background="Transparent">
-                <ListBox x:Name="LbList"
-                         Background="Transparent"
-                         HorizontalContentAlignment="Stretch"
-                         MouseDoubleClick="LbList_MouseDoubleClick">
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <Grid VerticalAlignment="Stretch"
-                                  HorizontalAlignment="Stretch">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition Width="100"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Grid.Column="0"
-                                           Margin="5,0"
-                                           Text="{Binding ArtistTitle}"/>
-                                <TextBlock Grid.Column="1"
-                                           Text="{Binding TimeString}"
-                                           Margin="5,0"
-                                           TextAlignment="Right"/>
-                            </Grid>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </TabItem>
-            <TabItem Header="Files">
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="25"/>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="220"/>
-                        <ColumnDefinition Width="5"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <StackPanel Grid.Column="0"
-                                Grid.Row="0"
-                                Grid.ColumnSpan="3"
-                                Orientation="Horizontal">
-                        <TextBlock Text="Drive:"
-                                   Margin="5,0"
-                                   VerticalAlignment="Center"/>
-                        <ComboBox Width="100"
-                                  x:Name="CbDrives"
-                                  SelectionChanged="CbDrives_SelectionChanged"
-                                  Margin="5,0"/>
-                    </StackPanel>
-                    <TreeView Grid.Column="0"
-                              Grid.Row="1"
-                              x:Name="TvDirs"
-                              SelectedItemChanged="TvDirs_SelectedItemChanged"
-                              Background="Transparent">
-                        <TreeView.Resources>
-                            <Style TargetType="{x:Type TreeViewItem}">
-                                <Setter Property="HeaderTemplate">
-                                    <Setter.Value>
-                                        <DataTemplate>
-                                            <StackPanel Orientation="Horizontal">
-                                                <Image Name="img"
-                                                       Width="20"
-                                                       Height="20"
-                                                       Stretch="Fill"
-                                                       Source="../Images/folder-100.png"/>
-                                                <TextBlock Text="{Binding}" Margin="5,0" />
-                                            </StackPanel>
-                                        </DataTemplate>
-                                    </Setter.Value>
-                                </Setter>
-                            </Style>
-                        </TreeView.Resources>
-                    </TreeView>
-                    <ListBox Grid.Column="2"
-                             Grid.Row="1"
-                             x:Name="LbFiles"
-                             MouseDoubleClick="LbFiles_MouseDoubleClick"
-                             Background="Transparent">
+            <TabControl Grid.Row="1"
+                        TabStripPlacement="Left"
+                        x:Name="TcView"
+                        Background="Transparent">
+                <TabItem Header="Playlist"
+                         Background="Transparent">
+                    <ListBox x:Name="LbList"
+                             Background="Transparent"
+                             HorizontalContentAlignment="Stretch"
+                             MouseDoubleClick="LbList_MouseDoubleClick">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
-                                <TextBlock Text="{Binding Converter={StaticResource NameConv}}"/>
+                                <Grid VerticalAlignment="Stretch"
+                                      HorizontalAlignment="Stretch">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="100"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0"
+                                               Margin="5,0"
+                                               Text="{Binding ArtistTitle}"/>
+                                    <TextBlock Grid.Column="1"
+                                               Text="{Binding TimeString}"
+                                               Margin="5,0"
+                                               TextAlignment="Right"/>
+                                </Grid>
                             </DataTemplate>
                         </ListBox.ItemTemplate>
                     </ListBox>
-                </Grid>
-            </TabItem>
-        </TabControl>
-    </Grid>
+                </TabItem>
+                <TabItem Header="Files">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="220"/>
+                            <ColumnDefinition Width="5"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0"
+                                    Grid.Row="0"
+                                    Grid.ColumnSpan="3"
+                                    Orientation="Horizontal">
+                            <TextBlock Text="Drive:"
+                                       Margin="5,0"
+                                       VerticalAlignment="Center"/>
+                            <ComboBox Width="100"
+                                      x:Name="CbDrives"
+                                      SelectionChanged="CbDrives_SelectionChanged"
+                                      Margin="5,0"/>
+                        </StackPanel>
+                        <TreeView Grid.Column="0"
+                                  Grid.Row="1"
+                                  x:Name="TvDirs"
+                                  SelectedItemChanged="TvDirs_SelectedItemChanged"
+                                  Background="Transparent">
+                            <TreeView.Resources>
+                                <Style TargetType="{x:Type TreeViewItem}">
+                                    <Setter Property="HeaderTemplate">
+                                        <Setter.Value>
+                                            <DataTemplate>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Image Name="img"
+                                                           Width="20"
+                                                           Height="20"
+                                                           Stretch="Fill"
+                                                           Source="../Images/folder-100.png"/>
+                                                    <TextBlock Text="{Binding}" Margin="5,0" />
+                                                </StackPanel>
+                                            </DataTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </TreeView.Resources>
+                        </TreeView>
+                        <ListBox Grid.Column="2"
+                                 Grid.Row="1"
+                                 x:Name="LbFiles"
+                                 MouseDoubleClick="LbFiles_MouseDoubleClick"
+                                 Background="Transparent">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Converter={StaticResource NameConv}}"/>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </Grid>
+    </Expander>
 </UserControl>

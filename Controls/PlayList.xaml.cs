@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -512,5 +513,18 @@ namespace BassPlayer.Controls
             Application.Current.Shutdown();
         }
         #endregion
+
+        private void Expander_Collapsed(object sender, RoutedEventArgs e)
+        {
+            if (DesignerProperties.GetIsInDesignMode(this)) return;
+            App.Current.MainWindow.Height = 160;
+        }
+
+        private void Expander_Expanded(object sender, RoutedEventArgs e)
+        {
+            if (DesignerProperties.GetIsInDesignMode(this)) return;
+
+            App.Current.MainWindow.Height = 480;
+        }
     }
 }
