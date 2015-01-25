@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace BassPlayer.Classes
 {
@@ -66,7 +67,7 @@ namespace BassPlayer.Classes
     /// Gets file name of a path
     /// </summary>
     [ValueConversion(typeof(string), typeof(string))]
-    internal class FileNameConverter: IValueConverter
+    internal class FileNameConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
@@ -78,6 +79,47 @@ namespace BassPlayer.Classes
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             return value;
+        }
+    }
+
+    /// <summary>
+    /// seconds to time string converter
+    /// </summary>
+    [ValueConversion(typeof(double), typeof(string))]
+    internal class TimeConverter : IValueConverter
+    {
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value == null) return null;
+            double val = System.Convert.ToDouble(value);
+            TimeSpan ts = TimeSpan.FromSeconds(val);
+            return ts.ToShortTime();
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return null;
+        }
+    }
+
+    /// <summary>
+    /// double formated as %
+    /// </summary>
+    [ValueConversion(typeof(double), typeof(string))]
+    internal class PercentConveter : IValueConverter
+    {
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value == null) return null;
+            double val = System.Convert.ToDouble(value);
+            return val.ToString("P");
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return null;
         }
     }
 }

@@ -1,9 +1,12 @@
 ﻿using BassPlayer.Classes;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using System.Linq;
 
 namespace BassPlayer.Controls
 {
@@ -15,6 +18,7 @@ namespace BassPlayer.Controls
         private bool _loaded;
         private DispatcherTimer _timer;
         private float _vol;
+        private string[] _filters, _lists;
 
         private static DependencyProperty AllwaysTopProperty = DependencyProperty.Register("AllwaysTop", typeof(bool?), typeof(Player), new PropertyMetadata(false));
 
@@ -35,6 +39,8 @@ namespace BassPlayer.Controls
             _timer.Interval = TimeSpan.FromMilliseconds(500);
             _timer.IsEnabled = false;
             _timer.Tick += _timer_Tick;
+            _filters = App.Formats.Replace("*", "").Split(';');
+            _lists = App.Playlists.Replace("*", "").Split(';');
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -47,6 +53,19 @@ namespace BassPlayer.Controls
             }
             VolSlider.Value = App.Engine.Volume;
             _loaded = true;
+            ProcessArguments();
+        }
+
+        public void ProcessArguments(IEnumerable<string> args = null)
+        {
+            if (args == null) args = Environment.GetCommandLineArgs();
+            foreach (var file in args)
+            {
+                var extension = Path.GetExtension(file);
+                if (_filters.Contains(extension)) PlayList.AppendFile(file);
+                else if (_lists.Contains(extension)) PlayList.AppendPlaylist(file);
+            }
+
         }
 
         private void CbDeviceList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -79,7 +98,7 @@ namespace BassPlayer.Controls
             else App.PlayTaskbar();
             SPosition.Maximum = App.Engine.Length;
             _timer.IsEnabled = (bool)!BtnPlayPause.IsChecked;
-            PlayList.SetCoverImage(App.Engine.ImageTag);
+            CoverArt.Source = App.Engine.ImageTag;
         }
 
         private void BtnPlayPause_Click(object sender, RoutedEventArgs e)

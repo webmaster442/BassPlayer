@@ -2,17 +2,23 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:BassPlayer.Classes"
              mc:Ignorable="d" 
              d:DesignHeight="90" d:DesignWidth="854"
              x:Name="Control"
              Loaded="UserControl_Loaded">
+    <UserControl.Resources>
+        <local:TimeConverter x:Key="TimeConv"/>
+        <local:PercentConveter x:Key="PercentConv"/>
+    </UserControl.Resources>
     <Grid Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="55"/>
             <ColumnDefinition Width="55"/>
             <ColumnDefinition Width="55"/>
             <ColumnDefinition Width="55"/>
+            <ColumnDefinition Width="80"/>
             <ColumnDefinition/>
             <ColumnDefinition Width="55"/>
             <ColumnDefinition Width="55"/>
@@ -24,11 +30,18 @@
             <RowDefinition/>
         </Grid.RowDefinitions>
         
-        <StackPanel
-            VerticalAlignment="Center"
-            Orientation="Horizontal"
-            Grid.Row="0"
-            Grid.ColumnSpan="99">
+        <Image x:Name="CoverArt"
+               Grid.Row="1"
+               Margin="4"
+               Grid.Column="4"
+               Grid.RowSpan="2"
+               Source="../Images/audio_file-100.png"
+               StretchDirection="DownOnly"/>
+    
+        <StackPanel VerticalAlignment="Center"
+                    Orientation="Horizontal"
+                    Grid.Row="0"
+                    Grid.ColumnSpan="99">
             <TextBlock Text="Output Device:"
                        Margin="5,0"
                        VerticalAlignment="Center"/>
@@ -45,15 +58,16 @@
                     Minimum="0"
                     Maximum="1"
                     Value="1"
-                    ValueChanged="VolSlider_ValueChanged"/>
+                    ValueChanged="VolSlider_ValueChanged"
+                    ToolTip="{Binding ElementName=VolSlider, Path=Value, Converter={StaticResource PercentConv}}"/>
             <CheckBox Content="Allways top"
                       VerticalAlignment="Center"
                       Margin="25,0"
                       IsChecked="{Binding ElementName=Control, Path=AllwaysTop}"/>
         </StackPanel>
-        
+
         <StackPanel Grid.Row="1"
-                    Grid.Column="4"
+                    Grid.Column="5"
                     Grid.RowSpan="2">
             <TextBlock Text=""
                        FontWeight="Bold"
@@ -64,7 +78,8 @@
                        x:Name="TbPosition"/>
             <Slider x:Name="SPosition"
                     Margin="5,0"
-                    Thumb.DragCompleted="SPosition_DragCompleted"/>
+                    Thumb.DragCompleted="SPosition_DragCompleted"
+                    ToolTip="{Binding ElementName=SPosition, Path=Value, Converter={StaticResource TimeConv}}"/>
         </StackPanel>
         
         
@@ -117,7 +132,7 @@
                    Width="40"
                    Height="40"/>
         </Button>
-        <ToggleButton Grid.Column="5"
+        <ToggleButton Grid.Column="6"
                       Grid.Row="1"
                       Grid.RowSpan="2"
                       x:Name="BtnMute"
@@ -129,7 +144,7 @@
                    Width="40"
                    Height="40"/>
         </ToggleButton>
-        <ToggleButton Grid.Column="6"
+        <ToggleButton Grid.Column="7"
                       Grid.Row="1"
                       Grid.RowSpan="2"
                       x:Name="BtnRepeat"
@@ -141,7 +156,7 @@
                    Width="40"
                    Height="40"/>
         </ToggleButton>
-        <ToggleButton Grid.Column="7"
+        <ToggleButton Grid.Column="8"
                       Grid.Row="1"
                       Grid.RowSpan="2"
                       x:Name="BtnSuffle"

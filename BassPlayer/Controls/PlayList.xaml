@@ -214,16 +214,6 @@
             <Grid.RowDefinitions>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <Image Width="150"
-                   Height="150"
-                   x:Name="CoverImage"
-                   Grid.RowSpan="2"
-                   Source="../Images/audio_file-100.png"
-                   VerticalAlignment="Bottom"
-                   Margin="20"
-                   Opacity="0.8"
-                   HorizontalAlignment="Right"/>
-
             <TabControl Grid.Row="1"
                         TabStripPlacement="Left"
                         x:Name="TcView"
@@ -239,13 +229,18 @@
                                 <Grid VerticalAlignment="Stretch"
                                       HorizontalAlignment="Stretch">
                                     <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="30"/>
                                         <ColumnDefinition/>
                                         <ColumnDefinition Width="100"/>
                                     </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0"
+                                    <Image Width="25"
+                                           Height="25"
+                                           Grid.Column="0"
+                                           Source="../Images/audio_file-100.png"/>
+                                    <TextBlock Grid.Column="1"
                                                Margin="5,0"
                                                Text="{Binding ArtistTitle}"/>
-                                    <TextBlock Grid.Column="1"
+                                    <TextBlock Grid.Column="2"
                                                Text="{Binding TimeString}"
                                                Margin="5,0"
                                                TextAlignment="Right"/>
@@ -289,8 +284,9 @@
                                             <DataTemplate>
                                                 <StackPanel Orientation="Horizontal">
                                                     <Image Name="img"
-                                                           Width="20"
-                                                           Height="20"
+                                                           Width="25"
+                                                           Height="25"
+                                                           Margin="2"
                                                            Stretch="Fill"
                                                            Source="../Images/folder-100.png"/>
                                                     <TextBlock Text="{Binding}" Margin="5,0" />
@@ -304,11 +300,24 @@
                         <ListBox Grid.Column="2"
                                  Grid.Row="1"
                                  x:Name="LbFiles"
+                                 HorizontalContentAlignment="Stretch"
                                  MouseDoubleClick="LbFiles_MouseDoubleClick"
                                  Background="Transparent">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="{Binding Converter={StaticResource NameConv}}"/>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="30"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Image Width="25"
+                                               Height="25"
+                                               Grid.Column="0"
+                                               Source="../Images/audio_file-100.png"/>
+                                        <TextBlock Grid.Column="1"
+                                                   Margin="2"
+                                                   Text="{Binding Converter={StaticResource NameConv}}"/>
+                                    </Grid>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>

@@ -65,7 +65,7 @@ namespace BassPlayer
         public bool SignalExternalCommandLineArgs(IList<string> args)
         {
             MainWindow mw = (MainWindow)App.Current.MainWindow;
-            mw.ProcessArguments(args);
+            mw.Player.ProcessArguments(args);
             return true;
         }
         #endregion

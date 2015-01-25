@@ -228,15 +228,12 @@
     <Resource Include="Images\audio_file-100.png" />
     <Resource Include="Images\end-100.png" />
     <Resource Include="Images\folder-100.png" />
-    <Resource Include="Images\mp3-100.png" />
     <Resource Include="Images\mute-100.png" />
     <Resource Include="Images\pause-100.png" />
     <Resource Include="Images\play-100.png" />
     <Resource Include="Images\repeat-100.png" />
     <Resource Include="Images\shuffle-100.png" />
     <Resource Include="Images\skip_to_start-100.png" />
-    <Resource Include="Images\video_file-100.png" />
-    <Resource Include="Images\wma-100.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

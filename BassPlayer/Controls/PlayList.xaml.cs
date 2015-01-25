@@ -156,10 +156,6 @@ namespace BassPlayer.Controls
         #endregion
 
         #region Public Functions
-        public void SetCoverImage(ImageSource src)
-        {
-            CoverImage.Source = src;
-        }
 
         public void DoNextTrack()
         {
@@ -170,7 +166,7 @@ namespace BassPlayer.Controls
                 if (Repeat) next = _index;
                 else if (Shuffle) next = _rgen.Next(0, _playlist.Count);
                 else next = _index + 1;
-                if (next > _playlist.Count - 1) next = 0;
+                if (next > _playlist.Count - 1) return;
                 AudioPlayerControls.Load(_playlist[next].FileName);
                 _index = next;
             }
@@ -180,7 +176,7 @@ namespace BassPlayer.Controls
                 if (Repeat) next = LbFiles.SelectedIndex;
                 else if (Shuffle) next = _rgen.Next(0, _files.Count);
                 else next = LbFiles.SelectedIndex + 1;
-                if (next > _files.Count - 1) next = 0;
+                if (next > _files.Count - 1) return;
                 AudioPlayerControls.Load(_files[next]);
                 LbFiles.SelectedIndex = next;
             }
@@ -195,7 +191,7 @@ namespace BassPlayer.Controls
                 if (Repeat) previous = _index;
                 else if (Shuffle) previous = _rgen.Next(0, _playlist.Count);
                 else previous = _index - 1;
-                if (previous < 0) previous = _playlist.Count - 1;
+                if (previous < 0) return;
                 AudioPlayerControls.Load(_playlist[previous].FileName);
                 _index = previous;
             }
@@ -205,7 +201,7 @@ namespace BassPlayer.Controls
                 if (Repeat) previous = LbFiles.SelectedIndex;
                 else if (Shuffle) previous = _rgen.Next(0, _files.Count);
                 else previous = LbFiles.SelectedIndex - 1;
-                if (previous < 0) previous = _files.Count - 1;
+                if (previous < 0) return;
                 AudioPlayerControls.Load(_files[previous]);
                 LbFiles.SelectedIndex = previous;
             }
