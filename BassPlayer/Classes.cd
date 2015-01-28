@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="BassPlayer.Classes.AudioEngine">
+    <Position X="0.5" Y="0.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>igAgAAQAhGBAARggEAACYABAAABAAEAAoAIAAAhAEIA=</HashCode>
+      <FileName>Classes\AudioEngine.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="BassPlayer.Classes.Extensisons">
+    <Position X="5.25" Y="3.75" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAABAAAAAAAAAAAAAEAAAAAAEAAA=</HashCode>
+      <FileName>Classes\Misc.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BassPlayer.Classes.Helpers">
+    <Position X="5.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAA=</HashCode>
+      <FileName>Classes\Misc.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BassPlayer.Classes.FileNameConverter" BaseTypeListCollapsed="true">
+    <Position X="3.25" Y="2.25" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\Misc.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="BassPlayer.Classes.TimeConverter" BaseTypeListCollapsed="true">
+    <Position X="3.25" Y="0.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\Misc.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="BassPlayer.Classes.PercentConveter" BaseTypeListCollapsed="true">
+    <Position X="3.25" Y="4" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAIAAAAAAAAgAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\Misc.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="BassPlayer.Classes.PlayListEntry">
+    <Position X="7" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgEAAAAAAAAAAAIAAAAAkAAAAAABAAQA=</HashCode>
+      <FileName>Classes\PlayListEntry.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="BassPlayer.Classes.MediaType">
+    <Position X="5.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAACAAAAAAAAAAAAAMAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Classes\Misc.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

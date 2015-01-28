@@ -106,7 +106,8 @@
                 Click="BtnPlayPause_Click">
             <Image Source="../Images/play-100.png"           
                    Width="40"
-                   Height="40"/>
+                   Height="40"
+                   x:Name="ImgPlayPause"/>
         </ToggleButton>
         <Button Grid.Column="2"
                 Grid.Row="1"

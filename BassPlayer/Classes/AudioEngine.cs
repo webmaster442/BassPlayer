@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Un4seen.Bass;
@@ -74,7 +73,7 @@ namespace BassPlayer.Classes
         {
             var error = Bass.BASS_ErrorGetCode();
             string text = string.Format("{0}\r\nBass Error code: {1}\r\nError Description: {2}", message, (int)error, error.ToString());
-            MessageBox.Show(text, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            throw new Exception(text);
         }
 
         /// <summary>
@@ -236,7 +235,8 @@ namespace BassPlayer.Classes
             get
             {
                 TAG_INFO tags = new TAG_INFO();
-                BassTags.BASS_TAG_GetFromFile(_source, tags);
+                if (_filetype == MediaType.Stream) BassTags.BASS_TAG_GetFromURL(_source, tags);
+                else BassTags.BASS_TAG_GetFromFile(_source, tags);
                 return string.Format("{0} - {1}", tags.artist, tags.title);
             }
         }

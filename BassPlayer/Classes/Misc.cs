@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
 
@@ -60,6 +61,21 @@ namespace BassPlayer.Classes
         public static void AddRange<T>(this ObservableCollection<T> collection, IEnumerable<T> elements)
         {
             foreach (var e in elements) collection.Add(e);
+        }
+    }
+
+    /// <summary>
+    /// Various helper functions
+    /// </summary>
+    internal static class Helpers
+    {
+        public static void ErrorDialog(Exception ex, string description = null)
+        {
+            if (description != null)
+            {
+                MessageBox.Show(string.Format("{0}\r\nDetails:{1}", description, ex.Message), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            else MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 

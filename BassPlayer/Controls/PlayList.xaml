@@ -33,6 +33,15 @@
                                    Source="../Images/Menu/settings-50.png"/>
                         </MenuItem.Icon>
                     </MenuItem>
+                    <MenuItem Header="About..."
+                              x:Name="MenBassAbout"
+                              Click="MenBassAbout_Click">
+                        <MenuItem.Icon>
+                            <Image Width="16"
+                                   Height="16"
+                                   Source="../Images/Menu/about-50.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
                     <Separator/>
                     <MenuItem Header="Exit"
                               x:Name="MenBassExit"
@@ -223,7 +232,8 @@
                     <ListBox x:Name="LbList"
                              Background="Transparent"
                              HorizontalContentAlignment="Stretch"
-                             MouseDoubleClick="LbList_MouseDoubleClick">
+                             SelectionMode="Extended"
+                             MouseDoubleClick="LbList_MouseDoubleClick" >
                         <ListBox.ItemTemplate>
                             <DataTemplate>
                                 <Grid VerticalAlignment="Stretch"
@@ -300,6 +310,7 @@
                         <ListBox Grid.Column="2"
                                  Grid.Row="1"
                                  x:Name="LbFiles"
+                                 SelectionMode="Extended"
                                  HorizontalContentAlignment="Stretch"
                                  MouseDoubleClick="LbFiles_MouseDoubleClick"
                                  Background="Transparent">

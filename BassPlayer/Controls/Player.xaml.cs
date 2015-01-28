@@ -7,6 +7,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using System.Linq;
+using System.Windows.Media.Imaging;
 
 namespace BassPlayer.Controls
 {
@@ -92,13 +93,17 @@ namespace BassPlayer.Controls
 
         public void Load(string file)
         {
-            App.Engine.FileName = file;
-            App.Engine.Play();
-            if (App.Engine.MediaType == MediaType.Stream && App.Engine.Length == 0) App.PlayUndetTaskbar();
-            else App.PlayTaskbar();
-            SPosition.Maximum = App.Engine.Length;
-            _timer.IsEnabled = (bool)!BtnPlayPause.IsChecked;
-            CoverArt.Source = App.Engine.ImageTag;
+            try
+            {
+                App.Engine.FileName = file;
+                App.Engine.Play();
+                if (App.Engine.MediaType == MediaType.Stream && App.Engine.Length == 0) App.PlayUndetTaskbar();
+                else App.PlayTaskbar();
+                SPosition.Maximum = App.Engine.Length;
+                _timer.IsEnabled = (bool)!BtnPlayPause.IsChecked;
+                CoverArt.Source = App.Engine.ImageTag;
+            }
+            catch (Exception ex) { Helpers.ErrorDialog(ex, "File Load error"); }
         }
 
         private void BtnPlayPause_Click(object sender, RoutedEventArgs e)
@@ -107,11 +112,13 @@ namespace BassPlayer.Controls
             {
                 App.Engine.Pause();
                 App.PauseTaskbar();
+                ImgPlayPause.Source = new BitmapImage(new Uri("/BassPlayer;component/Images/pause-100.png", UriKind.Relative));
             }
             else
             {
                 App.Engine.Play();
                 App.PlayTaskbar();
+                ImgPlayPause.Source = new BitmapImage(new Uri("/BassPlayer;component/Images/play-100.png", UriKind.Relative));
             }
             _timer.IsEnabled = (bool)!BtnPlayPause.IsChecked;
         }
