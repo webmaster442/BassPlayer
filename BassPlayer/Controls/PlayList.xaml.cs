@@ -510,6 +510,22 @@ namespace BassPlayer.Controls
                 _files.Add(fi.FullName);
             }
         }
+
+        private void FilesCtRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            TvDirs_SelectedItemChanged(sender, null);
+        }
+
+        private void FilesCtAddToPls_Click(object sender, RoutedEventArgs e)
+        {
+            List<PlayListEntry> add = new List<PlayListEntry>(LbFiles.SelectedItems.Count);
+            foreach (string file in LbFiles.SelectedItems)
+            {
+                add.Add(PlayListEntry.FromFile(file));
+            }
+            _playlist.AddRange(add);
+            TcView.SelectedIndex = 1;
+        }
         #endregion
 
         #region Bass Menu

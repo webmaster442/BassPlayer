@@ -138,4 +138,21 @@ namespace BassPlayer.Classes
             return null;
         }
     }
+
+    [ValueConversion(typeof(int), typeof(bool?))]
+    internal class EnableConverter: IValueConverter
+    {
+
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            int val = System.Convert.ToInt32(value);
+            if (val == 0) return true;
+            else return false;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            return null;
+        }
+    }
 }
