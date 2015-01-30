@@ -37,6 +37,7 @@ namespace BassPlayer.Classes
             Bass.LoadMe(enginedir);
             BassMix.LoadMe(enginedir);
             BassCd.LoadMe(enginedir);
+            BassTags.ReadPictureTAGs = true;
             Bass.BASS_PluginLoad(enginedir + "\\bass_aac.dll");
             Bass.BASS_PluginLoad(enginedir + "\\bass_ac3.dll");
             Bass.BASS_PluginLoad(enginedir + "\\bass_alac.dll");
@@ -147,7 +148,7 @@ namespace BassPlayer.Classes
             set
             {
                 _file = value;
-                var flags = BASSFlag.BASS_SAMPLE_LOOP | BASSFlag.BASS_STREAM_DECODE | BASSFlag.BASS_SAMPLE_FLOAT;
+                var flags = BASSFlag.BASS_SAMPLE_LOOP | BASSFlag.BASS_STREAM_DECODE | BASSFlag.BASS_SAMPLE_FLOAT | BASSFlag.BASS_STREAM_PRESCAN;
                 if (_source != 0)
                 {
                     Bass.BASS_StreamFree(_source);

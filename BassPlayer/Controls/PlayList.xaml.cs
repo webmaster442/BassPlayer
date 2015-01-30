@@ -22,10 +22,12 @@ namespace BassPlayer.Controls
     public partial class PlayList : UserControl
     {
         private ObservableCollection<PlayListEntry> _playlist;
+        private ObservableCollection<PlayListEntry> _tunes;
         private ObservableCollection<string> _files;
         private TreeViewItem dummyNode = null;
         private int _index;
         private Random _rgen;
+        private iTunesData _itunes;
 
 
         public Player AudioPlayerControls { get; set; }
@@ -37,10 +39,17 @@ namespace BassPlayer.Controls
         {
             InitializeComponent();
             _playlist = new ObservableCollection<PlayListEntry>();
+            _tunes = new ObservableCollection<PlayListEntry>();
             _files = new ObservableCollection<string>();
             _rgen = new Random();
+            _itunes = new iTunesData();
             LbList.ItemsSource = _playlist;
             LbFiles.ItemsSource = _files;
+            LbLib.ItemsSource = _tunes;
+            ListItunesData(SpArtists, _itunes.Artists, "Artists");
+            ListItunesData(SpAlbums, _itunes.Albums, "Albums");
+            ListItunesData(SpAlbums, _itunes.Compilations, "Compilations");
+            ListItunesData(SpGenres, _itunes.Genres, "Genres");
         }
 
         #region Private Functions
@@ -156,6 +165,16 @@ namespace BassPlayer.Controls
             }
         }
 
+        private void LbLib_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (AudioPlayerControls != null)
+            {
+                var index = LbLib.SelectedIndex;
+                _index = index;
+                AudioPlayerControls.Load(_tunes[index].FileName);
+            }
+        }
+
         private void LbFiles_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (AudioPlayerControls != null)
@@ -182,7 +201,7 @@ namespace BassPlayer.Controls
                 AudioPlayerControls.Load(_playlist[next].FileName);
                 _index = next;
             }
-            else
+            else if (TcView.SelectedIndex == 1)
             {
                 if (_files.Count < 1) return;
                 if (Repeat) next = LbFiles.SelectedIndex;
@@ -191,6 +210,16 @@ namespace BassPlayer.Controls
                 if (next > _files.Count - 1) return;
                 AudioPlayerControls.Load(_files[next]);
                 LbFiles.SelectedIndex = next;
+            }
+            else
+            {
+                if (_tunes.Count < 1) return;
+                if (Repeat) next = LbLib.SelectedIndex;
+                else if (Shuffle) next = _rgen.Next(0, _tunes.Count);
+                else next = LbLib.SelectedIndex + 1;
+                if (next > _tunes.Count - 1) return;
+                AudioPlayerControls.Load(_tunes[next].FileName);
+                LbLib.SelectedIndex = next;
             }
         }
 
@@ -207,7 +236,7 @@ namespace BassPlayer.Controls
                 AudioPlayerControls.Load(_playlist[previous].FileName);
                 _index = previous;
             }
-            else
+            else if (TcView.SelectedIndex == 1)
             {
                 if (_files.Count < 1) return;
                 if (Repeat) previous = LbFiles.SelectedIndex;
@@ -216,6 +245,16 @@ namespace BassPlayer.Controls
                 if (previous < 0) return;
                 AudioPlayerControls.Load(_files[previous]);
                 LbFiles.SelectedIndex = previous;
+            }
+            else
+            {
+                if (_tunes.Count < 1) return;
+                if (Repeat) previous = LbLib.SelectedIndex;
+                else if (Shuffle) previous = _rgen.Next(0, _tunes.Count);
+                else previous = LbLib.SelectedIndex - 1;
+                if (previous < 0) return;
+                AudioPlayerControls.Load(_tunes[previous].FileName);
+                LbLib.SelectedIndex = previous;
             }
         }
 
@@ -547,17 +586,47 @@ namespace BassPlayer.Controls
         }
         #endregion
 
+        #region Global expander handling
         private void Expander_Collapsed(object sender, RoutedEventArgs e)
         {
             if (DesignerProperties.GetIsInDesignMode(this)) return;
-            App.Current.MainWindow.Height = 160;
+            if (sender == e.OriginalSource)
+            {
+                App.Current.MainWindow.Height = 160;
+                e.Handled = true;
+            }
         }
 
         private void Expander_Expanded(object sender, RoutedEventArgs e)
         {
             if (DesignerProperties.GetIsInDesignMode(this)) return;
+            if (sender == e.OriginalSource)
+            {
+                App.Current.MainWindow.Height = 480;
+                e.Handled = true;
+            }
+        }
+        #endregion
 
-            App.Current.MainWindow.Height = 480;
+        private void ListItunesData(StackPanel target, string[] items, string linkcat)
+        {
+            foreach (var item in items)
+            {
+                Button b = new Button();
+                b.Content = item;
+                b.Margin = new Thickness(20, 2, 0, 1);
+                b.Click += b_Click;
+                b.ToolTip = string.Format("{0}/{1}", linkcat, item);
+                target.Children.Add(b);
+            }
+        }
+
+        private void b_Click(object sender, RoutedEventArgs e)
+        {
+            var s = ((Button)sender).ToolTip.ToString();
+            _tunes.Clear();
+            var result = _itunes.Filter(s);
+            _tunes.AddRange(result);
         }
     }
 }

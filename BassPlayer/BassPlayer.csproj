@@ -222,6 +222,12 @@
     <Content Include="Engine\x86\tags.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Images\itunes\album-compilation-50.png" />
+    <Resource Include="Images\itunes\album.png" />
+    <Resource Include="Images\itunes\artist-50.png" />
+    <Resource Include="Images\itunes\genres-50.png" />
+    <Resource Include="Images\itunes\podcast-50.png" />
+    <Resource Include="Images\itunes\songs-50.png" />
     <Resource Include="Images\About\BASS.net.png" />
     <Resource Include="Images\About\i_love_icons8-64.png" />
     <Resource Include="Images\About\logo_bass.png" />

@@ -102,6 +102,7 @@ namespace BassPlayer.Controls
                 SPosition.Maximum = App.Engine.Length;
                 _timer.IsEnabled = (bool)!BtnPlayPause.IsChecked;
                 CoverArt.Source = App.Engine.ImageTag;
+                CoverArtLarge.Source = App.Engine.ImageTag;
             }
             catch (Exception ex) { Helpers.ErrorDialog(ex, "File Load error"); }
         }

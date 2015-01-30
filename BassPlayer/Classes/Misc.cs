@@ -60,6 +60,7 @@ namespace BassPlayer.Classes
         /// <param name="elements">an IEnumerable collection</param>
         public static void AddRange<T>(this ObservableCollection<T> collection, IEnumerable<T> elements)
         {
+            if (elements == null) return;
             foreach (var e in elements) collection.Add(e);
         }
     }

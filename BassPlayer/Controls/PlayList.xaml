@@ -13,6 +13,7 @@
         <classes:EnableConverter x:Key="EnableConv"/>
     </UserControl.Resources>
     <Expander IsExpanded="True"
+              x:Name="MainExpander"
               Collapsed="Expander_Collapsed"
               Expanded="Expander_Expanded">
         <Expander.Header>
@@ -245,7 +246,7 @@
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="30"/>
                                         <ColumnDefinition/>
-                                        <ColumnDefinition Width="100"/>
+                                        <ColumnDefinition Width="60"/>
                                     </Grid.ColumnDefinitions>
                                     <Image Width="25"
                                            Height="25"
@@ -271,7 +272,7 @@
                         </Grid.RowDefinitions>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="220"/>
-                            <ColumnDefinition Width="5"/>
+                            <ColumnDefinition Width="3"/>
                             <ColumnDefinition/>
                         </Grid.ColumnDefinitions>
                         <StackPanel Grid.Column="0"
@@ -311,6 +312,10 @@
                                 </Style>
                             </TreeView.Resources>
                         </TreeView>
+                        <GridSplitter Grid.Row="1"
+                                      Grid.Column="1"
+                                      HorizontalAlignment="Stretch"
+                                      Background="{StaticResource {x:Static SystemColors.GradientActiveCaptionBrushKey}}"/>
                         <ListBox Grid.Column="2"
                                  Grid.Row="1"
                                  x:Name="LbFiles"
@@ -343,6 +348,116 @@
                                         <TextBlock Grid.Column="1"
                                                    Margin="2"
                                                    Text="{Binding Converter={StaticResource NameConv}}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="iTunes">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="220"/>
+                            <ColumnDefinition Width="3"/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <ScrollViewer Grid.Column="0">
+                            <StackPanel>
+                                <Expander>
+                                    <Expander.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Source="../Images/itunes/album.png"
+                                                   Width="22"
+                                                   Height="22"/>
+                                            <TextBlock Text="Albums"
+                                                       VerticalAlignment="Center"
+                                                       Margin="5"/>
+                                        </StackPanel> 
+                                    </Expander.Header>
+                                    <StackPanel x:Name="SpAlbums"/>
+                                </Expander>
+                                <Expander>
+                                    <Expander.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Source="../Images/itunes/album-compilation-50.png"
+                                                   Width="22"
+                                                   Height="22"/>
+                                            <TextBlock Text="Compilations"
+                                                       VerticalAlignment="Center"
+                                                       Margin="5"/>
+                                        </StackPanel>
+                                    </Expander.Header>
+                                    <StackPanel x:Name="SpCompilations"/>
+                                </Expander>
+                                <Expander>
+                                    <Expander.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Source="../Images/itunes/artist-50.png"
+                                                   Width="22"
+                                                   Height="22"/>
+                                            <TextBlock Text="Artists"
+                                                       VerticalAlignment="Center"
+                                                       Margin="5"/>
+                                        </StackPanel>
+                                    </Expander.Header>
+                                    <StackPanel x:Name="SpArtists"/>
+                                </Expander>
+                                <Expander>
+                                    <Expander.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Source="../Images/itunes/genres-50.png"
+                                                   Width="22"
+                                                   Height="22"/>
+                                            <TextBlock Text="Genres"
+                                                       VerticalAlignment="Center"
+                                                       Margin="5"/>
+                                        </StackPanel>
+                                    </Expander.Header>
+                                    <StackPanel x:Name="SpGenres"/>
+                                </Expander>
+                                <Expander>
+                                    <Expander.Header>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Image Source="../Images/itunes/songs-50.png"
+                                                   Width="22"
+                                                   Height="22"/>
+                                            <TextBlock Text="Songs"
+                                                       VerticalAlignment="Center"
+                                                       Margin="5"/>
+                                        </StackPanel>
+                                    </Expander.Header>
+                                </Expander>
+                            </StackPanel>
+                        </ScrollViewer>
+                        <GridSplitter Grid.Column="1"
+                                      HorizontalAlignment="Stretch"
+                                      Background="{StaticResource {x:Static SystemColors.GradientActiveCaptionBrushKey}}"/>
+                        <ListBox Grid.Column="2"
+                                 Background="Transparent"
+                                 x:Name="LbLib"
+                                 HorizontalContentAlignment="Stretch"
+                                 SelectionMode="Extended"
+                                 MouseDoubleClick="LbLib_MouseDoubleClick">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid VerticalAlignment="Stretch"
+                                      HorizontalAlignment="Stretch">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="30"/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="60"/>
+                                        </Grid.ColumnDefinitions>
+                                        <Image Width="25"
+                                           Height="25"
+                                           Grid.Column="0"
+                                           Source="../Images/audio_file-100.png"/>
+                                        <TextBlock Grid.Column="1"
+                                               Margin="5,0"
+                                               Text="{Binding ArtistTitle}"/>
+                                        <TextBlock Grid.Column="2"
+                                               Text="{Binding TimeString}"
+                                               Margin="5,0"
+                                               TextAlignment="Right"/>
                                     </Grid>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
