@@ -1,17 +1,9 @@
 ﻿using BassPlayer.Classes;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using YouTube_Downloader;
 
 namespace BassPlayer.Controls
@@ -26,20 +18,25 @@ namespace BassPlayer.Controls
             InitializeComponent();
         }
 
-        private async Task<PlayListEntry[]> GetEntrys()
+        private Task<PlayListEntry[]> GetEntrys()
         {
-            string[] lines = TbUrls.Text.Split('\n');
-            List<PlayListEntry> ret = new List<PlayListEntry>(lines.Length);
-
-            foreach (var line in lines)
+            return Task<PlayListEntry[]>.Run(() =>
             {
-                var quality = YouTubeDownloader.GetYouTubeVideoUrls(line);
-                var good = (from i in quality where i.Extention == "mp4" && i.Dimension.Width == 640 select i).FirstOrDefault();
-                
-            }
+                string[] lines = TbUrls.Text.Split('\n');
+                List<PlayListEntry> ret = new List<PlayListEntry>(lines.Length);
 
-            return ret.ToArray();
-
+                foreach (var line in lines)
+                {
+                    var quality = YouTubeDownloader.GetYouTubeVideoUrls(line);
+                    var good = (from i in quality where i.Extention == "mp4" && i.Dimension.Width == 640 select i).FirstOrDefault();
+                    PlayListEntry ple = new PlayListEntry();
+                    ple.Title = good.VideoTitle;
+                    ple.FileName = good.DownloadUrl;
+                    ple.Time = good.Length;
+                    ret.Add(ple);
+                }
+                return ret.ToArray();
+            });
         }
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)

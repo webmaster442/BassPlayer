@@ -64,6 +64,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\iTunesData.cs" />
     <Compile Include="Controls\AboutDialog.xaml.cs">
       <DependentUpon>AboutDialog.xaml</DependentUpon>
     </Compile>
