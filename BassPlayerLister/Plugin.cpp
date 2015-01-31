@@ -8,7 +8,7 @@ HMODULE FLibHandle = 0;
 HWND timer = 0;
 EXTERN_C IMAGE_DOS_HEADER __ImageBase;
 
-#define EXTENSIONS "MULTIMEDIA & (EXT=\"MP3\" | EXT=\"MP4\" | EXT=\"M4A\" | EXT=\"M4B\" | EXT=\"AAC\" | EXT=\"FLAC\" | EXT=\"AC3\" | EXT=\"WV\" | EXT=\"WAV\" | EXT=\"WMA\" | EXT=\"OGG\" | EXT=\"M3U\" | EXT=\"PLS\" | EXT=\"BPL\")"
+#define EXTENSIONS "MULTIMEDIA & (EXT=\"MP3\" | EXT=\"MP4\" | EXT=\"M4A\" | EXT=\"M4B\" | EXT=\"AAC\" | EXT=\"FLAC\" | EXT=\"AC3\" | EXT=\"WV\" | EXT=\"WAV\" | EXT=\"WMA\" | EXT=\"OGG\" | EXT=\"M3U\" | EXT=\"PLS\" | EXT=\"BPL\" | EXT=\"WPL\")"
 
 
 BOOL APIENTRY DllMain(HANDLE hModule, DWORD  ul_reason_for_call, LPVOID lpReserved)

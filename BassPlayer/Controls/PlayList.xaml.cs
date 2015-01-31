@@ -11,6 +11,7 @@ using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Xml.Linq;
 using System.Xml.Serialization;
 
 
@@ -50,6 +51,7 @@ namespace BassPlayer.Controls
             ListItunesData(SpAlbums, _itunes.Albums, "Albums");
             ListItunesData(SpAlbums, _itunes.Compilations, "Compilations");
             ListItunesData(SpGenres, _itunes.Genres, "Genres");
+            TabTunes.IsEnabled = _itunes.isLoaded;
         }
 
         #region Private Functions
@@ -150,6 +152,21 @@ namespace BassPlayer.Controls
                             _playlist.Add(newitem);
                         }
                     }
+                }
+            }
+            catch (Exception ex) { Helpers.ErrorDialog(ex, "File Load error"); }
+        }
+
+        private void LoadWPL(string file)
+        {
+            try
+            {
+                var doc = XDocument.Load(file).Descendants("body").Elements("seq").Elements("media");
+                foreach (var media in doc)
+                {
+                    var src = media.Attribute("src").Value;
+                    PlayListEntry entry = PlayListEntry.FromFile(src);
+                    _playlist.Add(entry);
                 }
             }
             catch (Exception ex) { Helpers.ErrorDialog(ex, "File Load error"); }
@@ -278,6 +295,9 @@ namespace BassPlayer.Controls
                 case ".pls":
                     LoadPls(file);
                     break;
+                case ".wpl":
+                    LoadWPL(file);
+                    break;
             }
         }
         #endregion
@@ -320,7 +340,7 @@ namespace BassPlayer.Controls
         private void MenLoadPlaylist_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
-            ofd.Filter = "Playlist Files | *.m3u;*.bpl;*.txt;*.pls";
+            ofd.Filter = "Playlist Files | *.m3u;*.bpl;*.txt;*.pls;*.wpl";
             ofd.Multiselect = true;
             if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
@@ -364,6 +384,21 @@ namespace BassPlayer.Controls
                 _playlist.Add(PlayListEntry.FromFile(url.Url));
             }
         }
+
+        private void MenAddYoutube_Click(object sender, RoutedEventArgs e)
+        {
+            ImportYoutube yt = new ImportYoutube();
+            if (yt.ShowDialog() == true)
+            {
+                if (yt.Entrys == null)
+                {
+                    MessageBox.Show("Import failed :(\r\nYoutube has changed format again...");
+                    return;
+                }
+                _playlist.AddRange(yt.Entrys);
+            }
+        }
+
         #endregion
 
         #region Sort menu
@@ -610,6 +645,7 @@ namespace BassPlayer.Controls
 
         private void ListItunesData(StackPanel target, string[] items, string linkcat)
         {
+            if (items == null || target == null) return;
             foreach (var item in items)
             {
                 Button b = new Button();

@@ -83,6 +83,16 @@
                                    Source="../Images/Menu/add_link-50.png"/>
                         </MenuItem.Icon>
                     </MenuItem>
+                    <MenuItem Header="Add Youtube URL..."
+                              x:Name="MenAddYoutube"
+                              Click="MenAddYoutube_Click">
+                        <MenuItem.Icon>
+                            <Image Width="16"
+                                   Height="16"
+                                   Source="../Images/Menu/youtube-50.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator/>
                     <MenuItem Header="Add Files..."
                               x:Name="MenAddFiles"
                               Click="MenAddFiles_Click">
@@ -354,7 +364,8 @@
                         </ListBox>
                     </Grid>
                 </TabItem>
-                <TabItem Header="iTunes">
+                <TabItem Header="iTunes"
+                         x:Name="TabTunes">
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="220"/>

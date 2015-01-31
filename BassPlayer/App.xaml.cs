@@ -43,7 +43,7 @@ namespace BassPlayer
 
         public const string Formats = "*.mp3;*.mp4;*.m4a;*.m4b;*.aac;*.flac;*.ac3;*.wv;*.wav;*.wma;*.ogg";
 
-        public const string Playlists = "*.pls;*.m3u;*.bpl";
+        public const string Playlists = "*.pls;*.m3u;*.bpl;*.wpl";
 
         internal static AudioEngine Engine;
         

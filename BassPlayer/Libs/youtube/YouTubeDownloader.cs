@@ -104,40 +104,12 @@ namespace YouTube_Downloader
             return str14;
         }
 
-        private static List<string> ExtractUrls(string html)
+        private static string[] ExtractUrls(string html)
         {
-            List<string> urls = new List<string>();
-            string DataBlockStart = "\"url_encoded_fmt_stream_map\":\\s+\"(.+?)&";  // Marks start of Javascript Data Block
-
-            html = Uri.UnescapeDataString(Regex.Match(html, DataBlockStart, RegexOptions.Singleline).Groups[1].ToString());
-
-            string firstPatren = html.Substring(0, html.IndexOf('=') + 1);
-            var matchs = Regex.Split(html, firstPatren);
-            for (int i = 0; i < matchs.Length; i++)
-                matchs[i] = firstPatren + matchs[i];
-            foreach (var match in matchs)
-            {
-                if (!match.Contains("url=")) continue;
-
-                string url = Helper.GetTxtBtwn(match, "url=", "\\u0026", 0);
-                if (url == "") url = Helper.GetTxtBtwn(match, "url=", ",url", 0);
-                if (url == "") url = Helper.GetTxtBtwn(match, "url=", "\",", 0);
-
-                string sig = Helper.GetTxtBtwn(match, "sig=", "\\u0026", 0);
-                if (sig == "") sig = Helper.GetTxtBtwn(match, "sig=", ",sig", 0);
-                if (sig == "") sig = Helper.GetTxtBtwn(match, "sig=", "\",", 0);
-
-                while ((url.EndsWith(",")) || (url.EndsWith(".")) || (url.EndsWith("\"")))
-                    url = url.Remove(url.Length - 1, 1);
-
-                while ((sig.EndsWith(",")) || (sig.EndsWith(".")) || (sig.EndsWith("\"")))
-                    sig = sig.Remove(sig.Length - 1, 1);
-
-                if (string.IsNullOrEmpty(url)) continue;
-                if (!string.IsNullOrEmpty(sig))
-                    url += "&signature=" + sig;
-                urls.Add(url);
-            }
+            var startIndexOfUrls = html.IndexOf("url_encoded_fmt_stream_map");
+            html =  Helper.GetTxtBtwn(html, "url=", "\"", startIndexOfUrls);
+            html = Uri.UnescapeDataString(html);
+            var urls = Regex.Split(html, "url=");
             return urls;
         }
 

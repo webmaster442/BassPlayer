@@ -21,8 +21,15 @@ namespace BassPlayer
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            if (Settings.Default.WindowLeft >= 0) this.Left = Settings.Default.WindowLeft;
-            if (Settings.Default.WindowTop >= 0) this.Top = Settings.Default.WindowTop;
+            var size = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
+            if (Settings.Default.WindowLeft < size.Width && Settings.Default.WindowLeft >= 0)
+            {
+                this.Left = Settings.Default.WindowLeft;
+            }
+            if (Settings.Default.WindowTop < size.Height && Settings.Default.WindowTop >= 0)
+            {
+                this.Top = Settings.Default.WindowTop;
+            }
             if (IntPtr.Size == 4) this.Title += " | x86";
             else this.Title += " | x64";
         }
@@ -42,6 +49,32 @@ namespace BassPlayer
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
                 Player.ProcessArguments(files);
             }
+        }
+
+        private void ThumbPrevious_Click(object sender, EventArgs e)
+        {
+            Player.DoThumbCommand(Controls.Player.ThumbCommands.Previous);
+        }
+
+        private void ThumbPlayPause_Click(object sender, EventArgs e)
+        {
+            Player.DoThumbCommand(Controls.Player.ThumbCommands.PlayPause);
+            ThumbPlayPause.ImageSource = Player.GetPlayPauseIcon();
+        }
+
+        private void ThumbStop_Click(object sender, EventArgs e)
+        {
+            Player.DoThumbCommand(Controls.Player.ThumbCommands.Stop);
+        }
+
+        private void ThumbNext_Click(object sender, EventArgs e)
+        {
+            Player.DoThumbCommand(Controls.Player.ThumbCommands.Next);
+        }
+
+        private void ThumbMute_Click(object sender, EventArgs e)
+        {
+            Player.DoThumbCommand(Controls.Player.ThumbCommands.MuteUnMute);
         }
     }
 }

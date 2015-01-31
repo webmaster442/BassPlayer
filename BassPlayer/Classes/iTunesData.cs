@@ -122,6 +122,7 @@ namespace BassPlayer.Classes
 
         public IEnumerable<PlayListEntry> Filter(string filterstring)
         {
+            if (!isLoaded) return null;
             string[] parts = filterstring.Split('/');
             if (parts.Length < 2) return null;
             switch (parts[0])

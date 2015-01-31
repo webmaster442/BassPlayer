@@ -18,17 +18,17 @@ namespace BassPlayer.Controls
             InitializeComponent();
         }
 
-        private Task<PlayListEntry[]> GetEntrys()
+        private Task<PlayListEntry[]> GetEntrys(string[] lines)
         {
             return Task<PlayListEntry[]>.Run(() =>
             {
-                string[] lines = TbUrls.Text.Split('\n');
                 List<PlayListEntry> ret = new List<PlayListEntry>(lines.Length);
 
                 foreach (var line in lines)
                 {
                     var quality = YouTubeDownloader.GetYouTubeVideoUrls(line);
                     var good = (from i in quality where i.Extention == "mp4" && i.Dimension.Width == 640 select i).FirstOrDefault();
+                    if (good == null) return ret.ToArray();
                     PlayListEntry ple = new PlayListEntry();
                     ple.Title = good.VideoTitle;
                     ple.FileName = good.DownloadUrl;
@@ -39,14 +39,23 @@ namespace BassPlayer.Controls
             });
         }
 
+        public PlayListEntry[] Entrys
+        {
+            get;
+            private set;
+        }
+
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
         {
-
+            this.DialogResult = false;
         }
 
         private async void BtnOk_Click(object sender, RoutedEventArgs e)
         {
-            PlayListEntry[] urls = await GetEntrys();
+            string[] lines = TbUrls.Text.Split('\n');
+            PlayListEntry[] urls = await GetEntrys(lines);
+            Entrys = urls;
+            this.DialogResult = true;
         }
     }
 }

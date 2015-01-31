@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows.Threading;
 using System.Linq;
 using System.Windows.Media.Imaging;
+using System.Windows.Shell;
 
 namespace BassPlayer.Controls
 {
@@ -107,20 +108,61 @@ namespace BassPlayer.Controls
             catch (Exception ex) { Helpers.ErrorDialog(ex, "File Load error"); }
         }
 
+        public enum ThumbCommands
+        {
+            PlayPause,
+            Stop,
+            Next,
+            Previous,
+            MuteUnMute
+        }
+
+        public void DoThumbCommand(ThumbCommands command)
+        {
+            switch (command)
+            {
+                case ThumbCommands.Next:
+                    BtnNext_Click(null, null);
+                    break;
+                case ThumbCommands.Stop:
+                    BtnStrop_Click(null, null);
+                    break;
+                case ThumbCommands.Previous:
+                    BtnPrevious_Click(null, null);
+                    break;
+                case ThumbCommands.MuteUnMute:
+                    BtnMute.IsChecked = !BtnMute.IsChecked;
+                    BtnMute_Click(null, null);
+                    break;
+                case ThumbCommands.PlayPause:
+                    BtnPlayPause.IsChecked = !BtnPlayPause.IsChecked;
+                    BtnPlayPause_Click(null, null);
+                    break;
+            }
+        }
+
+        public BitmapImage GetPlayPauseIcon()
+        {
+            if ((bool)BtnPlayPause.IsChecked)
+            {
+                return new BitmapImage(new Uri("/BassPlayer;component/Images/pause-100.png", UriKind.Relative));
+            }
+            return new BitmapImage(new Uri("/BassPlayer;component/Images/play-100.png", UriKind.Relative));
+        }
+
         private void BtnPlayPause_Click(object sender, RoutedEventArgs e)
         {
             if ((bool)BtnPlayPause.IsChecked)
             {
                 App.Engine.Pause();
                 App.PauseTaskbar();
-                ImgPlayPause.Source = new BitmapImage(new Uri("/BassPlayer;component/Images/pause-100.png", UriKind.Relative));
             }
             else
             {
                 App.Engine.Play();
                 App.PlayTaskbar();
-                ImgPlayPause.Source = new BitmapImage(new Uri("/BassPlayer;component/Images/play-100.png", UriKind.Relative));
             }
+            ImgPlayPause.Source = GetPlayPauseIcon();
             _timer.IsEnabled = (bool)!BtnPlayPause.IsChecked;
         }
 
