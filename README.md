@@ -1,6 +1,8 @@
 # BassPlayer
 
-An Audio Player based on bass.dll components & a Total Commander lister plugin
+An Audio Player based on bass.dll components & a Total Commander lister plugin.
+
+Compiled binary can be downloaded from: https://drive.google.com/folderview?id=0BzRxNHSnXbB5fjc0bHhQZU4tWXhuWFFHWDBHcWtfVzgtRnJ0d2lVZURTMXZnUmtfV1UwNmc&usp=sharing 
 
 Supported formats for playback:
  - MP3
