@@ -67,7 +67,7 @@ namespace BassPlayer.Controls
                 if (_filters.Contains(extension)) PlayList.AppendFile(file);
                 else if (_lists.Contains(extension)) PlayList.AppendPlaylist(file);
             }
-
+            App.Current.MainWindow.Activate();
         }
 
         private void CbDeviceList_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -88,7 +88,11 @@ namespace BassPlayer.Controls
             if (App.Engine.MediaType == MediaType.Stream && elen == 0) return;
             SPosition.Value = epos;
             double progress = epos / elen;
-            if (elen - epos < 1) PlayList.DoNextTrack();
+            if (elen - epos < 1)
+            {
+                BtnStrop_Click(null, null);
+                PlayList.DoNextTrack();
+            }
             App.SetTaskbarProgress(progress);
         }
 
@@ -145,9 +149,9 @@ namespace BassPlayer.Controls
         {
             if ((bool)BtnPlayPause.IsChecked)
             {
-                return new BitmapImage(new Uri("/BassPlayer;component/Images/pause-100.png", UriKind.Relative));
+                return new BitmapImage(new Uri("pack://application:,,,/BassPlayer;component/Images/pause-100.png"));
             }
-            return new BitmapImage(new Uri("/BassPlayer;component/Images/play-100.png", UriKind.Relative));
+            return new BitmapImage(new Uri("pack://application:,,,/BassPlayer;component/Images/play-100.png"));
         }
 
         private void BtnPlayPause_Click(object sender, RoutedEventArgs e)

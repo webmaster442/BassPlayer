@@ -68,7 +68,7 @@ HWND __stdcall ListLoad(HWND ParentWin, char* FileToLoad, int ShowFlags)
 	ShExecInfo.lpFile = L"BassPlayer.exe";
 	ShExecInfo.lpParameters = safefile;
 	ShExecInfo.lpDirectory = dllpath;
-	ShExecInfo.nShow = SW_MINIMIZE;
+	ShExecInfo.nShow = SW_NORMAL;
 	ShExecInfo.hInstApp = NULL;
 	ShellExecuteEx(&ShExecInfo);
 	Sleep(25);

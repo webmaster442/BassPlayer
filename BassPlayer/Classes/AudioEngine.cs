@@ -1,8 +1,11 @@
 ﻿using BassPlayer.Properties;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Windows;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Un4seen.Bass;
@@ -251,16 +254,26 @@ namespace BassPlayer.Classes
                 if (tags.PictureCount > 0)
                 {
                     var img = tags.PictureGetImage(0);
-                    MemoryStream ms = new MemoryStream();
-                    img.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
-                    BitmapImage bi = new BitmapImage();
-                    bi.BeginInit();
-                    bi.StreamSource = ms;
-                    bi.EndInit();
-                    return bi;
+                    return Bitmap2BitmapImage((Bitmap)img);
                 }
                 else return new BitmapImage(new Uri("/BassPlayer;component/Images/audio_file-100.png", UriKind.Relative));
             }
+        }
+
+        [DllImport("gdi32.dll")]
+        private static extern bool DeleteObject(IntPtr hObject);
+
+        private BitmapSource Bitmap2BitmapImage(Bitmap bitmap)
+        {
+            IntPtr hBitmap = bitmap.GetHbitmap();
+            BitmapSource retval;
+            try
+            {
+                retval = Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                
+            }
+            finally { DeleteObject(hBitmap); }
+            return retval;
         }
 
         /// <summary>
@@ -362,7 +375,7 @@ namespace BassPlayer.Classes
         public static PlayListEntry[] GetCdInfo(string drive)
         {
             List<PlayListEntry> list = new List<PlayListEntry>();
-          
+
             int drivecount = BassCd.BASS_CD_GetDriveCount(true);
             int driveindex = 0;
             for (int i = 0; i < drivecount; i++)

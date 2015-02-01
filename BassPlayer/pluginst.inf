@@ -1,0 +1,5 @@
+[plugininstall]
+description=Bass Player 1.0 Beta - Simple Audio player lister plugin
+type=wlx
+file=BassPlayerLister.wlx
+defaultdir=plugins\wlx\BassPlayer

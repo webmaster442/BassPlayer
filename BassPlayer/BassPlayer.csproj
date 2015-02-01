@@ -222,6 +222,9 @@
     <Content Include="Engine\x86\tags.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <None Include="pluginst.inf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Resource Include="Images\itunes\album-compilation-50.png" />
     <Resource Include="Images\itunes\album.png" />
     <Resource Include="Images\itunes\artist-50.png" />
