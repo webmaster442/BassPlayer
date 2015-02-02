@@ -234,14 +234,20 @@ namespace BassPlayer.Classes
         /// <summary>
         /// Get Playing tags
         /// </summary>
-        public string Tags
+        public PlayListEntry Tags
         {
             get
             {
                 TAG_INFO tags = new TAG_INFO();
                 if (_filetype == MediaType.Stream) BassTags.BASS_TAG_GetFromURL(_source, tags);
                 else BassTags.BASS_TAG_GetFromFile(_source, tags);
-                return string.Format("{0} - {1}", tags.artist, tags.title);
+                PlayListEntry ret = new PlayListEntry
+                    {
+                        Artist = tags.artist,
+                        Title = tags.title,
+                        FileName = this.FileName
+                    };
+                return ret;
             }
         }
 

@@ -1,0 +1,38 @@
+﻿<UserControl x:Class="BassPlayer.Controls.OSD"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="43" d:DesignWidth="400"
+             Loaded="UserControl_Loaded">
+    <TabControl TabStripPlacement="Left"
+                Background="Transparent"
+                BorderThickness="0">
+        <TabItem Header="I"
+                 ToolTip="Info">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Grid.Row="0"
+                           VerticalAlignment="Center"
+                           TextAlignment="Center"
+                           FontWeight="Bold"
+                           Text="Artist - Title"
+                           x:Name="TitleText"/>
+                <TextBlock Grid.Row="1"
+                           VerticalAlignment="Center"
+                           TextAlignment="Center"
+                           Text="00:00:00 / 00:00:00"
+                           x:Name="TimeText"
+                           MouseDown="TimeText_MouseDown"/>
+            </Grid>
+        </TabItem>
+        <TabItem Header="V"
+                 ToolTip="Visual">
+            
+        </TabItem>
+    </TabControl>
+</UserControl>

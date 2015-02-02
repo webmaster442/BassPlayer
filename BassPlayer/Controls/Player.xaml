@@ -4,8 +4,9 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:BassPlayer.Classes"
+             xmlns:local2="clr-namespace:BassPlayer.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="90" d:DesignWidth="854"
+             d:DesignHeight="92" d:DesignWidth="854"
              x:Name="Control"
              Loaded="UserControl_Loaded">
     <UserControl.Resources>
@@ -29,7 +30,7 @@
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        
+
         <Image x:Name="CoverArt"
                Grid.Row="1"
                Margin="4"
@@ -45,7 +46,7 @@
                        Source="../Images/audio_file-100.png"/>
             </Image.ToolTip>
         </Image>
-    
+
         <StackPanel VerticalAlignment="Center"
                     Orientation="Horizontal"
                     Grid.Row="0"
@@ -77,20 +78,17 @@
         <StackPanel Grid.Row="1"
                     Grid.Column="5"
                     Grid.RowSpan="2">
-            <TextBlock Text=""
-                       FontWeight="Bold"
-                       TextAlignment="Center"
-                       x:Name="TbArtistTitle"/>
-            <TextBlock Text=""
-                       TextAlignment="Center"
-                       x:Name="TbPosition"/>
+            
+            <local2:OSD x:Name="OSD"/>
+            
             <Slider x:Name="SPosition"
                     Margin="5,0"
                     Thumb.DragCompleted="SPosition_DragCompleted"
+                    Thumb.DragStarted="SPosition_DragStarted"
                     ToolTip="{Binding ElementName=SPosition, Path=Value, Converter={StaticResource TimeConv}}"/>
         </StackPanel>
-        
-        
+
+
         <!-- Gombok -->
         <Button Grid.Column="0"
                 Grid.Row="1"

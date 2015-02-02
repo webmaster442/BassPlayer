@@ -21,6 +21,7 @@ namespace BassPlayer.Controls
         private DispatcherTimer _timer;
         private float _vol;
         private string[] _filters, _lists;
+        private bool _isDraging;
 
         private static DependencyProperty AllwaysTopProperty = DependencyProperty.Register("AllwaysTop", typeof(bool?), typeof(Player), new PropertyMetadata(false));
 
@@ -35,6 +36,7 @@ namespace BassPlayer.Controls
         public Player()
         {
             InitializeComponent();
+            _isDraging = false;
             if (DesignerProperties.GetIsInDesignMode(this)) return;
             _loaded = false;
             _timer = new DispatcherTimer();
@@ -75,25 +77,6 @@ namespace BassPlayer.Controls
             string devicename = CbDeviceList.SelectedItem.ToString();
             App.Engine.ChangeDevice(devicename);
             VolSlider.Value = App.Engine.Volume;
-        }
-
-        private void _timer_Tick(object sender, EventArgs e)
-        {
-            var elen = App.Engine.Length;
-            var epos = App.Engine.Position;
-            TimeSpan len = TimeSpan.FromSeconds(elen);
-            TimeSpan pos = TimeSpan.FromSeconds(epos);
-            TbPosition.Text = string.Format("{0} / {1}", pos.ToShortTime(), len.ToShortTime());
-            TbArtistTitle.Text = App.Engine.Tags;
-            if (App.Engine.MediaType == MediaType.Stream && elen == 0) return;
-            SPosition.Value = epos;
-            double progress = epos / elen;
-            if (elen - epos < 1)
-            {
-                BtnStrop_Click(null, null);
-                PlayList.DoNextTrack();
-            }
-            App.SetTaskbarProgress(progress);
         }
 
         public void Load(string file)
@@ -178,10 +161,38 @@ namespace BassPlayer.Controls
 
         private void SPosition_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
         {
-            _timer.IsEnabled = false;
             App.Engine.Position = SPosition.Value;
             SPosition.Value = App.Engine.Position;
-            _timer.IsEnabled = true;
+            _isDraging = false;
+        }
+
+        private void SPosition_DragStarted(object sender, System.Windows.Controls.Primitives.DragStartedEventArgs e)
+        {
+            _isDraging = true;
+        }
+
+        private void _timer_Tick(object sender, EventArgs e)
+        {
+            var elen = App.Engine.Length;
+            var epos = App.Engine.Position;
+            if (_isDraging)
+            {
+                OSD.SongPosition = SPosition.Value;
+                return;
+            }
+
+            OSD.SongPosition = epos;
+            OSD.SongLength = elen;
+            OSD.Tags = App.Engine.Tags;
+            if (App.Engine.MediaType == MediaType.Stream && elen == 0) return;
+            SPosition.Value = epos;
+            double progress = epos / elen;
+            if (elen - epos < 1)
+            {
+                BtnStrop_Click(null, null);
+                PlayList.DoNextTrack();
+            }
+            App.SetTaskbarProgress(progress);
         }
 
         private void VolSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)

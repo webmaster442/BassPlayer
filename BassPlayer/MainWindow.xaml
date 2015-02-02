@@ -46,7 +46,7 @@
     </Window.TaskbarItemInfo>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="90"/>
+            <RowDefinition Height="92"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <local:Player Grid.Row="0"
