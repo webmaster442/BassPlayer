@@ -2,6 +2,10 @@
 using System;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
+using System.Windows.Shapes;
+using System.Windows.Threading;
+using Un4seen.Bass;
 
 namespace BassPlayer.Controls
 {
@@ -12,12 +16,37 @@ namespace BassPlayer.Controls
     {
         private bool _showremain;
         private bool _loaded;
+        private DispatcherTimer _timer;
+        private Polyline _vline;
 
         public OSD()
         {
             InitializeComponent();
             _showremain = false;
             _loaded = false;
+            _timer = new DispatcherTimer();
+            _timer.Interval = TimeSpan.FromMilliseconds(40);
+            _vline = new Polyline();
+            _vline.Stroke = new SolidColorBrush(Colors.Black);
+            _vline.StrokeThickness = 1;
+            _vline.VerticalAlignment = System.Windows.VerticalAlignment.Center;
+            Visual.Children.Add(_vline);
+            _timer.Tick += _timer_Tick;
+        }
+
+        private void _timer_Tick(object sender, EventArgs e)
+        {
+            if (App.Engine.MixerHandle == 0) return;
+            int length = (int)Bass.BASS_ChannelSeconds2Bytes(App.Engine.MixerHandle, 0.04);
+            short[] data = new short[length / 2];
+            length = Bass.BASS_ChannelGetData(App.Engine.MixerHandle, data, length);
+            _vline.Points.Clear();
+            double xscale = Visual.ActualWidth / data.Length;
+            double yscale = ((Visual.ActualHeight - 10) / 2) / (short.MaxValue);
+            for (int i=1; i<data.Length; i+=2)
+            {
+                _vline.Points.Add(new Point(i * xscale, data[i] * yscale));
+            }
         }
 
         public static DependencyProperty TagsProperty = DependencyProperty.Register("Tags", typeof(PlayListEntry), typeof(OSD));
@@ -80,6 +109,11 @@ namespace BassPlayer.Controls
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             _loaded = true;
+        }
+
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            _timer.IsEnabled = (OSDTab.SelectedIndex == 1);
         }
 
     }

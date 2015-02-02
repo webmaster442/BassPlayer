@@ -162,7 +162,7 @@ namespace BassPlayer.Classes
                     Bass.BASS_StreamFree(_mixer);
                     _mixer = 0;
                 }
-                var mixerflags = BASSFlag.BASS_MIXER_DOWNMIX | BASSFlag.BASS_SAMPLE_FLOAT | BASSFlag.BASS_MIXER_POSEX | BASSFlag.BASS_STREAM_AUTOFREE;
+                var mixerflags = BASSFlag.BASS_MIXER_DOWNMIX | BASSFlag.BASS_MIXER_POSEX | BASSFlag.BASS_STREAM_AUTOFREE;
                 if (_file.StartsWith("http://") || _file.StartsWith("https://"))
                 {
                     Bass.BASS_SetConfigPtr(BASSConfig.BASS_CONFIG_NET_PROXY, CreateProxyPtr());
@@ -331,6 +331,14 @@ namespace BassPlayer.Classes
                 var pos = Bass.BASS_ChannelSeconds2Bytes(_source, value);
                 Bass.BASS_ChannelSetPosition(_source, pos);
             }
+        }
+
+        /// <summary>
+        /// Returns mixer handle
+        /// </summary>
+        public int MixerHandle
+        {
+            get { return _mixer; }
         }
 
         /// <summary>

@@ -7,7 +7,9 @@
              d:DesignHeight="43" d:DesignWidth="400"
              Loaded="UserControl_Loaded">
     <TabControl TabStripPlacement="Left"
+                x:Name="OSDTab"
                 Background="Transparent"
+                SelectionChanged="TabControl_SelectionChanged"
                 BorderThickness="0">
         <TabItem Header="I"
                  ToolTip="Info">
@@ -32,7 +34,7 @@
         </TabItem>
         <TabItem Header="V"
                  ToolTip="Visual">
-            
+            <Grid x:Name="Visual"></Grid>
         </TabItem>
     </TabControl>
 </UserControl>
