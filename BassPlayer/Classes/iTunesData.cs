@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 using System.IO;
+using System.Linq;
 using System.Web;
+using System.Xml.Linq;
 
 namespace BassPlayer.Classes
 {
@@ -25,6 +23,7 @@ namespace BassPlayer.Classes
         public int DiscNumber { get; set; }     // Disc number
         public int TrackNumber { get; set; }    // TrackNumber
         public bool Compilation { get; set; }   // Compilation
+        public bool Podcast { get; set; }       // Podcast
         public string AlbumArtist { get; set; } // Album Artist
 
     }
@@ -56,13 +55,13 @@ namespace BassPlayer.Classes
 
         private IEnumerable<iTunesSong> LoadSongsFromITunes(string filename)
         {
-            var rawsongs = from song in XDocument.Load(filename).Descendants("plist").Elements("dict").Elements("dict").Elements("dict")
+            var rawsongs = from song in XDocument.Load(filename).Descendants("plist").Elements("dict").Elements("dict").Elements("dict").AsParallel()
                            select new XElement("song",
                                from key in song.Descendants("key")
                                select new XElement(((string)key).Replace(" ", ""),
                                    (string)(XElement)key.NextNode));
 
-            var songs = from s in rawsongs
+            var songs = from s in rawsongs.AsParallel()
                         select new iTunesSong()
                             {
                                 Album = s.Element("Album").ToString(string.Empty),
@@ -74,6 +73,7 @@ namespace BassPlayer.Classes
                                 TotalTime = s.Element("TotalTime").ToInt64(0),
                                 TrackNumber = s.Element("TrackNumber").ToInt(0),
                                 Compilation = s.Element("Compilation").ToBool(),
+                                Podcast = s.Element("Podcast").ToBool(),
                                 AlbumArtist = s.Element("AlbumArtist").ToString(string.Empty),
                                 DiscNumber = s.Element("DiscNumber").ToInt(0)
                             };
@@ -85,7 +85,7 @@ namespace BassPlayer.Classes
             get
             {
                 if (!isLoaded) return null;
-                var query = (from i in _db group i by i.AlbumArtist into g select g).Select(i => i.Key).OrderBy(i => i);
+                var query = (from i in _db.AsParallel() orderby i.AlbumArtist select i.AlbumArtist).Distinct();
                 return query.ToArray();
             }
         }
@@ -95,7 +95,17 @@ namespace BassPlayer.Classes
             get
             {
                 if (!isLoaded) return null;
-                var query = (from i in _db where i.Compilation == false group i by i.Album into g select g).Select(i => i.Key);
+                var query = (from i in _db.AsParallel() where i.Compilation == false && i.Podcast == false orderby i.Album ascending select i.Album).Distinct();
+                return query.ToArray();
+            }
+        }
+
+        public string[] Podcasts
+        {
+            get
+            {
+                if (!isLoaded) return null;
+                var query = (from i in _db.AsParallel() where i.Podcast == true orderby i.Album ascending select i.Album).Distinct();
                 return query.ToArray();
             }
         }
@@ -105,7 +115,7 @@ namespace BassPlayer.Classes
             get
             {
                 if (!isLoaded) return null;
-                var query = (from i in _db where i.Compilation == true group i by i.Album into g select g).Select(i => i.Key);
+                var query = (from i in _db.AsParallel() where i.Compilation == true && i.Podcast == false orderby i.Album ascending select i.Album).Distinct();
                 return query.ToArray();
             }
         }
@@ -115,7 +125,7 @@ namespace BassPlayer.Classes
             get
             {
                 if (!isLoaded) return null;
-                var q = (from i in _db select i.Genre).Distinct();
+                var q = (from i in _db orderby i.Genre ascending select i.Genre).Distinct();
                 return q.ToArray();
             }
         }
@@ -137,6 +147,8 @@ namespace BassPlayer.Classes
                                 Time = i.TotalTime / 1000,
                                 FileName = FileFromUrl(i.Location)
                             }).ToArray();
+                case "Compilations":
+                case "Podcasts":
                 case "Albums":
                     return (from i in _db orderby i.DiscNumber, i.TrackNumber ascending
                             where i.Album == parts[1]
@@ -151,6 +163,16 @@ namespace BassPlayer.Classes
                     return (from i in _db
                             orderby i.Artist, i.Name ascending
                             where i.Genre == parts[1]
+                            select new PlayListEntry
+                            {
+                                Artist = i.Artist,
+                                Title = i.Name,
+                                Time = i.TotalTime / 1000,
+                                FileName = FileFromUrl(i.Location)
+                            }).ToArray();
+                case "Songs":
+                    return (from i in _db
+                            orderby i.Artist, i.Album, i.DiscNumber, i.TrackNumber ascending
                             select new PlayListEntry
                             {
                                 Artist = i.Artist,

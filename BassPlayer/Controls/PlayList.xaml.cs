@@ -49,8 +49,9 @@ namespace BassPlayer.Controls
             LbLib.ItemsSource = _tunes;
             ListItunesData(SpArtists, _itunes.Artists, "Artists");
             ListItunesData(SpAlbums, _itunes.Albums, "Albums");
-            ListItunesData(SpAlbums, _itunes.Compilations, "Compilations");
+            ListItunesData(SpCompilations, _itunes.Compilations, "Compilations");
             ListItunesData(SpGenres, _itunes.Genres, "Genres");
+            ListItunesData(SpPodcasts, _itunes.Podcasts, "Podcasts");
             TabTunes.IsEnabled = _itunes.isLoaded;
         }
 
@@ -650,7 +651,7 @@ namespace BassPlayer.Controls
             {
                 Button b = new Button();
                 b.Content = item;
-                b.Margin = new Thickness(20, 2, 0, 1);
+                b.Margin = new Thickness(30, 2, 5, 2);
                 b.Click += b_Click;
                 b.ToolTip = string.Format("{0}/{1}", linkcat, item);
                 target.Children.Add(b);
@@ -663,6 +664,18 @@ namespace BassPlayer.Controls
             _tunes.Clear();
             var result = _itunes.Filter(s);
             _tunes.AddRange(result);
+        }
+
+        private void BtnListAll_Click(object sender, RoutedEventArgs e)
+        {
+            _tunes.Clear();
+            var result = _itunes.Filter("Songs/Songs");
+            _tunes.AddRange(result);
+        }
+
+        private void BtnFilter_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
