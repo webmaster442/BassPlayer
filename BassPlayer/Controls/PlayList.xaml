@@ -238,6 +238,17 @@
             <Grid.RowDefinitions>
                 <RowDefinition/>
             </Grid.RowDefinitions>
+            <StackPanel x:Name="Processing"
+                        Visibility="Collapsed"
+                        Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}"
+                        Panel.ZIndex="99">
+                <ProgressBar Height="30"
+                             IsIndeterminate="True"
+                             Margin="30,160,30,10"/>
+                <TextBlock Text="Processing ..."
+                           TextAlignment="Center"
+                           FontSize="22"/>
+            </StackPanel>
             <TabControl Grid.Row="1"
                         TabStripPlacement="Left"
                         x:Name="TcView"

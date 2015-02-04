@@ -6,11 +6,11 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 
@@ -56,7 +56,7 @@ namespace BassPlayer.Controls
         }
 
         #region Private Functions
-        private void LoadM3u(string file)
+        private async Task LoadM3u(string file)
         {
             try
             {
@@ -91,7 +91,7 @@ namespace BassPlayer.Controls
             catch (Exception ex) { Helpers.ErrorDialog(ex, "File Load error"); }
         }
 
-        private void LoadPls(string file)
+        private async Task LoadPls(string file)
         {
             try
             {
@@ -128,7 +128,7 @@ namespace BassPlayer.Controls
             catch (Exception ex) { Helpers.ErrorDialog(ex, "File Load error"); }
         }
 
-        private void LoadBPL(string file)
+        private async Task LoadBPL(string file)
         {
             try
             {
@@ -158,7 +158,7 @@ namespace BassPlayer.Controls
             catch (Exception ex) { Helpers.ErrorDialog(ex, "File Load error"); }
         }
 
-        private void LoadWPL(string file)
+        private async Task LoadWPL(string file)
         {
             try
             {
@@ -276,65 +276,85 @@ namespace BassPlayer.Controls
             }
         }
 
-        public void AppendFile(string file)
+        public async void AppendFile(string file)
         {
-            _playlist.Add(PlayListEntry.FromFile(file));
+            await Task.Run(() => 
+            { 
+                _playlist.Add(PlayListEntry.FromFile(file));
+            });
         }
 
-        public void AppendPlaylist(string file)
+        public async void AppendPlaylist(string file)
         {
+            Processing.Visibility = System.Windows.Visibility.Visible;
             string extenssion = Path.GetExtension(file);
             switch (extenssion)
             {
                 case ".m3u":
                 case ".txt":
-                    LoadM3u(file);
+                    await LoadM3u(file);
                     break;
                 case ".bpl":
-                    LoadBPL(file);
+                    await LoadBPL(file);
                     break;
                 case ".pls":
-                    LoadPls(file);
+                    await LoadPls(file);
                     break;
                 case ".wpl":
-                    LoadWPL(file);
+                    await LoadWPL(file);
                     break;
             }
+            Processing.Visibility = System.Windows.Visibility.Collapsed;
         }
         #endregion
 
         #region Load / Add menu
-        private void MenAddFiles_Click(object sender, RoutedEventArgs e)
+        private async void MenAddFiles_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
             ofd.Filter = "Audio Files | " + App.Formats;
             ofd.Multiselect = true;
             if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                foreach (var f in ofd.FileNames)
-                {
-                    _playlist.Add(PlayListEntry.FromFile(f));
-                }
+                Processing.Visibility = System.Windows.Visibility.Visible;
+                string[] files = ofd.FileNames;
+                List<PlayListEntry> items = new List<PlayListEntry>(files.Length);
+                await Task.Run(() =>
+                    {
+                        foreach (var f in files)
+                        {
+                            items.Add(PlayListEntry.FromFile(f));
+                        }
+                    });
+                _playlist.AddRange(items);
+                Processing.Visibility = System.Windows.Visibility.Collapsed;
             }
         }
 
-        private void MenAddFolder_Click(object sender, RoutedEventArgs e)
+        private async void MenAddFolder_Click(object sender, RoutedEventArgs e)
         {
-            string[] filters =  App.Formats.Split(';');
+            string[] filters = App.Formats.Split(';');
             System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();
             fbd.Description = "Select folder to be added";
             if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                List<string> Files = new List<string>(30);
-                foreach (var filter in filters)
-                {
-                    Files.AddRange(Directory.GetFiles(fbd.SelectedPath, filter));
-                }
-                Files.Sort();
-                foreach (var f in Files)
-                {
-                    _playlist.Add(PlayListEntry.FromFile(f));
-                }
+                List<PlayListEntry> _items = new List<PlayListEntry>();
+                Processing.Visibility = System.Windows.Visibility.Visible;
+                await Task.Run(() =>
+                    {
+                        List<string> Files = new List<string>(30);
+                        foreach (var filter in filters)
+                        {
+                            Files.AddRange(Directory.GetFiles(fbd.SelectedPath, filter));
+                        }
+                        Files.Sort();
+                        foreach (var f in Files)
+                        {
+                            _items.Add(PlayListEntry.FromFile(f));
+                        }
+                    });
+                _playlist.AddRange(_items);
+                Processing.Visibility = System.Windows.Visibility.Collapsed;
             }
         }
 
@@ -474,7 +494,7 @@ namespace BassPlayer.Controls
                                 var edir = Path.GetDirectoryName(entry.FileName);
                                 if (edir.StartsWith(targetdir))
                                 {
-                                    var line = edir.Replace(targetdir + "\\", "");
+                                    var line = entry.FileName.Replace(targetdir + "\\", "");
                                     contents.WriteLine(line);
                                 }
                                 else contents.WriteLine(entry.FileName);
