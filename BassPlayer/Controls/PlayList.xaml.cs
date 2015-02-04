@@ -628,7 +628,7 @@ namespace BassPlayer.Controls
             if (DesignerProperties.GetIsInDesignMode(this)) return;
             if (sender == e.OriginalSource)
             {
-                App.Current.MainWindow.Height = 160;
+                App.Current.MainWindow.Height = 155;
                 e.Handled = true;
             }
         }

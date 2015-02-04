@@ -23,18 +23,21 @@
                            TextAlignment="Center"
                            FontWeight="Bold"
                            Text="Artist - Title"
+                           Style="{StaticResource GlassText}"
                            x:Name="TitleText"/>
                 <TextBlock Grid.Row="1"
                            VerticalAlignment="Center"
                            TextAlignment="Center"
                            Text="00:00:00 / 00:00:00"
+                           Style="{StaticResource GlassText}"
                            x:Name="TimeText"
                            MouseDown="TimeText_MouseDown"/>
             </Grid>
         </TabItem>
         <TabItem Header="V"
                  ToolTip="Visual">
-            <Grid x:Name="Visual"></Grid>
+            <Grid x:Name="Visual">
+            </Grid>
         </TabItem>
     </TabControl>
 </UserControl>

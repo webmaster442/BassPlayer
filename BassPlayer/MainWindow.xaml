@@ -2,6 +2,7 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:BassPlayer.Controls"
+        xmlns:local2="clr-namespace:BassPlayer"
         Title="BassPlayer"
         Height="480"
         Width="854"
@@ -11,6 +12,39 @@
         Drop="Window_Drop"
         Closing="Window_Closing"
         Loaded="Window_Loaded">
+    <Window.Style>
+        <Style TargetType="{x:Type local2:MainWindow}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type local2:MainWindow}">
+                        <Grid>
+                            <Border Background="Transparent"
+                                    Margin="{Binding Source={x:Static SystemParameters.WindowNonClientFrameThickness}}">
+                                <ContentPresenter Content="{TemplateBinding Content}" />
+                            </Border>
+                            <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Title}" 
+                                       VerticalAlignment="Top" HorizontalAlignment="Left" 
+                                       Margin="36,8,0,0"/>
+                            <Image Source="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Icon}"
+                                   VerticalAlignment="Top" HorizontalAlignment="Left"
+                                   Margin="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(WindowChrome.WindowChrome).ResizeBorderThickness}" 
+                                   Width="{Binding Source={x:Static SystemParameters.SmallIconWidth}}"
+                                   WindowChrome.IsHitTestVisibleInChrome="True"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="WindowChrome.WindowChrome">
+                <Setter.Value>
+                    <WindowChrome GlassFrameThickness="9,146,9,9"
+                                  CaptionHeight="30"
+                                  ResizeBorderThickness="4"
+                                  NonClientFrameEdges="Bottom"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+    </Window.Style>
     <Window.TaskbarItemInfo>
         <TaskbarItemInfo x:Name="Taskbar" ProgressState="Normal">
             <TaskbarItemInfo.ThumbButtonInfos>
@@ -44,7 +78,15 @@
             </TaskbarItemInfo.ThumbButtonInfos>
         </TaskbarItemInfo>
     </Window.TaskbarItemInfo>
-    <Grid>
+    <Grid >
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#00000000" Offset="0"/>
+                <GradientStop Color="{StaticResource {x:Static SystemColors.ControlColorKey}}" Offset="0.21"/>
+                <GradientStop Color="{StaticResource {x:Static SystemColors.ControlColorKey}}" Offset="0.28"/>
+                <GradientStop Color="#00000000" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
         <Grid.RowDefinitions>
             <RowDefinition Height="92"/>
             <RowDefinition/>

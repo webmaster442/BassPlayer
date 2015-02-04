@@ -16,7 +16,7 @@ namespace BassPlayer.Controls
     {
         private bool _showremain;
         private bool _loaded;
-        private DispatcherTimer _timer;
+        private DispatcherTimer _visualTimer;
         private Polyline _vline;
 
         public OSD()
@@ -24,25 +24,26 @@ namespace BassPlayer.Controls
             InitializeComponent();
             _showremain = false;
             _loaded = false;
-            _timer = new DispatcherTimer();
-            _timer.Interval = TimeSpan.FromMilliseconds(40);
+            _visualTimer = new DispatcherTimer();
+            _visualTimer.Interval = TimeSpan.FromMilliseconds(40);
             _vline = new Polyline();
             _vline.Stroke = new SolidColorBrush(Colors.Black);
             _vline.StrokeThickness = 1;
+            _vline.Stroke = SystemColors.HighlightBrush;
             _vline.VerticalAlignment = System.Windows.VerticalAlignment.Center;
             Visual.Children.Add(_vline);
-            _timer.Tick += _timer_Tick;
+            _visualTimer.Tick += _visualTimer_Tick;
         }
 
-        private void _timer_Tick(object sender, EventArgs e)
+        private void _visualTimer_Tick(object sender, EventArgs e)
         {
             if (App.Engine.MixerHandle == 0) return;
-            int length = (int)Bass.BASS_ChannelSeconds2Bytes(App.Engine.MixerHandle, 0.04);
+            int length = (int)Bass.BASS_ChannelSeconds2Bytes(App.Engine.MixerHandle, 0.01);
             short[] data = new short[length / 2];
             length = Bass.BASS_ChannelGetData(App.Engine.MixerHandle, data, length);
             _vline.Points.Clear();
             double xscale = Visual.ActualWidth / data.Length;
-            double yscale = ((Visual.ActualHeight - 10) / 2) / (short.MaxValue);
+            double yscale = (Visual.ActualHeight * -0.35) / (short.MaxValue);
             for (int i=1; i<data.Length; i+=2)
             {
                 _vline.Points.Add(new Point(i * xscale, data[i] * yscale));
@@ -113,7 +114,7 @@ namespace BassPlayer.Controls
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            _timer.IsEnabled = (OSDTab.SelectedIndex == 1);
+            _visualTimer.IsEnabled = (OSDTab.SelectedIndex == 1);
         }
 
     }

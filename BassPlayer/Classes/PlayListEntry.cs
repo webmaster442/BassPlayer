@@ -17,6 +17,7 @@ namespace BassPlayer.Classes
         {
             get
             {
+                if (FileName == null) return null;
                 if (string.IsNullOrEmpty(Artist) && string.IsNullOrEmpty(Title))
                 {
                     if (FileName.StartsWith("http://")) return FileName;

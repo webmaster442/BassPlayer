@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:classes="clr-namespace:BassPlayer.Classes"
              mc:Ignorable="d"
-             Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}"
+             Background="Transparent"
              Loaded="UserControl_Loaded"
              d:DesignHeight="400" d:DesignWidth="800">
     <UserControl.Resources>
@@ -234,14 +234,14 @@
                 </MenuItem>
             </Menu>
         </Expander.Header>
-        <Grid>
+        <Grid Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}">
             <Grid.RowDefinitions>
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <TabControl Grid.Row="1"
                         TabStripPlacement="Left"
                         x:Name="TcView"
-                        Background="Transparent">
+                        Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}">
                 <TabItem Header="Playlist"
                          Background="Transparent">
                     <ListBox x:Name="LbList"
@@ -383,7 +383,7 @@
                                             <TextBlock Text="Albums"
                                                        VerticalAlignment="Center"
                                                        Margin="5"/>
-                                        </StackPanel> 
+                                        </StackPanel>
                                     </Expander.Header>
                                     <StackPanel x:Name="SpAlbums"/>
                                 </Expander>
