@@ -529,9 +529,9 @@ namespace BassPlayer.Controls
         private void MenManageDelete_Click(object sender, RoutedEventArgs e)
         {
             if (LbList.SelectedItems == null) return;
-            foreach (PlayListEntry entry in LbList.SelectedItems)
+            while (LbList.SelectedItems != null)
             {
-                _playlist.Remove(entry);
+                _playlist.Remove((PlayListEntry)LbList.SelectedItems[0]);
             }
         }
         #endregion
@@ -695,7 +695,9 @@ namespace BassPlayer.Controls
 
         private void BtnFilter_Click(object sender, RoutedEventArgs e)
         {
-
+            _tunes.Clear();
+            var result = _itunes.Search(TbFilter.Text);
+            _tunes.AddRange(result);
         }
     }
 }

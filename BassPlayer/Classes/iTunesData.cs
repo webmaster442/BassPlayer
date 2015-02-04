@@ -185,6 +185,24 @@ namespace BassPlayer.Classes
             }
         }
 
+        public IEnumerable<PlayListEntry> Search(string text)
+        {
+            text = text.ToLower();
+            return (from i in _db
+                    where i.Name.ToLower().Contains(text) || 
+                    i.Artist.ToLower().Contains(text) || 
+                    i.Album.ToLower().Contains(text) ||
+                    i.AlbumArtist.ToLower().Contains(text)
+                    orderby i.Artist, i.Album ascending
+                    select new PlayListEntry
+                    {
+                        Artist = i.Artist,
+                        Title = i.Name,
+                        Time = i.TotalTime / 1000,
+                        FileName = FileFromUrl(i.Location)
+                    }).ToArray();
+        }
+
         private string FileFromUrl(string p)
         {
             string decoded = HttpUtility.UrlDecode(p);

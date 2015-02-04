@@ -253,8 +253,16 @@
                         TabStripPlacement="Left"
                         x:Name="TcView"
                         Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}">
-                <TabItem Header="Playlist"
-                         Background="Transparent">
+                <TabItem Background="Transparent">
+                    <TabItem.Header>
+                        <StackPanel>
+                            <Image Source="../Images/Menu/ingredients_list-50.png"
+                                   Width="32"
+                                   Height="32"/>
+                            <TextBlock Text="Playlist"
+                                       TextAlignment="Center"/>
+                        </StackPanel>
+                    </TabItem.Header>
                     <ListBox x:Name="LbList"
                              Background="Transparent"
                              HorizontalContentAlignment="Stretch"
@@ -285,7 +293,16 @@
                         </ListBox.ItemTemplate>
                     </ListBox>
                 </TabItem>
-                <TabItem Header="Files">
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel>
+                            <Image Source="../Images/Menu/stack-50.png"
+                                   Width="32"
+                                   Height="32"/>
+                            <TextBlock Text="Files"
+                                       TextAlignment="Center"/>
+                        </StackPanel>
+                    </TabItem.Header>
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="25"/>
@@ -375,8 +392,16 @@
                         </ListBox>
                     </Grid>
                 </TabItem>
-                <TabItem Header="iTunes"
-                         x:Name="TabTunes">
+                <TabItem x:Name="TabTunes">
+                    <TabItem.Header>
+                        <StackPanel>
+                            <Image Source="../Images/Menu/mac_os-50.png"
+                                   Width="32"
+                                   Height="32"/>
+                            <TextBlock Text="iTunes"
+                                       TextAlignment="Center"/>
+                        </StackPanel>
+                    </TabItem.Header>
                     <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="220"/>

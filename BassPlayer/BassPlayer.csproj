@@ -275,6 +275,9 @@
     <Content Include="Engine\x86\tags.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Images\Menu\stack-50.png" />
+    <Resource Include="Images\Menu\ingredients_list-50.png" />
+    <Resource Include="Images\Menu\mac_os-50.png" />
     <None Include="pluginst.inf">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
