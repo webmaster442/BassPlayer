@@ -91,8 +91,44 @@ namespace BassPlayer.Controls
                 _timer.IsEnabled = (bool)!BtnPlayPause.IsChecked;
                 CoverArt.Source = App.Engine.ImageTag;
                 CoverArtLarge.Source = App.Engine.ImageTag;
+                Chapterize();
             }
             catch (Exception ex) { Helpers.ErrorDialog(ex, "File Load error"); }
+        }
+
+        private void Chapterize()
+        {
+            CmChapters.Items.Clear();
+            int cuts = 5;
+            if (App.Engine.Length >= 600) cuts = 10;
+            else if (App.Engine.Length >= 900) cuts = 15;
+            double cutlen = App.Engine.Length / cuts;
+
+            if (cutlen > 300)
+            {
+                cutlen = 300;
+                cuts = (int)(App.Engine.Length / 300);
+            }
+
+            for (int i = 1; i < cuts; i++)
+            {
+                MenuItem men = new MenuItem();
+                men.Header = TimeSpan.FromSeconds(i * cutlen).ToShortTime();
+                men.ToolTip = i * cutlen;
+                men.Click += men_Click;
+                CmChapters.Items.Add(men);
+            }
+
+        }
+
+        private void men_Click(object sender, RoutedEventArgs e)
+        {
+            MenuItem s = (MenuItem)sender;
+            double time = (double)s.ToolTip;
+            _timer.IsEnabled = false;
+            SPosition.Value = time;
+            App.Engine.Position = time;
+            _timer.IsEnabled = true;
         }
 
         public enum ThumbCommands

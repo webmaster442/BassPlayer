@@ -11,7 +11,8 @@
         AllowDrop="True"
         Drop="Window_Drop"
         Closing="Window_Closing"
-        Loaded="Window_Loaded">
+        Loaded="Window_Loaded"
+        Icon="Images/Menu/treble_clef-50.png">
     <Window.Style>
         <Style TargetType="{x:Type local2:MainWindow}">
             <Setter Property="Template">
@@ -38,7 +39,7 @@
                 <Setter.Value>
                     <WindowChrome GlassFrameThickness="9,146,9,9"
                                   CaptionHeight="30"
-                                  ResizeBorderThickness="4"
+                                  ResizeBorderThickness="9"
                                   NonClientFrameEdges="Bottom"/>
                 </Setter.Value>
             </Setter>

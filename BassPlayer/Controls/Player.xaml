@@ -83,12 +83,17 @@
                     Grid.RowSpan="2">
             
             <local2:OSD x:Name="OSD"/>
-            
+
             <Slider x:Name="SPosition"
                     Margin="5,0"
                     Thumb.DragCompleted="SPosition_DragCompleted"
                     Thumb.DragStarted="SPosition_DragStarted"
-                    ToolTip="{Binding ElementName=SPosition, Path=Value, Converter={StaticResource TimeConv}}"/>
+                    ToolTip="{Binding ElementName=SPosition, Path=Value, Converter={StaticResource TimeConv}}">
+                <Slider.ContextMenu>
+                    <ContextMenu x:Name="CmChapters">
+                    </ContextMenu>
+                </Slider.ContextMenu>
+            </Slider>
         </StackPanel>
 
 
