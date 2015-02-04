@@ -1,4 +1,5 @@
-﻿using BassPlayer.Properties;
+﻿using BassPlayer.Classes;
+using BassPlayer.Properties;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -12,11 +13,26 @@ namespace BassPlayer
     /// </summary>
     public partial class MainWindow : Window
     {
+        private KeyboardHook _keyboardhook;
+
         public MainWindow()
         {
             InitializeComponent();
             Playlist.AudioPlayerControls = Player;
             Player.PlayList = Playlist;
+            _keyboardhook = new KeyboardHook();
+            _keyboardhook.KeyPressed += _keyboardhook_KeyPressed;
+            try
+            {
+                _keyboardhook.RegisterHotKey(ModifierKeys.None, System.Windows.Forms.Keys.MediaPlayPause);
+                _keyboardhook.RegisterHotKey(ModifierKeys.None, System.Windows.Forms.Keys.MediaStop);
+                _keyboardhook.RegisterHotKey(ModifierKeys.None, System.Windows.Forms.Keys.MediaNextTrack);
+                _keyboardhook.RegisterHotKey(ModifierKeys.None, System.Windows.Forms.Keys.MediaPreviousTrack);
+            }
+            catch (Exception ex)
+            {
+                Helpers.ErrorDialog(ex, "Media keys registration failed");
+            }
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -48,6 +64,25 @@ namespace BassPlayer
             {
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
                 Player.ProcessArguments(files);
+            }
+        }
+
+        private void _keyboardhook_KeyPressed(object sender, KeyPressedEventArgs e)
+        {
+            switch (e.Key)
+            {
+                case System.Windows.Forms.Keys.MediaPreviousTrack:
+                    Player.DoThumbCommand(Controls.Player.ThumbCommands.Previous);
+                    break;
+                case System.Windows.Forms.Keys.MediaNextTrack:
+                    Player.DoThumbCommand(Controls.Player.ThumbCommands.Next);
+                    break;
+                case System.Windows.Forms.Keys.MediaPlayPause:
+                    Player.DoThumbCommand(Controls.Player.ThumbCommands.PlayPause);
+                    break;
+                case System.Windows.Forms.Keys.MediaStop:
+                    Player.DoThumbCommand(Controls.Player.ThumbCommands.Stop);
+                    break;
             }
         }
 

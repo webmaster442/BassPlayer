@@ -38,7 +38,7 @@
             <Setter Property="WindowChrome.WindowChrome">
                 <Setter.Value>
                     <WindowChrome GlassFrameThickness="9,146,9,9"
-                                  CaptionHeight="30"
+                                  CaptionHeight="22"
                                   ResizeBorderThickness="9"
                                   NonClientFrameEdges="Bottom"/>
                 </Setter.Value>

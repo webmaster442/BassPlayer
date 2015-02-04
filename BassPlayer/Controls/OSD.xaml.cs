@@ -29,7 +29,7 @@ namespace BassPlayer.Controls
             _vline = new Polyline();
             _vline.Stroke = new SolidColorBrush(Colors.Black);
             _vline.StrokeThickness = 1;
-            _vline.Stroke = SystemColors.HighlightBrush;
+            _vline.Stroke = SystemColors.HotTrackBrush;
             _vline.VerticalAlignment = System.Windows.VerticalAlignment.Center;
             Visual.Children.Add(_vline);
             _visualTimer.Tick += _visualTimer_Tick;
