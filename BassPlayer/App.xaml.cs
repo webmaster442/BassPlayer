@@ -7,6 +7,7 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using Un4seen.Bass;
 
 namespace BassPlayer
 {
@@ -52,6 +53,9 @@ namespace BassPlayer
         {
             if (SingleInstance<App>.InitializeAsFirstInstance(Unique))
             {
+                //api key
+                BassNet.Registration("", "");
+
                 var application = new App();
                 Engine = new AudioEngine();
                 application.InitializeComponent();

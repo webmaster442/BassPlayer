@@ -83,6 +83,7 @@
                                    Source="../Images/Menu/add_link-50.png"/>
                         </MenuItem.Icon>
                     </MenuItem>
+                    <!--
                     <MenuItem Header="Add Youtube URL..."
                               x:Name="MenAddYoutube"
                               Click="MenAddYoutube_Click">
@@ -92,6 +93,7 @@
                                    Source="../Images/Menu/youtube-50.png"/>
                         </MenuItem.Icon>
                     </MenuItem>
+                    -->
                     <Separator/>
                     <MenuItem Header="Add Files..."
                               x:Name="MenAddFiles"
@@ -512,6 +514,13 @@
                                  HorizontalContentAlignment="Stretch"
                                  SelectionMode="Extended"
                                  MouseDoubleClick="LbLib_MouseDoubleClick">
+                            <ListBox.ContextMenu>
+                                <ContextMenu>
+                                    <MenuItem Header="Add to playlist"
+                                              x:Name="TunesAddPlaylist"
+                                              Click="TunesAddPlaylist_Click"/>
+                                </ContextMenu>
+                            </ListBox.ContextMenu>
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
                                     <Grid VerticalAlignment="Stretch"

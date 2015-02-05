@@ -699,5 +699,13 @@ namespace BassPlayer.Controls
             var result = _itunes.Search(TbFilter.Text);
             _tunes.AddRange(result);
         }
+
+        private void TunesAddPlaylist_Click(object sender, RoutedEventArgs e)
+        {
+            foreach (PlayListEntry ple in LbLib.SelectedItems)
+            {
+                _playlist.Add(ple);
+            }
+        }
     }
 }
