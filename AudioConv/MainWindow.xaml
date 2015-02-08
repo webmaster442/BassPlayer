@@ -1,0 +1,215 @@
+﻿<Window x:Class="AudioConv.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Classes="clr-namespace:AudioConv.Classes"
+        xmlns:Converters="clr-namespace:AudioConv.Converters"
+        Title="Audio Converter" Height="450" Width="700">
+    <Window.Resources>
+        <Classes:FilenameConv x:Key="FilenameConv"/>
+    </Window.Resources>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="22"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Menu Grid.Row="0"
+              VerticalAlignment="Center">
+            <MenuItem Header="File">
+                <MenuItem.Icon>
+                    <Image Width="16"
+                           Height="16"
+                           Source="Images/Menu/audio_wave-50.png"/>
+                </MenuItem.Icon>
+                <MenuItem Header="Exit"
+                          x:Name="FileExit"
+                          Click="FileExit_Click">
+                    <MenuItem.Icon>
+                        <Image Width="16"
+                           Height="16"
+                           Source="Images/Menu/exit-50.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="Step">
+                <MenuItem.Icon>
+                    <Image Width="16"
+                           Height="16"
+                           Source="Images/Menu/human_footprints-50.png"/>
+                </MenuItem.Icon>
+                <MenuItem Header="1. Input Files">
+                    <MenuItem.Icon>
+                        <Image Width="16"
+                               Height="16"
+                               Source="Images/Menu/1-50.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="2. Audio Codec">
+                    <MenuItem.Icon>
+                        <Image Width="16"
+                               Height="16"
+                               Source="Images/Menu/2-50.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="3. Output Options">
+                    <MenuItem.Icon>
+                        <Image Width="16"
+                               Height="16"
+                               Source="Images/Menu/3-50.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="4. Start Encode">
+                    <MenuItem.Icon>
+                        <Image Width="16"
+                               Height="16"
+                               Source="Images/Menu/4-50.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="Input">
+                <MenuItem.Icon>
+                    <Image Width="16"
+                           Height="16"
+                           Source="Images/Menu/multiple_inputs-50.png"/>
+                </MenuItem.Icon>
+                <MenuItem Header="Add files..."
+                          x:Name="InputAddFiles"
+                          Click="InputAddFiles_Click">
+                    <MenuItem.Icon>
+                        <Image Width="16"
+                               Height="16"
+                               Source="Images/Menu/add_file-50.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Add directory..."
+                          x:Name="InputAddDir"
+                          Click="InputAddDir_Click">
+                    <MenuItem.Icon>
+                        <Image Width="16"
+                               Height="16"
+                               Source="Images/Menu/opened_folder-50.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+        <TabControl TabStripPlacement="Bottom"
+                    Grid.Row="1">
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="24"
+                               Height="24"
+                               Source="Images/Menu/1-50.png"/>
+                        <TextBlock Text="Input Files"
+                                   Style="{StaticResource HeaderText}"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <ListBox x:Name="LbInputFiles">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Converter={StaticResource FilenameConv}}"/>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="24"
+                               Height="24"
+                               Source="Images/Menu/2-50.png"/>
+                        <TextBlock Text="Audio Codec"
+                                   Style="{StaticResource HeaderText}"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <TabControl TabStripPlacement="Left">
+                    <TabItem Header="Wav">
+                        <Converters:WavConv x:Name="ConvWav"/>
+                    </TabItem>
+                    <TabItem Header="MP3"></TabItem>
+                    <TabItem Header="MP4 / AAC"></TabItem>
+                    <TabItem Header="WMA"></TabItem>
+                    <TabItem Header="OGG"></TabItem>
+                    <TabItem Header="FLAC"></TabItem>
+                    <TabItem Header="AC3"></TabItem>
+                    <TabItem Header="WavPack"></TabItem>
+                </TabControl>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="24"
+                               Height="24"
+                               Source="Images/Menu/3-50.png"/>
+                        <TextBlock Text="Output Options"
+                                   Style="{StaticResource HeaderText}"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <StackPanel>
+                    <TextBlock Text="Output Directory:"
+                               Style="{StaticResource HeaderText}"/>
+                    <Border Style="{StaticResource OptionsBorder}" >
+                        <StackPanel>
+                            <RadioButton Content="Same as input files"
+                                         IsChecked="True"
+                                         Margin="0,5,0,0"
+                                         x:Name="RbAsInput"/>
+                            <RadioButton Content="Selected directory"
+                                         Margin="0,5"
+                                         x:Name="RbDirSelect"/>
+                            <Grid Margin="10,0"
+                                  IsEnabled="{Binding ElementName=RbDirSelect, Path=IsChecked}">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="100"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBox Grid.Column="0"
+                                         Margin="2"
+                                         x:Name="TbOutDir"/>
+                                <Button Grid.Column="1" 
+                                        Content="Browse..."
+                                        Margin="2"
+                                        x:Name="BtnBrowse"
+                                        Click="BtnBrowse_Click"/>
+                            </Grid>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="24"
+                               Height="24"
+                               Source="Images/Menu/4-50.png"/>
+                        <TextBlock Text="Start Encode"
+                                   Style="{StaticResource HeaderText}"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <StackPanel>
+                    <CheckBox Content="Use multiple CPU's"/>
+                    <Button Content="Start"/>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+        <Button Grid.Row="1"
+                Width="32"
+                Height="32"
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Right"
+                Margin="0,0,42,2">
+            <Image Width="24"
+                   Height="24"
+                   Source="Images/Menu/left_arrow-50.png"/>
+        </Button>
+        <Button Grid.Row="1"
+                Width="32"
+                Height="32"
+                VerticalAlignment="Bottom"
+                HorizontalAlignment="Right"
+                Margin="0,0,5,2">
+            <Image Width="24"
+                   Height="24"
+                   Source="Images/Menu/right_arrow-50.png"/>
+        </Button>
+    </Grid>
+</Window>
