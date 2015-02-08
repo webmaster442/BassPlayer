@@ -29,6 +29,8 @@ namespace AudioConv.Classes
             }
         }
 
+        public static string OutputDirectory { get; set; }
+
         public static void GenerateAndRun(bool MultiCpu, IAudioConv Converter, IEnumerable<string> files)
         {
             int coreCount = 0;
@@ -50,6 +52,7 @@ namespace AudioConv.Classes
 
             for (int i=0; i<_filelists.Length; i++)
             {
+
             }
         }
     }

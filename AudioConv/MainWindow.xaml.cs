@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace AudioConv
 {
@@ -21,11 +23,24 @@ namespace AudioConv
             LbInputFiles.ItemsSource = _files;
         }
 
+        private void SelectTab(int index)
+        {
+            var Tab = (TabItem)TcMain.Items[index];
+            Tab.IsSelected = true;
+        }
+
         #region Menu
 
         private void FileExit_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void Step_Click(object sender, RoutedEventArgs e)
+        {
+            string[] s = ((MenuItem)sender).Header.ToString().Split('.');
+            int index = Convert.ToInt32(s[0]);
+            SelectTab(index-1);
         }
 
         private void InputAddDir_Click(object sender, RoutedEventArgs e)
@@ -68,6 +83,21 @@ namespace AudioConv
             {
                 TbOutDir.Text = fd.SelectedPath;
             }
+        }
+
+
+        private void BtnPrevTab_Click(object sender, RoutedEventArgs e)
+        {
+            int index = TcMain.SelectedIndex - 1;
+            if (index < 0) return;
+            SelectTab(index);
+        }
+
+        private void BtnNextTab_Click(object sender, RoutedEventArgs e)
+        {
+            int index = TcMain.SelectedIndex + 1;
+            if (index > TcMain.Items.Count - 1) return;
+            SelectTab(index);
         }
     }
 }

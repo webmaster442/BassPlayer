@@ -36,28 +36,36 @@
                            Height="16"
                            Source="Images/Menu/human_footprints-50.png"/>
                 </MenuItem.Icon>
-                <MenuItem Header="1. Input Files">
+                <MenuItem Header="1. Input Files"
+                          x:Name="Step1"
+                          Click="Step_Click">
                     <MenuItem.Icon>
                         <Image Width="16"
                                Height="16"
                                Source="Images/Menu/1-50.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="2. Audio Codec">
+                <MenuItem Header="2. Audio Codec"
+                          x:Name="Step2"
+                          Click="Step_Click">
                     <MenuItem.Icon>
                         <Image Width="16"
                                Height="16"
                                Source="Images/Menu/2-50.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="3. Output Options">
+                <MenuItem Header="3. Output Options"
+                          x:Name="Step3"
+                          Click="Step_Click">
                     <MenuItem.Icon>
                         <Image Width="16"
                                Height="16"
                                Source="Images/Menu/3-50.png"/>
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="4. Start Encode">
+                <MenuItem Header="4. Start Encode"
+                          x:Name="Step4"
+                          Click="Step_Click">
                     <MenuItem.Icon>
                         <Image Width="16"
                                Height="16"
@@ -92,6 +100,7 @@
             </MenuItem>
         </Menu>
         <TabControl TabStripPlacement="Bottom"
+                    x:Name="TcMain"
                     Grid.Row="1">
             <TabItem>
                 <TabItem.Header>
@@ -173,6 +182,8 @@
                             </Grid>
                         </StackPanel>
                     </Border>
+                    <TextBlock Text="Output File Naming:"
+                               Style="{StaticResource HeaderText}"/>
                 </StackPanel>
             </TabItem>
             <TabItem>
@@ -185,9 +196,17 @@
                                    Style="{StaticResource HeaderText}"/>
                     </StackPanel>
                 </TabItem.Header>
-                <StackPanel>
-                    <CheckBox Content="Use multiple CPU's"/>
-                    <Button Content="Start"/>
+                <StackPanel VerticalAlignment="Center"
+                            HorizontalAlignment="Center">
+                    <CheckBox Content="Use multiple CPU's"
+                              Margin="0,0,0,10"
+                              IsChecked="True"/>
+                    <Button>
+                        <Button.Content>
+                            <TextBlock Text="Start"
+                                       Style="{StaticResource HeaderText}"/>
+                        </Button.Content>
+                    </Button>
                 </StackPanel>
             </TabItem>
         </TabControl>
@@ -196,7 +215,9 @@
                 Height="32"
                 VerticalAlignment="Bottom"
                 HorizontalAlignment="Right"
-                Margin="0,0,42,2">
+                Margin="0,0,42,2"
+                x:Name="BtnPrevTab"
+                Click="BtnPrevTab_Click">
             <Image Width="24"
                    Height="24"
                    Source="Images/Menu/left_arrow-50.png"/>
@@ -206,7 +227,9 @@
                 Height="32"
                 VerticalAlignment="Bottom"
                 HorizontalAlignment="Right"
-                Margin="0,0,5,2">
+                Margin="0,0,5,2"
+                x:Name="BtnNextTab"
+                Click="BtnNextTab_Click">
             <Image Width="24"
                    Height="24"
                    Source="Images/Menu/right_arrow-50.png"/>
