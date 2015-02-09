@@ -69,6 +69,7 @@
     </Compile>
     <Compile Include="Classes\CmdGenerator.cs" />
     <Compile Include="Classes\IAudioConv.cs" />
+    <Compile Include="Classes\OutputNameGenerator.cs" />
     <Compile Include="Classes\WPFConverters.cs" />
     <Compile Include="Converters\WavConv.xaml.cs">
       <DependentUpon>WavConv.xaml</DependentUpon>

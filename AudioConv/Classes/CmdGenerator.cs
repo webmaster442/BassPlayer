@@ -1,59 +1,52 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.IO;
 
 namespace AudioConv.Classes
 {
-    internal static class CmdGenerator
+    internal class CmdGenerator
     {
-        private static List<string>[] _filelists;
+        private OutputNameGenerator _namegen;
 
-        private static void Dispatch(IEnumerable<string> files, int cpucount)
+        public CmdGenerator(bool usemulticpu, string pattern, DateTime time, int counter)
         {
-            _filelists = null;
-            GC.Collect();
-            GC.WaitForPendingFinalizers();
-            GC.Collect();
-
-            int i;
-
-            _filelists = new List<string>[cpucount];
-            for (i = 0; i < cpucount; i++) _filelists[i] = new List<string>(10);
-
-            i = 0;
-            foreach (var file in files)
-            {
-                _filelists[i].Add(file);
-                i++;
-                if (i > cpucount) i = 0;
-            }
+            _namegen = new OutputNameGenerator(counter, pattern, time, usemulticpu);
         }
 
-        public static string OutputDirectory { get; set; }
-
-        public static void GenerateAndRun(bool MultiCpu, IAudioConv Converter, IEnumerable<string> files)
+        public void GenerateAndRunCmds(IEnumerable<string> files, IAudioConv converter, string outdir)
         {
-            int coreCount = 0;
-            foreach (var item in new System.Management.ManagementObjectSearcher("Select * from Win32_Processor").Get())
+            _namegen.Generate(files, outdir);
+            int i = 0;
+            string[] tempnames = new string[_namegen.Cores];
+            StreamWriter[] tempfiles = new StreamWriter[_namegen.Cores];
+
+            for (i = 0; i < _namegen.Cores; i++)
             {
-                coreCount += int.Parse(item["NumberOfCores"].ToString());
+                tempnames[i] = Path.GetTempFileName() + ".cmd";
+                tempfiles[i] = File.CreateText(tempnames[i]);
             }
 
-            if (MultiCpu) Dispatch(files, coreCount);
-            else Dispatch(files, 1);
-
-            TextWriter[] _cmdfiles = new TextWriter[_filelists.Length];
-            string[] _cmdpaths = new string[_filelists.Length];
-            for (int i=0; i < _cmdfiles.Length; i++)
+            for (i = 0; i < tempfiles.Length; i++)
             {
-                _cmdpaths[i] = Path.GetTempFileName() + ".cmd";
-                _cmdfiles[i] = File.CreateText(_cmdpaths[i]);
+                foreach (var item in _namegen[i])
+                {
+                    string line = converter.GetCommandLine();
+                    line = line.Replace("[input]", item.Key);
+                    line = line.Replace("[output]", Path.Combine(outdir, item.Value));
+                    tempfiles[i].WriteLine(line);
+                }
+                //self delete after run
+                tempfiles[i].WriteLine("DEL \"%~f0\"");
             }
 
-            for (int i=0; i<_filelists.Length; i++)
+            for (i = 0; i < _namegen.Cores; i++)
             {
-
+                tempfiles[i].Close();
             }
+
         }
     }
 }

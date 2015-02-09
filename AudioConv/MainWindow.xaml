@@ -130,7 +130,8 @@
                                    Style="{StaticResource HeaderText}"/>
                     </StackPanel>
                 </TabItem.Header>
-                <TabControl TabStripPlacement="Left">
+                <TabControl TabStripPlacement="Left"
+                            x:Name="TabConverters">
                     <TabItem Header="Wav">
                         <Converters:WavConv x:Name="ConvWav"/>
                     </TabItem>
@@ -184,6 +185,59 @@
                     </Border>
                     <TextBlock Text="Output File Naming:"
                                Style="{StaticResource HeaderText}"/>
+                    <Border Style="{StaticResource OptionsBorder}">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <StackPanel Grid.Column="0">
+                                <TextBlock Text="Pattern:"
+                                           Style="{StaticResource HeaderText}"/>
+                                <TextBox Margin="10,0"
+                                         Text="[N]"
+                                         x:Name="TbPattern"/>
+                                <TextBlock Text="Valid Patterns:"
+                                           Style="{StaticResource HeaderText}"/>
+                                <TextBlock Text="[N] - File name"
+                                           Margin="10,0"/>
+                                <TextBlock Text="[C] - Counter"
+                                           Margin="10,0"/>
+                                <TextBlock Text="[Y] - Year [M] - Month [D] - Day"
+                                           Margin="10,0"/>
+                                <TextBlock Text="[h] - Hour [m] - Minute [S] - Seconds"
+                                           Margin="10,0"/>
+                            </StackPanel>
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="Counter options:"
+                                           Style="{StaticResource HeaderText}"/>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="Start number:"
+                                               VerticalAlignment="Center"
+                                               Margin="10,0"/>
+                                    <TextBox Width="40"
+                                             VerticalAlignment="Center"
+                                             Text="0"
+                                             x:Name="TbStartNum"
+                                             Margin="5,0"/>
+                                </StackPanel>
+                                <TextBlock Text="Date options:"
+                                           Style="{StaticResource HeaderText}"/>
+                                <RadioButton Content="Use Current date &amp; time"
+                                             IsChecked="True"
+                                             Margin="10,2"/>
+                                <RadioButton Content="Use specific date &amp; time"
+                                             Margin="10,2"
+                                             x:Name="RbSpecificDate"/>
+                                <TextBox Text="Y-M-D-h-m-s"
+                                         Margin="10,2"
+                                         x:Name="TbDateText"
+                                         IsEnabled="{Binding ElementName=RbSpecificDate, Path=IsChecked}"/>
+                                <TextBlock Text="Format: Y-M-D-h-m-s"
+                                           Margin="15,2"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
                 </StackPanel>
             </TabItem>
             <TabItem>
@@ -200,8 +254,9 @@
                             HorizontalAlignment="Center">
                     <CheckBox Content="Use multiple CPU's"
                               Margin="0,0,0,10"
+                              x:Name="MultiCpu"
                               IsChecked="True"/>
-                    <Button>
+                    <Button Click="Button_Click">
                         <Button.Content>
                             <TextBlock Text="Start"
                                        Style="{StaticResource HeaderText}"/>

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AudioConv.Classes;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
@@ -98,6 +99,38 @@ namespace AudioConv
             int index = TcMain.SelectedIndex + 1;
             if (index > TcMain.Items.Count - 1) return;
             SelectTab(index);
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                IAudioConv converter = null;
+                switch (TabConverters.SelectedIndex)
+                {
+                    case 0:
+                        converter = ConvWav;
+                        break;
+                }
+                if (converter == null) throw new Exception("No Audio converter selected");
+
+                string outdir = "[input]";
+                if (RbDirSelect.IsChecked == true) outdir = TbOutDir.Text;
+
+                if (!Directory.Exists(outdir)) Directory.CreateDirectory(outdir);
+
+                int counter = Convert.ToInt32(TbStartNum);
+
+                DateTime dtime = DateTime.Now;
+                if (RbSpecificDate.IsChecked == true) dtime = OutputNameGenerator.DateTimeFromString(TbDateText.Text);
+
+                OutputNameGenerator outgen = new OutputNameGenerator(counter, TbPattern.Text, dtime, (bool)MultiCpu.IsChecked);
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }
