@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -115,17 +116,22 @@ namespace AudioConv
                 if (converter == null) throw new Exception("No Audio converter selected");
 
                 string outdir = "[input]";
-                if (RbDirSelect.IsChecked == true) outdir = TbOutDir.Text;
+                if (RbDirSelect.IsChecked == true)
+                {
+                    outdir = TbOutDir.Text;
+                    if (!Directory.Exists(outdir)) Directory.CreateDirectory(outdir);
+                }
 
-                if (!Directory.Exists(outdir)) Directory.CreateDirectory(outdir);
-
-                int counter = Convert.ToInt32(TbStartNum);
+                int counter = Convert.ToInt32(TbStartNum.Text);
 
                 DateTime dtime = DateTime.Now;
                 if (RbSpecificDate.IsChecked == true) dtime = OutputNameGenerator.DateTimeFromString(TbDateText.Text);
 
-                OutputNameGenerator outgen = new OutputNameGenerator(counter, TbPattern.Text, dtime, (bool)MultiCpu.IsChecked);
-
+                this.Visibility = System.Windows.Visibility.Hidden;
+                ProgressWindow progress = new ProgressWindow((bool)MultiCpu.IsChecked, TbPattern.Text, dtime, counter);
+                progress.GenerateAndRunCmds(_files.ToList(), converter, outdir);
+                progress.ShowDialog();
+                this.Visibility = System.Windows.Visibility.Visible;
             }
             catch (Exception ex)
             {

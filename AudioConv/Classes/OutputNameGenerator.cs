@@ -62,7 +62,7 @@ namespace AudioConv.Classes
             int counter = _counter;
             foreach (var item in items)
             {
-                _lists[core].Add(item, GenFileName(item, counter, OutDir));
+                _lists[core].Add(item, GenFileName(Path.GetFileName(item), counter, OutDir));
                 core++;
                 counter++;
                 if (core > _lists.Length) core = 0;

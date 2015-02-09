@@ -47,7 +47,9 @@ namespace AudioConv.Converters
 
         public string GetCommandLine()
         {
-            return string.Format("ffmpeg.exe -i [input] -vn {0} {1} [output]", ConvHelpers.GetSampleRate(SampleRate), ConvHelpers.GetChannels(Channels));
+            return string.Format("ffmpeg.exe -i \"[input]\" -vn {0} {1} \"[output].{2}\"", ConvHelpers.GetSampleRate(SampleRate),
+                                                                                           ConvHelpers.GetChannels(Channels),
+                                                                                           Extension);
         }
     }
 }
