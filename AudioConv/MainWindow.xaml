@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Classes="clr-namespace:AudioConv.Classes"
         xmlns:Converters="clr-namespace:AudioConv.Converters"
-        Title="Audio Converter" Height="450" Width="700">
+        Title="Audio Converter" Height="420" Width="700">
     <Window.Resources>
         <Classes:FilenameConv x:Key="FilenameConv"/>
     </Window.Resources>
@@ -105,8 +105,8 @@
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <Image Width="24"
-                               Height="24"
+                        <Image Width="16"
+                               Height="16"
                                Source="Images/Menu/1-50.png"/>
                         <TextBlock Text="Input Files"
                                    Style="{StaticResource HeaderText}"/>
@@ -123,32 +123,119 @@
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <Image Width="24"
-                               Height="24"
+                        <Image Width="16"
+                               Height="16"
                                Source="Images/Menu/2-50.png"/>
                         <TextBlock Text="Audio Codec"
                                    Style="{StaticResource HeaderText}"/>
                     </StackPanel>
                 </TabItem.Header>
                 <TabControl TabStripPlacement="Left"
-                            x:Name="TabConverters">
-                    <TabItem Header="Wav">
-                        <Converters:WavConv x:Name="ConvWav"/>
+                            x:Name="TabConverters" Style="{DynamicResource CodecSelector}">
+                    <TabItem>
+                        <TabItem.Header>
+                            <StackPanel>
+                                <Image Source="Images/formats/wav-50.png"
+                                       Width="24"
+                                       Height="24"/>
+                                <TextBlock Text="Wav"
+                                           TextAlignment="Center"/>
+                            </StackPanel>
+                        </TabItem.Header>
+                        <ScrollViewer>
+                            <Converters:WavConv x:Name="ConvWav"/>
+                        </ScrollViewer>
                     </TabItem>
-                    <TabItem Header="MP3"></TabItem>
-                    <TabItem Header="MP4 / AAC"></TabItem>
-                    <TabItem Header="WMA"></TabItem>
-                    <TabItem Header="OGG"></TabItem>
-                    <TabItem Header="FLAC"></TabItem>
-                    <TabItem Header="AC3"></TabItem>
-                    <TabItem Header="WavPack"></TabItem>
+                    <TabItem>
+                        <TabItem.Header>
+                            <StackPanel>
+                                <Image Source="Images/formats/mp3-50.png"
+                                       Width="24"
+                                       Height="24"/>
+                                <TextBlock Text="Mp3"
+                                           TextAlignment="Center"/>
+                            </StackPanel>
+                        </TabItem.Header>
+                        <ScrollViewer>
+                            <Converters:Mp3Conv x:Name="ConvMp3"/>
+                        </ScrollViewer>
+                    </TabItem>
+                    <TabItem>
+                        <TabItem.Header>
+                            <StackPanel>
+                                <Image Source="Images/formats/aac-50.png"
+                                       Width="24"
+                                       Height="24"/>
+                                <TextBlock Text="Mp4 / AAC"
+                                           TextAlignment="Center"/>
+                            </StackPanel>
+                        </TabItem.Header>
+                        <ScrollViewer>
+                            
+                        </ScrollViewer>
+                    </TabItem>
+                    <TabItem>
+                        <TabItem.Header>
+                            <StackPanel>
+                                <Image Source="Images/formats/wma-50.png"
+                                       Width="24"
+                                       Height="24"/>
+                                <TextBlock Text="Wma"
+                                           TextAlignment="Center"/>
+                            </StackPanel>
+                        </TabItem.Header>
+                    </TabItem>
+                    <TabItem>
+                        <TabItem.Header>
+                            <StackPanel>
+                                <Image Source="Images/formats/ogg-50.png"
+                                       Width="24"
+                                       Height="24"/>
+                                <TextBlock Text="Ogg"
+                                           TextAlignment="Center"/>
+                            </StackPanel>
+                        </TabItem.Header>
+                    </TabItem>
+                    <TabItem>
+                        <TabItem.Header>
+                            <StackPanel>
+                                <Image Source="Images/formats/FLAC.png"
+                                       Width="24"
+                                       Height="24"/>
+                                <TextBlock Text="FLAC"
+                                           TextAlignment="Center"/>
+                            </StackPanel>
+                        </TabItem.Header>
+                    </TabItem>
+                    <TabItem>
+                        <TabItem.Header>
+                            <StackPanel>
+                                <Image Source="Images/formats/wav-50.png"
+                                       Width="24"
+                                       Height="24"/>
+                                <TextBlock Text="AC3"
+                                           TextAlignment="Center"/>
+                            </StackPanel>
+                        </TabItem.Header>
+                    </TabItem>
+                    <TabItem>
+                        <TabItem.Header>
+                            <StackPanel>
+                                <Image Source="Images/formats/wavpack.png"
+                                       Width="24"
+                                       Height="24"/>
+                                <TextBlock Text="WavPack"
+                                           TextAlignment="Center"/>
+                            </StackPanel>
+                        </TabItem.Header>
+                    </TabItem>
                 </TabControl>
             </TabItem>
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <Image Width="24"
-                               Height="24"
+                        <Image Width="16"
+                               Height="16"
                                Source="Images/Menu/3-50.png"/>
                         <TextBlock Text="Output Options"
                                    Style="{StaticResource HeaderText}"/>
@@ -243,8 +330,8 @@
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
-                        <Image Width="24"
-                               Height="24"
+                        <Image Width="16"
+                               Height="16"
                                Source="Images/Menu/4-50.png"/>
                         <TextBlock Text="Start Encode"
                                    Style="{StaticResource HeaderText}"/>

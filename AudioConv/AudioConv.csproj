@@ -55,6 +55,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Converters\Mp3Conv.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Converters\WavConv.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -70,6 +74,9 @@
     <Compile Include="Classes\IAudioConv.cs" />
     <Compile Include="Classes\OutputNameGenerator.cs" />
     <Compile Include="Classes\WPFConverters.cs" />
+    <Compile Include="Converters\Mp3Conv.xaml.cs">
+      <DependentUpon>Mp3Conv.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Converters\WavConv.xaml.cs">
       <DependentUpon>WavConv.xaml</DependentUpon>
     </Compile>
@@ -133,6 +140,17 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Menu\right_arrow-50.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\formats\aac-50.png" />
+    <Resource Include="Images\formats\FLAC.png" />
+    <Resource Include="Images\formats\mp3-50.png" />
+    <Resource Include="Images\formats\ogg-50.png" />
+    <Resource Include="Images\formats\wav-50.png" />
+    <Resource Include="Images\formats\wma-50.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\formats\wavpack.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

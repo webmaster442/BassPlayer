@@ -1,0 +1,100 @@
+﻿<UserControl x:Class="AudioConv.Converters.Mp3Conv"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:classes="clr-namespace:AudioConv.Classes"
+             mc:Ignorable="d"
+             x:Name="ConvMp3"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <classes:EnumBooleanConverter x:Key="EnumBoolConv"/>
+    </UserControl.Resources>
+    <StackPanel Background="White">
+        <TextBlock Text="Sample Rate:"
+                   Style="{StaticResource HeaderText}"/>
+        <Border Style="{StaticResource OptionsBorder}">
+            <WrapPanel>
+                <RadioButton IsChecked="{Binding ElementName=ConvMp3, Path=SampleRate, Converter={StaticResource EnumBoolConv}, ConverterParameter=NoChange}"
+                             Content="No Change"
+                             Style="{StaticResource RadioSelect}"/>
+                <RadioButton IsChecked="{Binding ElementName=ConvMp3, Path=SampleRate, Converter={StaticResource EnumBoolConv}, ConverterParameter=Rate44100}"
+                             Content="44,1KHz"
+                             Style="{StaticResource RadioSelect}"/>
+                <RadioButton IsChecked="{Binding ElementName=ConvMp3, Path=SampleRate, Converter={StaticResource EnumBoolConv}, ConverterParameter=Rate48000}"
+                             Content="48KHz"
+                             Style="{StaticResource RadioSelect}"/>
+            </WrapPanel>
+        </Border>
+        <TextBlock Text="Channels:"
+                   Style="{StaticResource HeaderText}"/>
+        <Border Style="{StaticResource OptionsBorder}">
+            <WrapPanel>
+                <RadioButton IsChecked="{Binding ElementName=ConvMp3, Path=Channels, Converter={StaticResource EnumBoolConv}, ConverterParameter=NoChange}"
+                             Content="No Change"
+                             Style="{StaticResource RadioSelect}"/>
+                <RadioButton IsChecked="{Binding ElementName=ConvMp3, Path=Channels, Converter={StaticResource EnumBoolConv}, ConverterParameter=Ch1}"
+                             Content="Mono"
+                             Style="{StaticResource RadioSelect}"/>
+                <RadioButton IsChecked="{Binding ElementName=ConvMp3, Path=Channels, Converter={StaticResource EnumBoolConv}, ConverterParameter=Ch2}"
+                             Content="Stereo"
+                             Style="{StaticResource RadioSelect}"/>
+            </WrapPanel>
+        </Border>
+        <TextBlock Text="Encoding mode:"
+                   Style="{StaticResource HeaderText}"/>
+        <Border Style="{StaticResource OptionsBorder}">
+            <WrapPanel>
+                <RadioButton Content="Constant Bitrate"
+                             Style="{StaticResource RadioSelect}"
+                             x:Name="CRateConst"
+                             IsChecked="{Binding ElementName=ConvMp3, Path=ConstantRate}"/>
+                <RadioButton Content="Average Bitrate"
+                             x:Name="CRateVbr"
+                             Style="{StaticResource RadioSelect}"/>
+            </WrapPanel>
+        </Border>
+        <TextBlock Text="Bitrate (Kbps):"
+                   Style="{StaticResource HeaderText}"/>
+        <Border Style="{StaticResource OptionsBorder}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="35"/>
+                </Grid.ColumnDefinitions>
+                <Slider Ticks="8,16,24,32,40,48,64,80,96,112,128,160,192,224,256,320"
+                        IsSnapToTickEnabled="True"
+                        Minimum="8"
+                        Maximum="320"
+                        Value="{Binding ElementName=ConvMp3, Path=BitRate}"
+                        IsEnabled="{Binding ElementName=CRateConst, Path=IsChecked}"
+                        x:Name="SQuality"
+                        Grid.Column="0"/>
+                <TextBox Grid.Column="1" 
+                         Text="{Binding ElementName=SQuality, Path=Value}"
+                         IsReadOnly="True"/>
+            </Grid>
+        </Border>
+        <TextBlock Text="VBR Quality (0 = best)"
+                   Style="{StaticResource HeaderText}"/>
+        <Border Style="{StaticResource OptionsBorder}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="35"/>
+                </Grid.ColumnDefinitions>
+                <Slider TickFrequency="1"
+                        IsSnapToTickEnabled="True"
+                        Minimum="0"
+                        Maximum="9"
+                        Value="{Binding ElementName=ConvMp3, Path=Quality}"
+                        IsEnabled="{Binding ElementName=CRateVbr, Path=IsChecked}"
+                        x:Name="VQuality"
+                        Grid.Column="0"/>
+                <TextBox Grid.Column="1" 
+                         Text="{Binding ElementName=VQuality, Path=Value}"
+                         IsReadOnly="True"/>
+            </Grid>
+        </Border>
+    </StackPanel>
+</UserControl>
