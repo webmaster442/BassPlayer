@@ -237,13 +237,17 @@
             </Menu>
         </Expander.Header>
         <Grid Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="6*"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <StackPanel x:Name="Processing"
                         Visibility="Collapsed"
                         Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}"
-                        Panel.ZIndex="99">
+                        Panel.ZIndex="99" Grid.ColumnSpan="2">
                 <ProgressBar Height="30"
                              IsIndeterminate="True"
                              Margin="30,160,30,10"/>
@@ -251,10 +255,10 @@
                            TextAlignment="Center"
                            FontSize="22"/>
             </StackPanel>
-            <TabControl Grid.Row="1"
+            <TabControl
                         TabStripPlacement="Left"
                         x:Name="TcView"
-                        Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}">
+                        Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}" Grid.ColumnSpan="2">
                 <TabItem Background="Transparent">
                     <TabItem.Header>
                         <StackPanel>
@@ -294,13 +298,18 @@
                                     Grid.Row="0"
                                     Grid.ColumnSpan="3"
                                     Orientation="Horizontal">
-                            <TextBlock Text="Drive:"
+                            <TextBlock Text="Drives:"
                                        Margin="5,0"
                                        VerticalAlignment="Center"/>
-                            <ComboBox Width="100"
-                                      x:Name="CbDrives"
-                                      SelectionChanged="CbDrives_SelectionChanged"
-                                      Margin="5,0"/>
+                            
+                            <StackPanel Orientation="Horizontal"
+                                        x:Name="SpDriveList">
+                                
+                            </StackPanel>
+                            <Button Content="Refresh"
+                                    x:Name="BtnRefresh"
+                                    Margin="5,0"
+                                    Click="BtnRefresh_Click"/>
                         </StackPanel>
                         <TreeView Grid.Column="0"
                                   Grid.Row="1"

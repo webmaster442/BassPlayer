@@ -71,7 +71,7 @@
                     Value="1"
                     ValueChanged="VolSlider_ValueChanged"
                     ToolTip="{Binding ElementName=VolSlider, Path=Value, Converter={StaticResource PercentConv}}"/>
-            <CheckBox Content="Allways top"
+            <CheckBox Content="Always top"
                       VerticalAlignment="Center"
                       Margin="25,0"
                       IsChecked="{Binding ElementName=Control, Path=AllwaysTop}"

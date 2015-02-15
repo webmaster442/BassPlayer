@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 
@@ -538,17 +539,84 @@ namespace BassPlayer.Controls
 
         #region File Explorer
 
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        private Button CreateButton(string texts, string tag, BitmapImage image)
         {
-            foreach (var drive in Directory.GetLogicalDrives())
+            Button button = new Button();
+            StackPanel sp = new StackPanel();
+            sp.Orientation = Orientation.Horizontal;
+            Image icon = new Image();
+            icon.Width = 16;
+            icon.Height = 16;
+            icon.Source = image;
+            sp.Children.Add(icon);
+            TextBlock text = new TextBlock();
+            text.Margin = new Thickness(2, 0, 2, 0);
+            text.Text = texts;
+            sp.Children.Add(text);
+            button.Content = sp;
+            button.ToolTip = tag;
+            button.Margin = new Thickness(2.5, 0, 2.5, 0);
+            button.Click += button_Click;
+            return button;
+        }
+
+        private void BuildDriveList()
+        {
+            var drives = DriveInfo.GetDrives();
+            SpDriveList.Children.Clear();
+            foreach (var drive in drives)
             {
-                CbDrives.Items.Add(drive);
+                if (!drive.IsReady) continue;
+                BitmapImage icon = null;
+                switch (drive.DriveType)
+                {
+                    case DriveType.CDRom:
+                        icon = new BitmapImage(new Uri("pack://application:,,,/BassPlayer;component/Images/filemanager/cd-50.png"));
+                        break;
+                    case DriveType.Fixed:
+                    case DriveType.Ram:
+                    case DriveType.NoRootDirectory:
+                    case DriveType.Unknown:
+                        icon = new BitmapImage(new Uri("pack://application:,,,/BassPlayer;component/Images/filemanager/hdd-50.png"));
+                        break;
+                    case DriveType.Network:
+                        icon = new BitmapImage(new Uri("pack://application:,,,/BassPlayer;component/Images/filemanager/cloud_storage-50.png"));
+                        break;
+                    case DriveType.Removable:
+                        icon = new BitmapImage(new Uri("pack://application:,,,/BassPlayer;component/Images/filemanager/usb_logo-50.png"));
+                        break;
+                }
+                Button button = CreateButton(drive.Name, drive.Name, icon);
+                SpDriveList.Children.Add(button);
+            }
+
+            foreach (var cloud in CloudDriveProvider.AvailableDrives)
+            {
+                Button button = CreateButton(cloud.ToString(), CloudDriveProvider.GetPath(cloud), CloudDriveProvider.GetIcon(cloud));
+                SpDriveList.Children.Add(button);
             }
         }
 
-        private void CbDrives_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ListDir(string path)
         {
-            string drive = CbDrives.SelectedItem.ToString();
+            _files.Clear();
+            List<string> files = new List<string>();
+            foreach (var filter in App.Formats.Split(';'))
+            {
+                files.AddRange(Directory.GetFiles(path, filter));
+            }
+            files.Sort();
+            foreach (var file in files)
+            {
+                FileInfo fi = new FileInfo(file);
+                if ((fi.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden) continue;
+                _files.Add(fi.FullName);
+            }
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            string drive = (sender as Button).ToolTip.ToString();
             TvDirs.Items.Clear();
             string[] dirs = Directory.GetDirectories(drive);
             foreach (var dir in dirs)
@@ -562,6 +630,17 @@ namespace BassPlayer.Controls
                 item.Expanded += item_Expanded;
                 TvDirs.Items.Add(item);
             }
+            ListDir(drive);
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            BuildDriveList();
+        }
+
+        private void BtnRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            BuildDriveList();
         }
 
         private void item_Expanded(object sender, RoutedEventArgs e)
@@ -592,18 +671,7 @@ namespace BassPlayer.Controls
             if (TvDirs.SelectedItem == null) return;
             _files.Clear();
             TreeViewItem selected = (TreeViewItem)TvDirs.SelectedItem;
-            List<string> files = new List<string>();
-            foreach (var filter in App.Formats.Split(';'))
-            {
-                files.AddRange(Directory.GetFiles(selected.Tag.ToString(), filter));
-            }
-            files.Sort();
-            foreach (var file in files)
-            {
-                FileInfo fi = new FileInfo(file);
-                if ((fi.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden) continue;
-                _files.Add(fi.FullName);
-            }
+            ListDir(selected.Tag.ToString());
         }
 
         private void FilesCtRefresh_Click(object sender, RoutedEventArgs e)
@@ -664,6 +732,8 @@ namespace BassPlayer.Controls
         }
         #endregion
 
+        #region iTunes
+
         private void ListItunesData(StackPanel target, string[] items, string linkcat)
         {
             if (items == null || target == null) return;
@@ -707,5 +777,7 @@ namespace BassPlayer.Controls
                 _playlist.Add(ple);
             }
         }
+
+        #endregion
     }
 }
