@@ -98,6 +98,7 @@
     <Compile Include="Classes\CloudDriveProvider.cs" />
     <Compile Include="Classes\iTunesData.cs" />
     <Compile Include="Classes\KeyboardHook.cs" />
+    <Compile Include="Classes\RecentPlays.cs" />
     <Compile Include="Controls\AboutDialog.xaml.cs">
       <DependentUpon>AboutDialog.xaml</DependentUpon>
     </Compile>
