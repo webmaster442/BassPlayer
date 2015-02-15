@@ -58,7 +58,7 @@
             <ComboBox Width="180"
                       Margin="5,0"
                       x:Name="CbDeviceList"
-                      SelectedIndex="1"
+                      SelectedIndex="0"
                       SelectionChanged="CbDeviceList_SelectionChanged"/>
             <TextBlock Text="Volume:"
                        Margin="5,0"

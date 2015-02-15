@@ -266,33 +266,8 @@
                         </StackPanel>
                     </TabItem.Header>
                     <ListBox x:Name="LbList"
-                             Background="Transparent"
-                             HorizontalContentAlignment="Stretch"
-                             SelectionMode="Extended"
+                             Style="{StaticResource Playlist}"
                              MouseDoubleClick="LbList_MouseDoubleClick" >
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Grid VerticalAlignment="Stretch"
-                                      HorizontalAlignment="Stretch">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="30"/>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition Width="60"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Image Width="25"
-                                           Height="25"
-                                           Grid.Column="0"
-                                           Source="../Images/audio_file-100.png"/>
-                                    <TextBlock Grid.Column="1"
-                                               Margin="5,0"
-                                               Text="{Binding ArtistTitle}"/>
-                                    <TextBlock Grid.Column="2"
-                                               Text="{Binding TimeString}"
-                                               Margin="5,0"
-                                               TextAlignment="Right"/>
-                                </Grid>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
                     </ListBox>
                 </TabItem>
                 <TabItem>
@@ -509,10 +484,8 @@
                                       HorizontalAlignment="Stretch"
                                       Background="{StaticResource {x:Static SystemColors.GradientActiveCaptionBrushKey}}"/>
                         <ListBox Grid.Column="2"
-                                 Background="Transparent"
+                                 Style="{StaticResource Playlist}"
                                  x:Name="LbLib"
-                                 HorizontalContentAlignment="Stretch"
-                                 SelectionMode="Extended"
                                  MouseDoubleClick="LbLib_MouseDoubleClick">
                             <ListBox.ContextMenu>
                                 <ContextMenu>
@@ -521,29 +494,6 @@
                                               Click="TunesAddPlaylist_Click"/>
                                 </ContextMenu>
                             </ListBox.ContextMenu>
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid VerticalAlignment="Stretch"
-                                      HorizontalAlignment="Stretch">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="30"/>
-                                            <ColumnDefinition/>
-                                            <ColumnDefinition Width="60"/>
-                                        </Grid.ColumnDefinitions>
-                                        <Image Width="25"
-                                           Height="25"
-                                           Grid.Column="0"
-                                           Source="../Images/audio_file-100.png"/>
-                                        <TextBlock Grid.Column="1"
-                                               Margin="5,0"
-                                               Text="{Binding ArtistTitle}"/>
-                                        <TextBlock Grid.Column="2"
-                                               Text="{Binding TimeString}"
-                                               Margin="5,0"
-                                               TextAlignment="Right"/>
-                                    </Grid>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
                         </ListBox>
                     </Grid>
                 </TabItem>

@@ -70,4 +70,36 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
+    <Style TargetType="{x:Type ListBox}" x:Key="Playlist">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+        <Setter Property="SelectionMode" Value="Extended"/>
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <Grid VerticalAlignment="Stretch"
+                          HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="30"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="60"/>
+                        </Grid.ColumnDefinitions>
+                        <Image Width="25"
+                               Height="25"
+                               Grid.Column="0"
+                               Source="Images/audio_file-100.png"/>
+                        <TextBlock Grid.Column="1"
+                                   Margin="5,0"
+                                   Text="{Binding ArtistTitle}"/>
+                        <TextBlock Grid.Column="2"
+                                   Text="{Binding TimeString}"
+                                   Margin="5,0"
+                                   TextAlignment="Right"/>
+                    </Grid>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
 </ResourceDictionary>

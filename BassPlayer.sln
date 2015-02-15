@@ -13,8 +13,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{FB24884C-8
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AudioConv", "AudioConv\AudioConv.csproj", "{D7DB5118-25DD-417B-9B09-CE65E9CF9500}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -53,18 +51,6 @@ Global
 		{D0DE0F07-AF25-4797-9B62-25C1BA3608B2}.Release|Win32.Build.0 = Release|Win32
 		{D0DE0F07-AF25-4797-9B62-25C1BA3608B2}.Release|x64.ActiveCfg = Release|x64
 		{D0DE0F07-AF25-4797-9B62-25C1BA3608B2}.Release|x64.Build.0 = Release|x64
-		{D7DB5118-25DD-417B-9B09-CE65E9CF9500}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D7DB5118-25DD-417B-9B09-CE65E9CF9500}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D7DB5118-25DD-417B-9B09-CE65E9CF9500}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{D7DB5118-25DD-417B-9B09-CE65E9CF9500}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{D7DB5118-25DD-417B-9B09-CE65E9CF9500}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{D7DB5118-25DD-417B-9B09-CE65E9CF9500}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{D7DB5118-25DD-417B-9B09-CE65E9CF9500}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D7DB5118-25DD-417B-9B09-CE65E9CF9500}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D7DB5118-25DD-417B-9B09-CE65E9CF9500}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{D7DB5118-25DD-417B-9B09-CE65E9CF9500}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{D7DB5118-25DD-417B-9B09-CE65E9CF9500}.Release|Win32.ActiveCfg = Release|Any CPU
-		{D7DB5118-25DD-417B-9B09-CE65E9CF9500}.Release|x64.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
