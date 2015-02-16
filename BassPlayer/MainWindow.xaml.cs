@@ -58,6 +58,7 @@ namespace BassPlayer
             Settings.Default.WindowLeft = this.Left;
             Settings.Default.WindowTop = this.Top;
             Settings.Default.Save();
+            Playlist.SaveRecent();
             e.Cancel = false;
         }
 

@@ -1,7 +1,10 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
+                    xmlns:classes="clr-namespace:BassPlayer.Classes"
                     xmlns:local="clr-namespace:BassPlayer">
+    
+    <classes:TextShorter x:Key="TextShort"/>
     
     <Style x:Key="GlassText" TargetType="{x:Type TextBlock}">
         <Setter Property="TextWrapping" Value="NoWrap"/>
@@ -91,7 +94,8 @@
                                Source="Images/audio_file-100.png"/>
                         <TextBlock Grid.Column="1"
                                    Margin="5,0"
-                                   Text="{Binding ArtistTitle}"/>
+                                   ToolTip="{Binding ArtistTitle}"
+                                   Text="{Binding ArtistTitle, Converter={StaticResource TextShort}}"/>
                         <TextBlock Grid.Column="2"
                                    Text="{Binding TimeString}"
                                    Margin="5,0"

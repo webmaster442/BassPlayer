@@ -121,19 +121,7 @@ namespace BassPlayer.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string RecentXML {
-            get {
-                return ((string)(this["RecentXML"]));
-            }
-            set {
-                this["RecentXML"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("30")]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
         public uint RecentCount {
             get {
                 return ((uint)(this["RecentCount"]));

@@ -11,6 +11,7 @@
     <UserControl.Resources>
         <classes:FileNameConverter x:Key="NameConv"/>
         <classes:EnableConverter x:Key="EnableConv"/>
+        <classes:LastPlayedConv x:Key="LastPlayConv"/>
     </UserControl.Resources>
     <Expander IsExpanded="True"
               x:Name="MainExpander"
@@ -55,10 +56,8 @@
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
-                <MenuItem Header="|"
-                          IsEnabled="False"/>
                 <MenuItem Header="Add"
-                          IsEnabled="{Binding ElementName=TcView, Path=SelectedIndex, Converter={StaticResource EnableConv}}">
+                          IsEnabled="{Binding ElementName=TcView, Path=SelectedIndex, ConverterParameter=0, Converter={StaticResource EnableConv}}">
                     <MenuItem.Icon>
                         <Image Width="16"
                                Height="16"
@@ -127,7 +126,7 @@
                     </MenuItem>
                 </MenuItem>
                 <MenuItem Header="Sort"
-                          IsEnabled="{Binding ElementName=TcView, Path=SelectedIndex, Converter={StaticResource EnableConv}}">
+                          IsEnabled="{Binding ElementName=TcView, Path=SelectedIndex, ConverterParameter=0, Converter={StaticResource EnableConv}}">
                     <MenuItem.Icon>
                         <Image Width="16"
                                Height="16"
@@ -199,7 +198,7 @@
                     </MenuItem>
                 </MenuItem>
                 <MenuItem Header="Manage"
-                          IsEnabled="{Binding ElementName=TcView, Path=SelectedIndex, Converter={StaticResource EnableConv}}">
+                          IsEnabled="{Binding ElementName=TcView, Path=SelectedIndex, ConverterParameter=0, Converter={StaticResource EnableConv}}">
                     <MenuItem.Icon>
                         <Image Width="16"
                                Height="16"
@@ -231,6 +230,58 @@
                             <Image Width="16"
                                    Height="16"
                                    Source="../Images/Menu/delete_sign-50.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+                <MenuItem Header="Recent"
+                          IsEnabled="{Binding ElementName=TcView, Path=SelectedIndex, ConverterParameter=3, Converter={StaticResource EnableConv}}"
+                          x:Name="MenRecent">
+                    <MenuItem.Icon>
+                        <Image Width="16"
+                               Height="16"
+                               Source="../Images/Menu/note_music-50.png"/>
+                    </MenuItem.Icon>
+                    <MenuItem Header="by Play count">
+                        <MenuItem.Icon>
+                            <Image Width="16"
+                                   Height="16"
+                                   Source="../Images/Menu/alphabetical_sorting-50.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="by Play Date">
+                        <MenuItem.Icon>
+                            <Image Width="16"
+                                   Height="16"
+                                   Source="../Images/Menu/alphabetical_sorting-50.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="by File name">
+                        <MenuItem.Icon>
+                            <Image Width="16"
+                                   Height="16"
+                                   Source="../Images/Menu/alphabetical_sorting-50.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="by Length">
+                        <MenuItem.Icon>
+                            <Image Width="16"
+                                   Height="16"
+                                   Source="../Images/Menu/alphabetical_sorting-50.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <MenuItem Header="By Artist &amp; Title">
+                        <MenuItem.Icon>
+                            <Image Width="16"
+                                   Height="16"
+                                   Source="../Images/Menu/alphabetical_sorting-50.png"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                    <Separator/>
+                    <MenuItem Header="Clear">
+                        <MenuItem.Icon>
+                            <Image Width="16"
+                                   Height="16"
+                                   Source="../Images/Menu/delete-50.png"/>
                         </MenuItem.Icon>
                     </MenuItem>
                 </MenuItem>
@@ -301,10 +352,10 @@
                             <TextBlock Text="Drives:"
                                        Margin="5,0"
                                        VerticalAlignment="Center"/>
-                            
+
                             <StackPanel Orientation="Horizontal"
                                         x:Name="SpDriveList">
-                                
+
                             </StackPanel>
                             <Button Content="Refresh"
                                     x:Name="BtnRefresh"
@@ -505,6 +556,47 @@
                             </ListBox.ContextMenu>
                         </ListBox>
                     </Grid>
+                </TabItem>
+                <TabItem x:Name="TabRecent">
+                    <TabItem.Header>
+                        <StackPanel>
+                            <Image Source="../Images/Menu/note_music-50.png"
+                                   Width="32"
+                                   Height="32"/>
+                            <TextBlock Text="Recent"
+                                       TextAlignment="Center"/>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <ListBox x:Name="LbRecent"
+                             HorizontalContentAlignment="Stretch"
+                             Background="Transparent"
+                             MouseDoubleClick="LbRecent_MouseDoubleClick">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ToolTip="{Binding LastPlayed, Converter={StaticResource LastPlayConv}}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="30"/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="60"/>
+                                        <ColumnDefinition Width="30"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Image Width="25"
+                                               Height="25"
+                                               Grid.Column="0"
+                                               Source="../Images/audio_file-100.png"/>
+                                    <TextBlock Grid.Column="1"
+                                               Margin="2"
+                                               Text="{Binding Title, Converter={StaticResource TextShort}}"/>
+                                    <TextBlock Grid.Column="2"
+                                               Margin="2"
+                                               Text="{Binding Time}"/>
+                                    <TextBlock Grid.Column="3"
+                                               Margin="2"
+                                               Text="{Binding PlayCount}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
                 </TabItem>
             </TabControl>
         </Grid>

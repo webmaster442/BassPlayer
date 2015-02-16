@@ -284,6 +284,7 @@
     <Content Include="Engine\x86\tags.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Images\Menu\note_music-50.png" />
     <Resource Include="Images\filemanager\cloud_storage-50.png" />
     <Resource Include="Images\filemanager\cd-50.png" />
     <Resource Include="Images\filemanager\dropbox-50.png" />

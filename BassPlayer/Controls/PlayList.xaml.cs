@@ -26,6 +26,7 @@ namespace BassPlayer.Controls
         private ObservableCollection<PlayListEntry> _playlist;
         private ObservableCollection<PlayListEntry> _tunes;
         private ObservableCollection<string> _files;
+        private RecentPlays _recent;
         private TreeViewItem dummyNode = null;
         private int _index;
         private Random _rgen;
@@ -40,14 +41,19 @@ namespace BassPlayer.Controls
         public PlayList()
         {
             InitializeComponent();
+
             _playlist = new ObservableCollection<PlayListEntry>();
             _tunes = new ObservableCollection<PlayListEntry>();
             _files = new ObservableCollection<string>();
+            _recent = new RecentPlays();
             _rgen = new Random();
             _itunes = new iTunesData();
+
             LbList.ItemsSource = _playlist;
             LbFiles.ItemsSource = _files;
             LbLib.ItemsSource = _tunes;
+            LbRecent.ItemsSource = _recent;
+
             ListItunesData(SpArtists, _itunes.Artists, "Artists");
             ListItunesData(SpAlbums, _itunes.Albums, "Albums");
             ListItunesData(SpCompilations, _itunes.Compilations, "Compilations");
@@ -181,6 +187,7 @@ namespace BassPlayer.Controls
                 var index = LbList.SelectedIndex;
                 _index = index;
                 AudioPlayerControls.Load(_playlist[index].FileName);
+                _recent.Add(_playlist[index]);
             }
         }
 
@@ -191,6 +198,7 @@ namespace BassPlayer.Controls
                 var index = LbLib.SelectedIndex;
                 _index = index;
                 AudioPlayerControls.Load(_tunes[index].FileName);
+                _recent.Add(PlayListEntry.FromFile(_tunes[index].FileName));
             }
         }
 
@@ -200,6 +208,17 @@ namespace BassPlayer.Controls
             {
                 var index = LbFiles.SelectedIndex;
                 AudioPlayerControls.Load(_files[index]);
+                _recent.Add(PlayListEntry.FromFile(_files[index]));
+            }
+        }
+
+        private void LbRecent_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (AudioPlayerControls != null)
+            {
+                var index = LbRecent.SelectedIndex;
+                AudioPlayerControls.Load(_recent[index].FilePath);
+                _recent.UpdateItemAtIndex(index);
             }
         }
 
@@ -307,6 +326,12 @@ namespace BassPlayer.Controls
             }
             Processing.Visibility = System.Windows.Visibility.Collapsed;
         }
+
+        public void SaveRecent()
+        {
+            _recent.Save();
+        }
+
         #endregion
 
         #region Load / Add menu
