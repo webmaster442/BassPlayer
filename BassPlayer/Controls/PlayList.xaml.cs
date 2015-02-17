@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -11,6 +12,7 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Documents;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using System.Xml.Linq;
 using System.Xml.Serialization;
 
@@ -25,6 +27,7 @@ namespace BassPlayer.Controls
         private ObservableCollection<PlayListEntry> _playlist;
         private ObservableCollection<PlayListEntry> _tunes;
         private ObservableCollection<string> _files;
+        private RecentPlays _recent;
         private TreeViewItem dummyNode = null;
         private int _index;
         private Random _rgen;
@@ -39,14 +42,19 @@ namespace BassPlayer.Controls
         public PlayList()
         {
             InitializeComponent();
+
             _playlist = new ObservableCollection<PlayListEntry>();
             _tunes = new ObservableCollection<PlayListEntry>();
             _files = new ObservableCollection<string>();
+            _recent = new RecentPlays();
             _rgen = new Random();
             _itunes = new iTunesData();
+
             LbList.ItemsSource = _playlist;
             LbFiles.ItemsSource = _files;
             LbLib.ItemsSource = _tunes;
+            LbRecent.ItemsSource = _recent;
+
             ListItunesData(SpArtists, _itunes.Artists, "Artists");
             ListItunesData(SpAlbums, _itunes.Albums, "Albums");
             ListItunesData(SpCompilations, _itunes.Compilations, "Compilations");
@@ -180,6 +188,7 @@ namespace BassPlayer.Controls
                 var index = LbList.SelectedIndex;
                 _index = index;
                 AudioPlayerControls.Load(_playlist[index].FileName);
+                _recent.Add(_playlist[index]);
             }
         }
 
@@ -190,6 +199,7 @@ namespace BassPlayer.Controls
                 var index = LbLib.SelectedIndex;
                 _index = index;
                 AudioPlayerControls.Load(_tunes[index].FileName);
+                _recent.Add(PlayListEntry.FromFile(_tunes[index].FileName));
             }
         }
 
@@ -199,6 +209,17 @@ namespace BassPlayer.Controls
             {
                 var index = LbFiles.SelectedIndex;
                 AudioPlayerControls.Load(_files[index]);
+                _recent.Add(PlayListEntry.FromFile(_files[index]));
+            }
+        }
+
+        private void LbRecent_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (AudioPlayerControls != null)
+            {
+                var index = LbRecent.SelectedIndex;
+                AudioPlayerControls.Load(_recent[index].FilePath);
+                _recent.UpdateItemAtIndex(index);
             }
         }
 
@@ -211,6 +232,7 @@ namespace BassPlayer.Controls
             var next = 0;
             if (TcView.SelectedIndex == 0)
             {
+                //Playlist
                 if (_playlist.Count < 1) return;
                 if (Repeat) next = _index;
                 else if (Shuffle) next = _rgen.Next(0, _playlist.Count);
@@ -221,6 +243,18 @@ namespace BassPlayer.Controls
             }
             else if (TcView.SelectedIndex == 1)
             {
+                //Recent
+                if (_recent.Count < 1) return;
+                if (Repeat) next = LbRecent.SelectedIndex;
+                else if (Shuffle) next = _rgen.Next(0, _recent.Count);
+                else next = LbRecent.SelectedIndex + 1;
+                if (next > _recent.Count - 1) return;
+                AudioPlayerControls.Load(_recent[next].FilePath);
+                LbRecent.SelectedIndex = next;
+            }
+            else if (TcView.SelectedIndex == 2)
+            {
+                //File Manager
                 if (_files.Count < 1) return;
                 if (Repeat) next = LbFiles.SelectedIndex;
                 else if (Shuffle) next = _rgen.Next(0, _files.Count);
@@ -228,9 +262,11 @@ namespace BassPlayer.Controls
                 if (next > _files.Count - 1) return;
                 AudioPlayerControls.Load(_files[next]);
                 LbFiles.SelectedIndex = next;
+                _recent.UpdateItemAtIndex(next);
             }
-            else
+            else if (TcView.SelectedIndex == 3)
             {
+                //iTunes
                 if (_tunes.Count < 1) return;
                 if (Repeat) next = LbLib.SelectedIndex;
                 else if (Shuffle) next = _rgen.Next(0, _tunes.Count);
@@ -246,6 +282,7 @@ namespace BassPlayer.Controls
             var previous = 0;
             if (TcView.SelectedIndex == 0)
             {
+                //Playlist
                 if (_playlist.Count < 1) return;
                 if (Repeat) previous = _index;
                 else if (Shuffle) previous = _rgen.Next(0, _playlist.Count);
@@ -256,6 +293,19 @@ namespace BassPlayer.Controls
             }
             else if (TcView.SelectedIndex == 1)
             {
+                //Recent
+                if (_recent.Count < 1) return;
+                if (Repeat) previous = LbRecent.SelectedIndex;
+                else if (Shuffle) previous = _rgen.Next(0, _recent.Count);
+                else previous = LbRecent.SelectedIndex - 1;
+                if (previous < 0) return;
+                AudioPlayerControls.Load(_recent[previous].FilePath);
+                LbRecent.SelectedIndex = previous;
+                _recent.UpdateItemAtIndex(previous);
+            }
+            else if (TcView.SelectedIndex == 2)
+            {
+                //File Manager
                 if (_files.Count < 1) return;
                 if (Repeat) previous = LbFiles.SelectedIndex;
                 else if (Shuffle) previous = _rgen.Next(0, _files.Count);
@@ -264,8 +314,9 @@ namespace BassPlayer.Controls
                 AudioPlayerControls.Load(_files[previous]);
                 LbFiles.SelectedIndex = previous;
             }
-            else
+            else if (TcView.SelectedIndex == 3)
             {
+                //iTunes
                 if (_tunes.Count < 1) return;
                 if (Repeat) previous = LbLib.SelectedIndex;
                 else if (Shuffle) previous = _rgen.Next(0, _tunes.Count);
@@ -278,8 +329,8 @@ namespace BassPlayer.Controls
 
         public async void AppendFile(string file)
         {
-            await Task.Run(() => 
-            { 
+            await Task.Run(() =>
+            {
                 _playlist.Add(PlayListEntry.FromFile(file));
             });
         }
@@ -306,6 +357,12 @@ namespace BassPlayer.Controls
             }
             Processing.Visibility = System.Windows.Visibility.Collapsed;
         }
+
+        public void SaveRecent()
+        {
+            _recent.Save();
+        }
+
         #endregion
 
         #region Load / Add menu
@@ -422,55 +479,164 @@ namespace BassPlayer.Controls
 
         #endregion
 
-        #region Sort menu
-        private void MenSortArtistTitle_Click(object sender, RoutedEventArgs e)
+        #region Command Bindigns
+        private void SortArtistTitle_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            var query = (from i in _playlist orderby i.ArtistTitle ascending select i).ToList();
-            _playlist.Clear();
-            _playlist.AddRange(query);
+            if (TcView.SelectedIndex == 0)
+            {
+                var query = (from i in _playlist orderby i.ArtistTitle ascending select i).ToList();
+                _playlist.Clear();
+                _playlist.AddRange(query);
+            }
+            else
+            {
+                var query = (from i in _recent orderby i.Title ascending select i).ToList();
+                _recent.Clear();
+                _recent.AddRange(query);
+            }
         }
 
-        private void MenSortArtist_Click(object sender, RoutedEventArgs e)
+        private void SortLength_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (TcView.SelectedIndex == 0)
+            {
+                var query = (from i in _playlist orderby i.Time ascending select i).ToList();
+                _playlist.Clear();
+                _playlist.AddRange(query);
+            }
+            else
+            {
+                var query = (from i in _recent orderby i.Time ascending select i).ToList();
+                _recent.Clear();
+                _recent.AddRange(query);
+            }
+        }
+
+        private void SortFileName_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (TcView.SelectedIndex == 0)
+            {
+                var query = (from i in _playlist orderby i.FileName ascending select i).ToList();
+                _playlist.Clear();
+                _playlist.AddRange(query);
+            }
+            else
+            {
+                var query = (from i in _recent orderby i.FilePath ascending select i).ToList();
+                _recent.Clear();
+                _recent.AddRange(query);
+            }
+        }
+
+        private void SortRandom_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (TcView.SelectedIndex == 0)
+            {
+                var query = (from i in _playlist orderby Guid.NewGuid() select i).ToList();
+                _playlist.Clear();
+                _playlist.AddRange(query);
+            }
+            else
+            {
+                var query = (from i in _recent orderby Guid.NewGuid() select i).ToList();
+                _recent.Clear();
+                _recent.AddRange(query);
+            }
+        }
+
+        private void SortReverse_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (TcView.SelectedIndex == 0)
+            {
+                var query = _playlist.Reverse().ToList();
+                _playlist.Clear();
+                _playlist.AddRange(query);
+            }
+            else
+            {
+                var query = _recent.Reverse().ToList();
+                _recent.Clear();
+                _recent.AddRange(query);
+            }
+        }
+
+        private void ManageClear_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (TcView.SelectedIndex == 0) _playlist.Clear();
+            else _recent.Clear();
+        }
+
+        private void ManageDelete_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (LbList.SelectedItems.Count == 0) return;
+            while (LbList.SelectedItems != null)
+            {
+                _playlist.Remove((PlayListEntry)LbList.SelectedItems[0]);
+            }
+        }
+
+        private void SortArtist_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             var query = (from i in _playlist orderby i.Artist ascending select i).ToList();
             _playlist.Clear();
             _playlist.AddRange(query);
         }
 
-        private void MenSortTitle_Click(object sender, RoutedEventArgs e)
+        private void SortTitle_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             var query = (from i in _playlist orderby i.Title ascending select i).ToList();
             _playlist.Clear();
             _playlist.AddRange(query);
         }
 
-        private void MenSortLength_Click(object sender, RoutedEventArgs e)
+
+        private void SortDate_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            var query = (from i in _playlist orderby i.Time ascending select i).ToList();
-            _playlist.Clear();
-            _playlist.AddRange(query);
+            var query = (from i in _recent orderby i.LastPlayed descending select i).ToList();
+            _recent.Clear();
+            _recent.AddRange(query);
         }
 
-        private void MenSortFileName_Click(object sender, RoutedEventArgs e)
+        private void ContextRefresh_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            var query = (from i in _playlist orderby i.FileName ascending select i).ToList();
-            _playlist.Clear();
-            _playlist.AddRange(query);
+
         }
 
-        private void MenSortRandom_Click(object sender, RoutedEventArgs e)
+        private void ContextAddPlaylist_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            var query = (from i in _playlist orderby Guid.NewGuid() select i).ToList();
-            _playlist.Clear();
-            _playlist.AddRange(query);
+            PlayListEntry[] Items = null;
+            if (TcView.SelectedIndex == 1)
+            {
+                 Items = (from RecentItem i in LbRecent.SelectedItems select PlayListEntry.FromFile(i.FilePath)).ToArray();
+            }
+            else if (TcView.SelectedIndex == 2)
+            {
+                Items = (from string i in LbFiles.SelectedItems select PlayListEntry.FromFile(i)).ToArray();
+            }
+            else if (TcView.SelectedIndex == 3)
+            {
+                Items = (from PlayListEntry i in LbLib.SelectedItems select i).ToArray();
+            }
+            _playlist.AddRange(Items);
+            Dispatcher.BeginInvoke((Action)(() => TcView.SelectedIndex = 0));
+
         }
 
-        private void MenSortReverse_Click(object sender, RoutedEventArgs e)
+        private void ContextCopyToDevice_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            var query = _playlist.Reverse().ToList();
-            _playlist.Clear();
-            _playlist.AddRange(query);
+            string[] files = null;
+            if (TcView.SelectedIndex == 0) files = (from PlayListEntry i in LbFiles.SelectedItems select i.FileName).ToArray();
+            else if (TcView.SelectedIndex == 1) files = (from RecentItem i in LbRecent.SelectedItems select i.FilePath).ToArray();
+            else if (TcView.SelectedIndex == 2) files = (from string i in LbFiles.SelectedItems select i).ToArray();
+            else if (TcView.SelectedIndex == 3) files = (from PlayListEntry i in LbLib.SelectedItems select i.FileName).ToArray();
+
+            Process p = new Process();
+            p.StartInfo.FileName = "BassDeviceCopy.exe";
+            p.StartInfo.Arguments = Helpers.Arguments(files);
+            p.StartInfo.UseShellExecute = false;
+            p.Start();
         }
+
         #endregion
 
         #region ManageMenu
@@ -520,35 +686,88 @@ namespace BassPlayer.Controls
                 }
             }
         }
-
-        private void MenManageClear_Click(object sender, RoutedEventArgs e)
-        {
-            _playlist.Clear();
-        }
-
-        private void MenManageDelete_Click(object sender, RoutedEventArgs e)
-        {
-            if (LbList.SelectedItems == null) return;
-            while (LbList.SelectedItems != null)
-            {
-                _playlist.Remove((PlayListEntry)LbList.SelectedItems[0]);
-            }
-        }
         #endregion
 
         #region File Explorer
 
-        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        private Button CreateButton(string texts, string tag, BitmapImage image)
         {
-            foreach (var drive in Directory.GetLogicalDrives())
+            Button button = new Button();
+            StackPanel sp = new StackPanel();
+            sp.Orientation = Orientation.Horizontal;
+            Image icon = new Image();
+            icon.Width = 16;
+            icon.Height = 16;
+            icon.Source = image;
+            sp.Children.Add(icon);
+            TextBlock text = new TextBlock();
+            text.Margin = new Thickness(2, 0, 2, 0);
+            text.Text = texts;
+            sp.Children.Add(text);
+            button.Content = sp;
+            button.ToolTip = tag;
+            button.Margin = new Thickness(2.5, 0, 2.5, 0);
+            button.Click += button_Click;
+            return button;
+        }
+
+        private void BuildDriveList()
+        {
+            var drives = DriveInfo.GetDrives();
+            SpDriveList.Children.Clear();
+            foreach (var drive in drives)
             {
-                CbDrives.Items.Add(drive);
+                if (!drive.IsReady) continue;
+                BitmapImage icon = null;
+                switch (drive.DriveType)
+                {
+                    case DriveType.CDRom:
+                        icon = new BitmapImage(new Uri("pack://application:,,,/BassPlayer;component/Images/filemanager/cd-50.png"));
+                        break;
+                    case DriveType.Fixed:
+                    case DriveType.Ram:
+                    case DriveType.NoRootDirectory:
+                    case DriveType.Unknown:
+                        icon = new BitmapImage(new Uri("pack://application:,,,/BassPlayer;component/Images/filemanager/hdd-50.png"));
+                        break;
+                    case DriveType.Network:
+                        icon = new BitmapImage(new Uri("pack://application:,,,/BassPlayer;component/Images/filemanager/cloud_storage-50.png"));
+                        break;
+                    case DriveType.Removable:
+                        icon = new BitmapImage(new Uri("pack://application:,,,/BassPlayer;component/Images/filemanager/usb_logo-50.png"));
+                        break;
+                }
+                Button button = CreateButton(drive.Name, drive.Name, icon);
+                SpDriveList.Children.Add(button);
+            }
+
+            foreach (var cloud in CloudDriveProvider.AvailableDrives)
+            {
+                Button button = CreateButton(cloud.ToString(), CloudDriveProvider.GetPath(cloud), CloudDriveProvider.GetIcon(cloud));
+                SpDriveList.Children.Add(button);
             }
         }
 
-        private void CbDrives_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void ListDir(string path)
         {
-            string drive = CbDrives.SelectedItem.ToString();
+            _files.Clear();
+            List<string> files = new List<string>();
+            foreach (var filter in App.Formats.Split(';'))
+            {
+                files.AddRange(Directory.GetFiles(path, filter));
+            }
+            files.Sort();
+            foreach (var file in files)
+            {
+                FileInfo fi = new FileInfo(file);
+                if ((fi.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden) continue;
+                _files.Add(fi.FullName);
+            }
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            string drive = (sender as Button).ToolTip.ToString();
             TvDirs.Items.Clear();
             string[] dirs = Directory.GetDirectories(drive);
             foreach (var dir in dirs)
@@ -562,6 +781,17 @@ namespace BassPlayer.Controls
                 item.Expanded += item_Expanded;
                 TvDirs.Items.Add(item);
             }
+            ListDir(drive);
+        }
+
+        private void UserControl_Loaded(object sender, RoutedEventArgs e)
+        {
+            BuildDriveList();
+        }
+
+        private void BtnRefresh_Click(object sender, RoutedEventArgs e)
+        {
+            BuildDriveList();
         }
 
         private void item_Expanded(object sender, RoutedEventArgs e)
@@ -592,18 +822,7 @@ namespace BassPlayer.Controls
             if (TvDirs.SelectedItem == null) return;
             _files.Clear();
             TreeViewItem selected = (TreeViewItem)TvDirs.SelectedItem;
-            List<string> files = new List<string>();
-            foreach (var filter in App.Formats.Split(';'))
-            {
-                files.AddRange(Directory.GetFiles(selected.Tag.ToString(), filter));
-            }
-            files.Sort();
-            foreach (var file in files)
-            {
-                FileInfo fi = new FileInfo(file);
-                if ((fi.Attributes & FileAttributes.Hidden) == FileAttributes.Hidden) continue;
-                _files.Add(fi.FullName);
-            }
+            ListDir(selected.Tag.ToString());
         }
 
         private void FilesCtRefresh_Click(object sender, RoutedEventArgs e)
@@ -664,6 +883,8 @@ namespace BassPlayer.Controls
         }
         #endregion
 
+        #region iTunes
+
         private void ListItunesData(StackPanel target, string[] items, string linkcat)
         {
             if (items == null || target == null) return;
@@ -707,5 +928,7 @@ namespace BassPlayer.Controls
                 _playlist.Add(ple);
             }
         }
+
+        #endregion
     }
 }

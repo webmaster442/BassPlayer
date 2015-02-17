@@ -58,7 +58,7 @@
             <ComboBox Width="180"
                       Margin="5,0"
                       x:Name="CbDeviceList"
-                      SelectedIndex="1"
+                      SelectedIndex="0"
                       SelectionChanged="CbDeviceList_SelectionChanged"/>
             <TextBlock Text="Volume:"
                        Margin="5,0"
@@ -71,7 +71,7 @@
                     Value="1"
                     ValueChanged="VolSlider_ValueChanged"
                     ToolTip="{Binding ElementName=VolSlider, Path=Value, Converter={StaticResource PercentConv}}"/>
-            <CheckBox Content="Allways top"
+            <CheckBox Content="Always top"
                       VerticalAlignment="Center"
                       Margin="25,0"
                       IsChecked="{Binding ElementName=Control, Path=AllwaysTop}"

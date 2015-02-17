@@ -276,7 +276,6 @@ namespace BassPlayer.Classes
             try
             {
                 retval = Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-                
             }
             finally { DeleteObject(hBitmap); }
             return retval;
@@ -373,7 +372,7 @@ namespace BassPlayer.Classes
         {
             int devcount = Bass.BASS_GetDeviceCount();
             List<string> _devices = new List<string>(devcount);
-            for (int i = 0; i < devcount; i++)
+            for (int i = 1; i < devcount; i++)
             {
                 var device = Bass.BASS_GetDeviceInfo(i);
                 if (device.IsEnabled) _devices.Add(device.name);

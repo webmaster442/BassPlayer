@@ -19,6 +19,8 @@ namespace BassPlayer.Controls
             TbProxyPort.Text = Settings.Default.ProxyPort;
             TbProxyUrl.Text = Settings.Default.ProxyAddress;
             TbProxyUser.Text = Settings.Default.ProxyUser;
+            CbMediaKeys.IsChecked = Settings.Default.MediaKeys;
+            CbProxyEnabled.IsChecked = Settings.Default.ProxyEnabled;
         }
 
         private void BtnCancel_Click(object sender, RoutedEventArgs e)
@@ -32,6 +34,8 @@ namespace BassPlayer.Controls
             Settings.Default.ProxyPort = TbProxyPort.Text;
             Settings.Default.ProxyAddress = TbProxyUrl.Text;
             Settings.Default.ProxyUser = TbProxyUser.Text;
+            Settings.Default.ProxyEnabled = (bool)CbProxyEnabled.IsChecked;
+            Settings.Default.MediaKeys = (bool)CbMediaKeys.IsChecked;
             Settings.Default.Save();
             this.DialogResult = true;
         }

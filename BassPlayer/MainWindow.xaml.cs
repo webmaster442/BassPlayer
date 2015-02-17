@@ -22,16 +22,19 @@ namespace BassPlayer
             Player.PlayList = Playlist;
             _keyboardhook = new KeyboardHook();
             _keyboardhook.KeyPressed += _keyboardhook_KeyPressed;
-            try
+            if (Settings.Default.MediaKeys)
             {
-                _keyboardhook.RegisterHotKey(ModifierKeys.None, System.Windows.Forms.Keys.MediaPlayPause);
-                _keyboardhook.RegisterHotKey(ModifierKeys.None, System.Windows.Forms.Keys.MediaStop);
-                _keyboardhook.RegisterHotKey(ModifierKeys.None, System.Windows.Forms.Keys.MediaNextTrack);
-                _keyboardhook.RegisterHotKey(ModifierKeys.None, System.Windows.Forms.Keys.MediaPreviousTrack);
-            }
-            catch (Exception ex)
-            {
-                Helpers.ErrorDialog(ex, "Media keys registration failed");
+                try
+                {
+                    _keyboardhook.RegisterHotKey(ModifierKeys.None, System.Windows.Forms.Keys.MediaPlayPause);
+                    _keyboardhook.RegisterHotKey(ModifierKeys.None, System.Windows.Forms.Keys.MediaStop);
+                    _keyboardhook.RegisterHotKey(ModifierKeys.None, System.Windows.Forms.Keys.MediaNextTrack);
+                    _keyboardhook.RegisterHotKey(ModifierKeys.None, System.Windows.Forms.Keys.MediaPreviousTrack);
+                }
+                catch (Exception ex)
+                {
+                    Helpers.ErrorDialog(ex, "Media keys are in use by another application.\r\nTo Use media key functions please close other apps that may use the keys, then restart the player");
+                }
             }
         }
 
@@ -55,6 +58,7 @@ namespace BassPlayer
             Settings.Default.WindowLeft = this.Left;
             Settings.Default.WindowTop = this.Top;
             Settings.Default.Save();
+            Playlist.SaveRecent();
             e.Cancel = false;
         }
 

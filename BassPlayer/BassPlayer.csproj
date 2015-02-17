@@ -38,7 +38,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
+    <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -95,11 +95,14 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\CloudDriveProvider.cs" />
     <Compile Include="Classes\iTunesData.cs" />
     <Compile Include="Classes\KeyboardHook.cs" />
+    <Compile Include="Classes\RecentPlays.cs" />
     <Compile Include="Controls\AboutDialog.xaml.cs">
       <DependentUpon>AboutDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Commands.cs" />
     <Compile Include="Controls\ImportYoutube.xaml.cs">
       <DependentUpon>ImportYoutube.xaml</DependentUpon>
     </Compile>
@@ -282,6 +285,14 @@
     <Content Include="Engine\x86\tags.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Resource Include="Images\Menu\note_music-50.png" />
+    <Resource Include="Images\filemanager\cloud_storage-50.png" />
+    <Resource Include="Images\filemanager\cd-50.png" />
+    <Resource Include="Images\filemanager\dropbox-50.png" />
+    <Resource Include="Images\filemanager\google_drive-50.png" />
+    <Resource Include="Images\filemanager\hdd-50.png" />
+    <Resource Include="Images\filemanager\skydrive-50.png" />
+    <Resource Include="Images\filemanager\usb_logo-50.png" />
     <Resource Include="Images\Menu\stack-50.png" />
     <Resource Include="Images\Menu\ingredients_list-50.png" />
     <Resource Include="Images\Menu\mac_os-50.png" />

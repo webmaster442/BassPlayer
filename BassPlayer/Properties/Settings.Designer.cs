@@ -106,5 +106,29 @@ namespace BassPlayer.Properties {
                 this["ProxyEnabled"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool MediaKeys {
+            get {
+                return ((bool)(this["MediaKeys"]));
+            }
+            set {
+                this["MediaKeys"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("100")]
+        public uint RecentCount {
+            get {
+                return ((uint)(this["RecentCount"]));
+            }
+            set {
+                this["RecentCount"] = value;
+            }
+        }
     }
 }
