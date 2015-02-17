@@ -298,8 +298,8 @@ namespace BassPlayer.Controls
 
         public async void AppendFile(string file)
         {
-            await Task.Run(() => 
-            { 
+            await Task.Run(() =>
+            {
                 _playlist.Add(PlayListEntry.FromFile(file));
             });
         }
@@ -448,54 +448,122 @@ namespace BassPlayer.Controls
 
         #endregion
 
-        #region Sort menu
-        private void MenSortArtistTitle_Click(object sender, RoutedEventArgs e)
+        #region Command Bindigns
+        private void SortArtistTitle_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            var query = (from i in _playlist orderby i.ArtistTitle ascending select i).ToList();
-            _playlist.Clear();
-            _playlist.AddRange(query);
+            if (TcView.SelectedIndex == 0)
+            {
+                var query = (from i in _playlist orderby i.ArtistTitle ascending select i).ToList();
+                _playlist.Clear();
+                _playlist.AddRange(query);
+            }
+            else
+            {
+                var query = (from i in _recent orderby i.Title ascending select i).ToList();
+                _recent.Clear();
+                _recent.AddRange(query);
+            }
         }
 
-        private void MenSortArtist_Click(object sender, RoutedEventArgs e)
+        private void SortLength_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (TcView.SelectedIndex == 0)
+            {
+                var query = (from i in _playlist orderby i.Time ascending select i).ToList();
+                _playlist.Clear();
+                _playlist.AddRange(query);
+            }
+            else
+            {
+                var query = (from i in _recent orderby i.Time ascending select i).ToList();
+                _recent.Clear();
+                _recent.AddRange(query);
+            }
+        }
+
+        private void SortFileName_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (TcView.SelectedIndex == 0)
+            {
+                var query = (from i in _playlist orderby i.FileName ascending select i).ToList();
+                _playlist.Clear();
+                _playlist.AddRange(query);
+            }
+            else
+            {
+                var query = (from i in _recent orderby i.FilePath ascending select i).ToList();
+                _recent.Clear();
+                _recent.AddRange(query);
+            }
+        }
+
+        private void SortRandom_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (TcView.SelectedIndex == 0)
+            {
+                var query = (from i in _playlist orderby Guid.NewGuid() select i).ToList();
+                _playlist.Clear();
+                _playlist.AddRange(query);
+            }
+            else
+            {
+                var query = (from i in _recent orderby Guid.NewGuid() select i).ToList();
+                _recent.Clear();
+                _recent.AddRange(query);
+            }
+        }
+
+        private void SortReverse_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (TcView.SelectedIndex == 0)
+            {
+                var query = _playlist.Reverse().ToList();
+                _playlist.Clear();
+                _playlist.AddRange(query);
+            }
+            else
+            {
+                var query = _recent.Reverse().ToList();
+                _recent.Clear();
+                _recent.AddRange(query);
+            }
+        }
+
+        private void ManageClear_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (TcView.SelectedIndex == 0) _playlist.Clear();
+            else _recent.Clear();
+        }
+
+        private void ManageDelete_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            if (LbList.SelectedItems == null) return;
+            while (LbList.SelectedItems != null)
+            {
+                _playlist.Remove((PlayListEntry)LbList.SelectedItems[0]);
+            }
+        }
+
+        private void SortArtist_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             var query = (from i in _playlist orderby i.Artist ascending select i).ToList();
             _playlist.Clear();
             _playlist.AddRange(query);
         }
 
-        private void MenSortTitle_Click(object sender, RoutedEventArgs e)
+        private void SortTitle_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             var query = (from i in _playlist orderby i.Title ascending select i).ToList();
             _playlist.Clear();
             _playlist.AddRange(query);
         }
 
-        private void MenSortLength_Click(object sender, RoutedEventArgs e)
-        {
-            var query = (from i in _playlist orderby i.Time ascending select i).ToList();
-            _playlist.Clear();
-            _playlist.AddRange(query);
-        }
 
-        private void MenSortFileName_Click(object sender, RoutedEventArgs e)
+        private void SortDate_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            var query = (from i in _playlist orderby i.FileName ascending select i).ToList();
-            _playlist.Clear();
-            _playlist.AddRange(query);
-        }
-
-        private void MenSortRandom_Click(object sender, RoutedEventArgs e)
-        {
-            var query = (from i in _playlist orderby Guid.NewGuid() select i).ToList();
-            _playlist.Clear();
-            _playlist.AddRange(query);
-        }
-
-        private void MenSortReverse_Click(object sender, RoutedEventArgs e)
-        {
-            var query = _playlist.Reverse().ToList();
-            _playlist.Clear();
-            _playlist.AddRange(query);
+            var query = (from i in _recent orderby i.LastPlayed descending select i).ToList();
+            _recent.Clear();
+            _recent.AddRange(query);
         }
         #endregion
 
@@ -544,20 +612,6 @@ namespace BassPlayer.Controls
                         }
                         break;
                 }
-            }
-        }
-
-        private void MenManageClear_Click(object sender, RoutedEventArgs e)
-        {
-            _playlist.Clear();
-        }
-
-        private void MenManageDelete_Click(object sender, RoutedEventArgs e)
-        {
-            if (LbList.SelectedItems == null) return;
-            while (LbList.SelectedItems != null)
-            {
-                _playlist.Remove((PlayListEntry)LbList.SelectedItems[0]);
             }
         }
         #endregion

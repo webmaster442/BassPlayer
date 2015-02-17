@@ -102,6 +102,7 @@
     <Compile Include="Controls\AboutDialog.xaml.cs">
       <DependentUpon>AboutDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\Commands.cs" />
     <Compile Include="Controls\ImportYoutube.xaml.cs">
       <DependentUpon>ImportYoutube.xaml</DependentUpon>
     </Compile>
