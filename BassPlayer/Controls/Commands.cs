@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
 namespace BassPlayer.Controls
 {
@@ -28,5 +23,11 @@ namespace BassPlayer.Controls
         public static readonly RoutedUICommand ManageDelete = new RoutedUICommand("Delete Selected", "ManageDelete", typeof(CustomCommands));
 
         public static readonly RoutedUICommand ManageClear = new RoutedUICommand("Clear List", "ManageClear", typeof(CustomCommands));
+
+        public static readonly RoutedUICommand ContextAddPlaylist = new RoutedUICommand("Add to Playlist", "ContextAddPlaylist", typeof(CustomCommands));
+
+        public static readonly RoutedUICommand ContextCopyToDevice = new RoutedUICommand("Copy to Device...", "ContextCopyToDevice", typeof(CustomCommands));
+
+        public static readonly RoutedUICommand ContextRefresh = new RoutedUICommand("Refresh", "ContextRefresh", typeof(CustomCommands));
     }
 }

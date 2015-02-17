@@ -35,6 +35,13 @@
                         Executed="ManageDelete_Executed"/>
         <CommandBinding Command="{x:Static controls:CustomCommands.ManageClear}"
                         Executed="ManageClear_Executed"/>
+
+        <CommandBinding Command="{x:Static controls:CustomCommands.ContextAddPlaylist}"
+                        Executed="ContextAddPlaylist_Executed"/>
+        <CommandBinding Command="{x:Static controls:CustomCommands.ContextCopyToDevice}"
+                        Executed="ContextCopyToDevice_Executed"/>
+        <CommandBinding Command="{x:Static controls:CustomCommands.ContextRefresh}"
+                        Executed="ContextRefresh_Executed"/>
     </UserControl.CommandBindings>
     <Expander IsExpanded="True"
               x:Name="MainExpander"
@@ -239,7 +246,7 @@
                     </MenuItem>
                 </MenuItem>
                 <MenuItem Header="Recent"
-                          IsEnabled="{Binding ElementName=TcView, Path=SelectedIndex, ConverterParameter=3, Converter={StaticResource EnableConv}}"
+                          IsEnabled="{Binding ElementName=TcView, Path=SelectedIndex, ConverterParameter=1, Converter={StaticResource EnableConv}}"
                           x:Name="MenRecent">
                     <MenuItem.Icon>
                         <Image Width="16"
@@ -336,6 +343,138 @@
                     <ListBox x:Name="LbList"
                              Style="{StaticResource Playlist}"
                              MouseDoubleClick="LbList_MouseDoubleClick" >
+                        <ListBox.ContextMenu>
+                            <ContextMenu IsEnabled="{Binding ElementName=TcView, Path=SelectedIndex, ConverterParameter=0, Converter={StaticResource EnableConv}}">
+                                <MenuItem Command="{x:Static controls:CustomCommands.ContextCopyToDevice}"/>
+                                <Separator/>
+                                <MenuItem Header="Sort">
+                                    <MenuItem.Icon>
+                                        <Image Width="16"
+                                               Height="16"
+                                               Source="../Images/Menu/generic_sorting_2-50.png"/>
+                                    </MenuItem.Icon>
+                                    <MenuItem Command="{x:Static controls:CustomCommands.SortArtistTitle}">
+                                        <MenuItem.Icon>
+                                            <Image Width="16"
+                                                   Height="16"
+                                                   Source="../Images/Menu/alphabetical_sorting-50.png"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Command="{x:Static controls:CustomCommands.SortArtist}">
+                                        <MenuItem.Icon>
+                                            <Image Width="16"
+                                                   Height="16"
+                                                   Source="../Images/Menu/alphabetical_sorting-50.png"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Command="{x:Static controls:CustomCommands.SortTitle}">
+                                        <MenuItem.Icon>
+                                            <Image Width="16"
+                                                   Height="16"
+                                                   Source="../Images/Menu/alphabetical_sorting-50.png"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Command="{x:Static controls:CustomCommands.SortLength}">
+                                        <MenuItem.Icon>
+                                            <Image Width="16"
+                                                   Height="16"
+                                                   Source="../Images/Menu/alphabetical_sorting-50.png"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Command="{x:Static controls:CustomCommands.SortFileName}">
+                                        <MenuItem.Icon>
+                                            <Image Width="16"
+                                                   Height="16"
+                                                   Source="../Images/Menu/alphabetical_sorting-50.png"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <Separator/>
+                                    <MenuItem Command="{x:Static controls:CustomCommands.SortRandom}">
+                                        <MenuItem.Icon>
+                                            <Image Width="16"
+                                                   Height="16"
+                                                   Source="../Images/Menu/dice-50.png"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Command="{x:Static controls:CustomCommands.SortReverse}">
+                                        <MenuItem.Icon>
+                                            <Image Width="16"
+                                                   Height="16"
+                                                   Source="../Images/Menu/generic_sorting_2-50.png"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                </MenuItem>
+                                <MenuItem Header="Manage">
+                                    <MenuItem.Icon>
+                                        <Image Width="16"
+                                               Height="16"
+                                               Source="../Images/Menu/to_do-50.png"/>
+                                    </MenuItem.Icon>
+                                    <MenuItem Command="{x:Static controls:CustomCommands.ManageClear}">
+                                        <MenuItem.Icon>
+                                            <Image Width="16"
+                                                   Height="16"
+                                                   Source="../Images/Menu/delete-50.png"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                    <MenuItem Command="{x:Static controls:CustomCommands.ManageDelete}">
+                                        <MenuItem.Icon>
+                                            <Image Width="16"
+                                                   Height="16"
+                                                   Source="../Images/Menu/delete_sign-50.png"/>
+                                        </MenuItem.Icon>
+                                    </MenuItem>
+                                </MenuItem>
+                            </ContextMenu>
+                        </ListBox.ContextMenu>
+                    </ListBox>
+                </TabItem>
+                <TabItem x:Name="TabRecent">
+                    <TabItem.Header>
+                        <StackPanel>
+                            <Image Source="../Images/Menu/note_music-50.png"
+                                   Width="32"
+                                   Height="32"/>
+                            <TextBlock Text="Recent"
+                                       TextAlignment="Center"/>
+                        </StackPanel>
+                    </TabItem.Header>
+                    <ListBox x:Name="LbRecent"
+                             HorizontalContentAlignment="Stretch"
+                             Background="Transparent"
+                             MouseDoubleClick="LbRecent_MouseDoubleClick">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Grid ToolTip="{Binding LastPlayed, Converter={StaticResource LastPlayConv}}">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="30"/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="60"/>
+                                        <ColumnDefinition Width="30"/>
+                                    </Grid.ColumnDefinitions>
+                                    <Image Width="25"
+                                               Height="25"
+                                               Grid.Column="0"
+                                               Source="../Images/audio_file-100.png"/>
+                                    <TextBlock Grid.Column="1"
+                                               Margin="2"
+                                               Text="{Binding Title, Converter={StaticResource TextShort}}"/>
+                                    <TextBlock Grid.Column="2"
+                                               Margin="2"
+                                               Text="{Binding Time}"/>
+                                    <TextBlock Grid.Column="3"
+                                               Margin="2"
+                                               Text="{Binding PlayCount}"/>
+                                </Grid>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                        <ListBox.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Command="{x:Static controls:CustomCommands.ContextAddPlaylist}"/>
+                                <Separator/>
+                                <MenuItem Command="{x:Static controls:CustomCommands.ContextCopyToDevice}"/>
+                            </ContextMenu>
+                        </ListBox.ContextMenu>
                     </ListBox>
                 </TabItem>
                 <TabItem>
@@ -413,13 +552,9 @@
                                  Background="Transparent">
                             <ListBox.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Header="Refresh"
-                                              x:Name="FilesCtRefresh"
-                                              Click="FilesCtRefresh_Click"/>
+                                    <MenuItem Command="{x:Static controls:CustomCommands.ContextAddPlaylist}"/>
                                     <Separator/>
-                                    <MenuItem Header="Add to Playlist..."
-                                              x:Name="FilesCtAddToPls"
-                                              Click="FilesCtAddToPls_Click"/>
+                                    <MenuItem Command="{x:Static controls:CustomCommands.ContextCopyToDevice}"/>
                                 </ContextMenu>
                             </ListBox.ContextMenu>
                             <ListBox.ItemTemplate>
@@ -562,54 +697,13 @@
                                  MouseDoubleClick="LbLib_MouseDoubleClick">
                             <ListBox.ContextMenu>
                                 <ContextMenu>
-                                    <MenuItem Header="Add to playlist"
-                                              x:Name="TunesAddPlaylist"
-                                              Click="TunesAddPlaylist_Click"/>
+                                    <MenuItem Command="{x:Static controls:CustomCommands.ContextAddPlaylist}"/>
+                                    <Separator/>
+                                    <MenuItem Command="{x:Static controls:CustomCommands.ContextCopyToDevice}"/>
                                 </ContextMenu>
                             </ListBox.ContextMenu>
                         </ListBox>
                     </Grid>
-                </TabItem>
-                <TabItem x:Name="TabRecent">
-                    <TabItem.Header>
-                        <StackPanel>
-                            <Image Source="../Images/Menu/note_music-50.png"
-                                   Width="32"
-                                   Height="32"/>
-                            <TextBlock Text="Recent"
-                                       TextAlignment="Center"/>
-                        </StackPanel>
-                    </TabItem.Header>
-                    <ListBox x:Name="LbRecent"
-                             HorizontalContentAlignment="Stretch"
-                             Background="Transparent"
-                             MouseDoubleClick="LbRecent_MouseDoubleClick">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Grid ToolTip="{Binding LastPlayed, Converter={StaticResource LastPlayConv}}">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="30"/>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition Width="60"/>
-                                        <ColumnDefinition Width="30"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Image Width="25"
-                                               Height="25"
-                                               Grid.Column="0"
-                                               Source="../Images/audio_file-100.png"/>
-                                    <TextBlock Grid.Column="1"
-                                               Margin="2"
-                                               Text="{Binding Title, Converter={StaticResource TextShort}}"/>
-                                    <TextBlock Grid.Column="2"
-                                               Margin="2"
-                                               Text="{Binding Time}"/>
-                                    <TextBlock Grid.Column="3"
-                                               Margin="2"
-                                               Text="{Binding PlayCount}"/>
-                                </Grid>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                    </ListBox>
                 </TabItem>
             </TabControl>
         </Grid>

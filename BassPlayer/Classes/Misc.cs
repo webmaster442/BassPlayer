@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Data;
 using System.Windows.Media;
@@ -77,6 +78,16 @@ namespace BassPlayer.Classes
                 MessageBox.Show(string.Format("{0}\r\nDetails:{1}", description, ex.Message), "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
             else MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+
+        public static string Arguments(string[] args)
+        {
+            StringBuilder sb = new StringBuilder();
+            foreach (var arg in args)
+            {
+                sb.AppendFormat("\"{0}\" ", arg);
+            }
+            return sb.ToString();
         }
     }
 

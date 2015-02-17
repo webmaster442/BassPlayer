@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -231,6 +232,7 @@ namespace BassPlayer.Controls
             var next = 0;
             if (TcView.SelectedIndex == 0)
             {
+                //Playlist
                 if (_playlist.Count < 1) return;
                 if (Repeat) next = _index;
                 else if (Shuffle) next = _rgen.Next(0, _playlist.Count);
@@ -241,6 +243,18 @@ namespace BassPlayer.Controls
             }
             else if (TcView.SelectedIndex == 1)
             {
+                //Recent
+                if (_recent.Count < 1) return;
+                if (Repeat) next = LbRecent.SelectedIndex;
+                else if (Shuffle) next = _rgen.Next(0, _recent.Count);
+                else next = LbRecent.SelectedIndex + 1;
+                if (next > _recent.Count - 1) return;
+                AudioPlayerControls.Load(_recent[next].FilePath);
+                LbRecent.SelectedIndex = next;
+            }
+            else if (TcView.SelectedIndex == 2)
+            {
+                //File Manager
                 if (_files.Count < 1) return;
                 if (Repeat) next = LbFiles.SelectedIndex;
                 else if (Shuffle) next = _rgen.Next(0, _files.Count);
@@ -248,9 +262,11 @@ namespace BassPlayer.Controls
                 if (next > _files.Count - 1) return;
                 AudioPlayerControls.Load(_files[next]);
                 LbFiles.SelectedIndex = next;
+                _recent.UpdateItemAtIndex(next);
             }
-            else
+            else if (TcView.SelectedIndex == 3)
             {
+                //iTunes
                 if (_tunes.Count < 1) return;
                 if (Repeat) next = LbLib.SelectedIndex;
                 else if (Shuffle) next = _rgen.Next(0, _tunes.Count);
@@ -266,6 +282,7 @@ namespace BassPlayer.Controls
             var previous = 0;
             if (TcView.SelectedIndex == 0)
             {
+                //Playlist
                 if (_playlist.Count < 1) return;
                 if (Repeat) previous = _index;
                 else if (Shuffle) previous = _rgen.Next(0, _playlist.Count);
@@ -276,6 +293,19 @@ namespace BassPlayer.Controls
             }
             else if (TcView.SelectedIndex == 1)
             {
+                //Recent
+                if (_recent.Count < 1) return;
+                if (Repeat) previous = LbRecent.SelectedIndex;
+                else if (Shuffle) previous = _rgen.Next(0, _recent.Count);
+                else previous = LbRecent.SelectedIndex - 1;
+                if (previous < 0) return;
+                AudioPlayerControls.Load(_recent[previous].FilePath);
+                LbRecent.SelectedIndex = previous;
+                _recent.UpdateItemAtIndex(previous);
+            }
+            else if (TcView.SelectedIndex == 2)
+            {
+                //File Manager
                 if (_files.Count < 1) return;
                 if (Repeat) previous = LbFiles.SelectedIndex;
                 else if (Shuffle) previous = _rgen.Next(0, _files.Count);
@@ -284,8 +314,9 @@ namespace BassPlayer.Controls
                 AudioPlayerControls.Load(_files[previous]);
                 LbFiles.SelectedIndex = previous;
             }
-            else
+            else if (TcView.SelectedIndex == 3)
             {
+                //iTunes
                 if (_tunes.Count < 1) return;
                 if (Repeat) previous = LbLib.SelectedIndex;
                 else if (Shuffle) previous = _rgen.Next(0, _tunes.Count);
@@ -537,7 +568,7 @@ namespace BassPlayer.Controls
 
         private void ManageDelete_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            if (LbList.SelectedItems == null) return;
+            if (LbList.SelectedItems.Count == 0) return;
             while (LbList.SelectedItems != null)
             {
                 _playlist.Remove((PlayListEntry)LbList.SelectedItems[0]);
@@ -565,6 +596,47 @@ namespace BassPlayer.Controls
             _recent.Clear();
             _recent.AddRange(query);
         }
+
+        private void ContextRefresh_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+
+        }
+
+        private void ContextAddPlaylist_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            PlayListEntry[] Items = null;
+            if (TcView.SelectedIndex == 1)
+            {
+                 Items = (from RecentItem i in LbRecent.SelectedItems select PlayListEntry.FromFile(i.FilePath)).ToArray();
+            }
+            else if (TcView.SelectedIndex == 2)
+            {
+                Items = (from string i in LbFiles.SelectedItems select PlayListEntry.FromFile(i)).ToArray();
+            }
+            else if (TcView.SelectedIndex == 3)
+            {
+                Items = (from PlayListEntry i in LbLib.SelectedItems select i).ToArray();
+            }
+            _playlist.AddRange(Items);
+            Dispatcher.BeginInvoke((Action)(() => TcView.SelectedIndex = 0));
+
+        }
+
+        private void ContextCopyToDevice_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            string[] files = null;
+            if (TcView.SelectedIndex == 0) files = (from PlayListEntry i in LbFiles.SelectedItems select i.FileName).ToArray();
+            else if (TcView.SelectedIndex == 1) files = (from RecentItem i in LbRecent.SelectedItems select i.FilePath).ToArray();
+            else if (TcView.SelectedIndex == 2) files = (from string i in LbFiles.SelectedItems select i).ToArray();
+            else if (TcView.SelectedIndex == 3) files = (from PlayListEntry i in LbLib.SelectedItems select i.FileName).ToArray();
+
+            Process p = new Process();
+            p.StartInfo.FileName = "BassDeviceCopy.exe";
+            p.StartInfo.Arguments = Helpers.Arguments(files);
+            p.StartInfo.UseShellExecute = false;
+            p.Start();
+        }
+
         #endregion
 
         #region ManageMenu
