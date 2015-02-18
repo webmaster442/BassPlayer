@@ -231,5 +231,10 @@ namespace BassPlayer.Classes
         {
             return xe != null;
         }
+
+        public static DateTime ToDateTime(this XElement xe)
+        {
+            return Convert.ToDateTime(xe.Value);
+        }
     }
 }

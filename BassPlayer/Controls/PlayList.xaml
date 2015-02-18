@@ -705,6 +705,60 @@
                         </ListBox>
                     </Grid>
                 </TabItem>
+                <TabItem Header="Youtube">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="25"/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="100"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" 
+                                   Grid.Row="0" 
+                                   Text="Search:" 
+                                   VerticalAlignment="Center"/>
+                        <TextBox Grid.Column="1"
+                                 Grid.Row="0"
+                                 x:Name="TbYoutubeQuery" 
+                                 VerticalAlignment="Center"/>
+                        <Button Grid.Row="0"
+                                Grid.Column="2"
+                                Content="Search"
+                                Click="Button_Click_1" 
+                                VerticalAlignment="Center"/>
+                        <ListBox Grid.Row="1"
+                                 VerticalContentAlignment="Stretch"
+                                 Grid.ColumnSpan="3"
+                                 x:Name="LbYoutube">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="180"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Image Grid.Column="0"
+                                               Grid.RowSpan="2"
+                                               Source="{Binding Thumbnail}"/>
+                                        <TextBlock Grid.Row="0"
+                                                   Grid.Column="1"
+                                                   Text="{Binding Title}"/>
+                                        <TextBlock Grid.Row="1"
+                                                   Grid.Column="1"
+                                                   Text="{Binding Date}"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Grid>
+                </TabItem>
             </TabControl>
         </Grid>
     </Expander>

@@ -27,6 +27,7 @@ namespace BassPlayer.Controls
         private ObservableCollection<PlayListEntry> _playlist;
         private ObservableCollection<PlayListEntry> _tunes;
         private ObservableCollection<string> _files;
+        private ObservableCollection<YoutubeItem> _youtube;
         private RecentPlays _recent;
         private TreeViewItem dummyNode = null;
         private int _index;
@@ -46,6 +47,7 @@ namespace BassPlayer.Controls
             _playlist = new ObservableCollection<PlayListEntry>();
             _tunes = new ObservableCollection<PlayListEntry>();
             _files = new ObservableCollection<string>();
+            _youtube = new ObservableCollection<YoutubeItem>();
             _recent = new RecentPlays();
             _rgen = new Random();
             _itunes = new iTunesData();
@@ -54,6 +56,7 @@ namespace BassPlayer.Controls
             LbFiles.ItemsSource = _files;
             LbLib.ItemsSource = _tunes;
             LbRecent.ItemsSource = _recent;
+            LbYoutube.ItemsSource = _youtube;
 
             ListItunesData(SpArtists, _itunes.Artists, "Artists");
             ListItunesData(SpAlbums, _itunes.Albums, "Albums");
@@ -887,5 +890,12 @@ namespace BassPlayer.Controls
             _tunes.AddRange(result);
         }
         #endregion
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            var results = YoutubeLoader.Search(TbYoutubeQuery.Text);
+            _youtube.Clear();
+            _youtube.AddRange(results);
+        }
     }
 }
