@@ -103,9 +103,6 @@
       <DependentUpon>AboutDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Controls\Commands.cs" />
-    <Compile Include="Controls\ImportYoutube.xaml.cs">
-      <DependentUpon>ImportYoutube.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Controls\OSD.xaml.cs">
       <DependentUpon>OSD.XAML</DependentUpon>
     </Compile>
@@ -121,10 +118,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\AddUrlDialog.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\ImportYoutube.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -165,9 +158,6 @@
       <DependentUpon>PlayList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Libs\SingleInstance.cs" />
-    <Compile Include="Libs\youtube\FileSizeFormatProvider.cs" />
-    <Compile Include="Libs\youtube\Helper.cs" />
-    <Compile Include="Libs\youtube\YouTubeDownloader.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>

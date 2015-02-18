@@ -327,12 +327,9 @@ namespace BassPlayer.Controls
             }
         }
 
-        public async void AppendFile(string file)
+        public void AppendFile(string file)
         {
-            await Task.Run(() =>
-            {
-                _playlist.Add(PlayListEntry.FromFile(file));
-            });
+            _playlist.Add(PlayListEntry.FromFile(file));
         }
 
         public async void AppendPlaylist(string file)
@@ -462,21 +459,6 @@ namespace BassPlayer.Controls
                 _playlist.Add(PlayListEntry.FromFile(url.Url));
             }
         }
-
-        private void MenAddYoutube_Click(object sender, RoutedEventArgs e)
-        {
-            ImportYoutube yt = new ImportYoutube();
-            if (yt.ShowDialog() == true)
-            {
-                if (yt.Entrys == null)
-                {
-                    MessageBox.Show("Import failed :(\r\nYoutube has changed format again...");
-                    return;
-                }
-                _playlist.AddRange(yt.Entrys);
-            }
-        }
-
         #endregion
 
         #region Command Bindigns
@@ -824,22 +806,6 @@ namespace BassPlayer.Controls
             TreeViewItem selected = (TreeViewItem)TvDirs.SelectedItem;
             ListDir(selected.Tag.ToString());
         }
-
-        private void FilesCtRefresh_Click(object sender, RoutedEventArgs e)
-        {
-            TvDirs_SelectedItemChanged(sender, null);
-        }
-
-        private void FilesCtAddToPls_Click(object sender, RoutedEventArgs e)
-        {
-            List<PlayListEntry> add = new List<PlayListEntry>(LbFiles.SelectedItems.Count);
-            foreach (string file in LbFiles.SelectedItems)
-            {
-                add.Add(PlayListEntry.FromFile(file));
-            }
-            _playlist.AddRange(add);
-            TcView.SelectedIndex = 1;
-        }
         #endregion
 
         #region Bass Menu
@@ -920,15 +886,6 @@ namespace BassPlayer.Controls
             var result = _itunes.Search(TbFilter.Text);
             _tunes.AddRange(result);
         }
-
-        private void TunesAddPlaylist_Click(object sender, RoutedEventArgs e)
-        {
-            foreach (PlayListEntry ple in LbLib.SelectedItems)
-            {
-                _playlist.Add(ple);
-            }
-        }
-
         #endregion
     }
 }
