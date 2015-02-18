@@ -193,6 +193,7 @@ namespace BassPlayer.Controls
         {
             App.Engine.Stop();
             BtnPlayPause.IsChecked = false;
+            App.SetTaskbarProgress(0);
         }
 
         private void SPosition_DragCompleted(object sender, System.Windows.Controls.Primitives.DragCompletedEventArgs e)
