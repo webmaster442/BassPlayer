@@ -216,6 +216,19 @@ namespace BassPlayer.Controls
             }
         }
 
+        private async void LbYoutube_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (AudioPlayerControls != null)
+            {
+                var index = LbYoutube.SelectedIndex;
+                YtProgress.Visibility = System.Windows.Visibility.Visible;
+                PlayListEntry entry = await YoutubeLoader.FromYoutubeItem(_youtube[index]);
+                _playlist.Add(entry);
+                YtProgress.Visibility = System.Windows.Visibility.Collapsed;
+                Dispatcher.BeginInvoke((Action)(() => TcView.SelectedIndex = 0));
+            }
+        }
+
         private void LbRecent_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (AudioPlayerControls != null)

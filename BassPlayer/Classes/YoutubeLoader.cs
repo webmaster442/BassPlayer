@@ -9,6 +9,7 @@ using System.Web;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using System.Xml;
+using YoutubeExtractor;
 
 namespace BassPlayer.Classes
 {
@@ -33,6 +34,22 @@ namespace BassPlayer.Classes
             bitmap.EndInit();
             bitmap.Freeze();
             return bitmap;
+        }
+
+        private static PlayListEntry FromYoutubeItemFunction(YoutubeItem item)
+        {
+            PlayListEntry ple = new PlayListEntry();
+
+            var videoinfos = DownloadUrlResolver.GetDownloadUrls("https://www.youtube.com/watch?v=" + item.VideoId);
+
+            var video = (from v in videoinfos where v.VideoType == VideoType.Mp4 && v.Resolution == 360 select v).FirstOrDefault();
+            if (video == null) return null;
+
+            if (video.RequiresDecryption) DownloadUrlResolver.DecryptDownloadUrl(video);
+
+            ple.Title = video.Title;
+            ple.FileName = video.DownloadUrl;
+            return ple;
         }
 
         private static YoutubeItem[] SearchFunction(string s)
@@ -68,5 +85,9 @@ namespace BassPlayer.Classes
             return Task.Run(() => SearchFunction(s));
         }
 
+        public static Task<PlayListEntry> FromYoutubeItem(YoutubeItem item)
+        {
+            return Task.Run(() => FromYoutubeItemFunction(item));
+        }
     }
 }
