@@ -1,7 +1,9 @@
-﻿using System;
+﻿using BassPlayer.Properties;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Net;
 using System.Text;
 using System.Windows;
 using System.Windows.Data;
@@ -88,6 +90,18 @@ namespace BassPlayer.Classes
                 sb.AppendFormat("\"{0}\" ", arg);
             }
             return sb.ToString();
+        }
+
+        public static WebClient CreateClient()
+        {
+            WebClient client = new WebClient();
+            if (Properties.Settings.Default.ProxyEnabled)
+            {
+                WebProxy proxy = new WebProxy(Settings.Default.ProxyAddress, Convert.ToInt32(Settings.Default.ProxyPort));
+                proxy.Credentials = new NetworkCredential(Settings.Default.ProxyUser, Settings.Default.ProxyPassword);
+                client.Proxy = proxy;
+            }
+            return client;
         }
     }
 

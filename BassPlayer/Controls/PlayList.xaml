@@ -112,17 +112,6 @@
                                    Source="../Images/Menu/add_link-50.png"/>
                         </MenuItem.Icon>
                     </MenuItem>
-                    <!--
-                    <MenuItem Header="Add Youtube URL..."
-                              x:Name="MenAddYoutube"
-                              Click="MenAddYoutube_Click">
-                        <MenuItem.Icon>
-                            <Image Width="16"
-                                   Height="16"
-                                   Source="../Images/Menu/youtube-50.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    -->
                     <Separator/>
                     <MenuItem Header="Add Files..."
                               x:Name="MenAddFiles"
@@ -705,7 +694,16 @@
                         </ListBox>
                     </Grid>
                 </TabItem>
-                <TabItem Header="Youtube">
+                <TabItem>
+                    <TabItem.Header>
+                        <StackPanel>
+                            <Image Width="32"
+                                   Height="32"
+                                   Source="../Images/Menu/youtube-50.png"/>
+                            <TextBlock Text="YouTube"
+                                       TextAlignment="Center"/>
+                        </StackPanel>
+                    </TabItem.Header>
                     <Grid>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="25"/>
@@ -732,10 +730,11 @@
                         <ListBox Grid.Row="1"
                                  VerticalContentAlignment="Stretch"
                                  Grid.ColumnSpan="3"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                                  x:Name="LbYoutube">
                             <ListBox.ItemTemplate>
                                 <DataTemplate>
-                                    <Grid>
+                                    <Grid Margin="2">
                                         <Grid.RowDefinitions>
                                             <RowDefinition/>
                                             <RowDefinition/>
@@ -746,17 +745,35 @@
                                         </Grid.ColumnDefinitions>
                                         <Image Grid.Column="0"
                                                Grid.RowSpan="2"
+                                               Margin="2"
                                                Source="{Binding Thumbnail}"/>
                                         <TextBlock Grid.Row="0"
                                                    Grid.Column="1"
-                                                   Text="{Binding Title}"/>
+                                                   Margin="2"
+                                                   Text="{Binding Title}"
+                                                   FontWeight="Bold"/>
                                         <TextBlock Grid.Row="1"
                                                    Grid.Column="1"
+                                                   Margin="2"
                                                    Text="{Binding Date}"/>
                                     </Grid>
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
+                        <Grid Panel.ZIndex="44"
+                              Grid.RowSpan="2"
+                              Grid.ColumnSpan="3"
+                              x:Name="YtProgress"
+                              Visibility="Collapsed"
+                              Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+                            <TextBlock Text="Connecting YouTube..."
+                                       VerticalAlignment="Center" 
+                                       HorizontalAlignment="Center" 
+                                       Margin="0,0,0,60"/>
+                            <ProgressBar Height="30"
+                                         IsIndeterminate="true"
+                                         Margin="10"/>
+                        </Grid>
                     </Grid>
                 </TabItem>
             </TabControl>

@@ -4,8 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.ServiceModel.Syndication;
+using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 using System.Xml;
 
 namespace BassPlayer.Classes
@@ -22,37 +24,48 @@ namespace BassPlayer.Classes
     {
         private static BitmapImage DownloadImage(string id)
         {
-            WebClient wc = new WebClient();
+            WebClient wc = Helpers.CreateClient();
             byte[] data = wc.DownloadData(string.Format("http://img.youtube.com/vi/{0}/mqdefault.jpg", id));
             MemoryStream ms = new MemoryStream(data);
             BitmapImage bitmap = new BitmapImage();
             bitmap.BeginInit();
             bitmap.StreamSource = ms;
             bitmap.EndInit();
+            bitmap.Freeze();
             return bitmap;
         }
 
-        public static IEnumerable<YoutubeItem> Search(string s)
+        private static YoutubeItem[] SearchFunction(string s)
         {
             string query = HttpUtility.UrlEncode(s);
-            
-            XmlReader reader = XmlReader.Create("https://gdata.youtube.com/feeds/api/videos?q="+query);
+
+            WebClient wc = Helpers.CreateClient();
+            byte[] data = wc.DownloadData("https://gdata.youtube.com/feeds/api/videos?q=" + query);
+            MemoryStream ms = new MemoryStream(data);
+
+            XmlReader reader = XmlReader.Create(ms);
 
             SyndicationFeed feed = SyndicationFeed.Load(reader);
-            
+
             //http://img.youtube.com/vi/6GO1MEYVpkM/mqdefault.jpg
 
             var q = from item in feed.Items
-                            select new YoutubeItem
-                            {
-                                Title = item.Title.Text,
-                                Date = item.PublishDate,
-                                VideoId = item.Id.Replace("http://gdata.youtube.com/feeds/api/videos/", ""),
-                                Thumbnail = DownloadImage(item.Id.Replace("http://gdata.youtube.com/feeds/api/videos/", ""))
-                            };
+                    select new YoutubeItem
+                    {
+                        Title = item.Title.Text,
+                        Date = item.PublishDate,
+                        VideoId = item.Id.Replace("http://gdata.youtube.com/feeds/api/videos/", ""),
+                        Thumbnail = DownloadImage(item.Id.Replace("http://gdata.youtube.com/feeds/api/videos/", ""))
+                    };
 
+            ms.Close();
 
-            return q;
+            return q.ToArray();
+        }
+
+        public static Task<YoutubeItem[]> Search(string s)
+        {
+            return Task.Run(() => SearchFunction(s));
         }
 
     }

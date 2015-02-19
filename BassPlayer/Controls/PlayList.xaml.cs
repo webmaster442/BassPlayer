@@ -891,11 +891,20 @@ namespace BassPlayer.Controls
         }
         #endregion
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
+        private async void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            var results = YoutubeLoader.Search(TbYoutubeQuery.Text);
-            _youtube.Clear();
-            _youtube.AddRange(results);
+            YtProgress.Visibility = System.Windows.Visibility.Visible;
+            try
+            {
+                var results = await YoutubeLoader.Search(TbYoutubeQuery.Text);
+                _youtube.Clear();
+                _youtube.AddRange(results);
+            }
+            catch (Exception ex)
+            {
+                Helpers.ErrorDialog(ex, "Youtube Query failed");
+            }
+            YtProgress.Visibility = System.Windows.Visibility.Collapsed;
         }
     }
 }
