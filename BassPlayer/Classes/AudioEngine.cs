@@ -142,62 +142,65 @@ namespace BassPlayer.Classes
             }
         }
 
-        /// <summary>
-        /// Gets or sets the file or url to be played
-        /// </summary>
-        public string FileName
+
+        public void SetFileName(string file)
         {
-            get { return _file; }
-            set
+            PlayListEntry entry = new PlayListEntry();
+            entry.FileName = file;
+            SetPlayListEntry(entry);
+        }
+
+        public void SetPlayListEntry(PlayListEntry entry)
+        {
+            _file = entry.FileName;
+            var flags = BASSFlag.BASS_SAMPLE_LOOP | BASSFlag.BASS_STREAM_DECODE | BASSFlag.BASS_SAMPLE_FLOAT | BASSFlag.BASS_STREAM_PRESCAN;
+            if (_source != 0)
             {
-                _file = value;
-                var flags = BASSFlag.BASS_SAMPLE_LOOP | BASSFlag.BASS_STREAM_DECODE | BASSFlag.BASS_SAMPLE_FLOAT | BASSFlag.BASS_STREAM_PRESCAN;
-                if (_source != 0)
-                {
-                    Bass.BASS_StreamFree(_source);
-                    _source = 0;
-                }
-                if (_mixer != 0)
-                {
-                    Bass.BASS_StreamFree(_mixer);
-                    _mixer = 0;
-                }
-                var mixerflags = BASSFlag.BASS_MIXER_DOWNMIX | BASSFlag.BASS_MIXER_POSEX | BASSFlag.BASS_STREAM_AUTOFREE;
-                if (_file.StartsWith("http://") || _file.StartsWith("https://"))
-                {
-                    Bass.BASS_SetConfigPtr(BASSConfig.BASS_CONFIG_NET_PROXY, CreateProxyPtr());
-                    _source = Bass.BASS_StreamCreateURL(_file, 0, flags, _streamrip, IntPtr.Zero);
-                    _filetype = MediaType.Stream;
-                }
-                else if (_file.StartsWith("cd://"))
-                {
-                    string[] info = _file.Replace("cd://", "").Split('/');
-                    _source = BassCd.BASS_CD_StreamCreate(Convert.ToInt32(info[0]), Convert.ToInt32(info[1]), flags);
-                    _filetype = MediaType.CD;
-                }
-                else
-                {
-                    _source = Bass.BASS_StreamCreateFile(_file, 0, 0, flags);
-                    _filetype = MediaType.File;
-                }
-                if (_source == 0)
-                {
-                    Error("Load failed");
-                    return;
-                }
-                var ch = Bass.BASS_ChannelGetInfo(_source);
-                _mixer = BassMix.BASS_Mixer_StreamCreate(ch.freq, ch.chans, mixerflags);
-                if (_mixer == 0)
-                {
-                    Error("Mixer stream create failed");
-                    return;
-                }
-                if (!BassMix.BASS_Mixer_StreamAddChannel(_mixer, _source, BASSFlag.BASS_MIXER_DOWNMIX))
-                {
-                    Error("Mixer chanel adding failed");
-                    return;
-                }
+                Bass.BASS_StreamFree(_source);
+                _source = 0;
             }
+            if (_mixer != 0)
+            {
+                Bass.BASS_StreamFree(_mixer);
+                _mixer = 0;
+            }
+            var mixerflags = BASSFlag.BASS_MIXER_DOWNMIX | BASSFlag.BASS_MIXER_POSEX | BASSFlag.BASS_STREAM_AUTOFREE;
+            if (_file.StartsWith("http://") || _file.StartsWith("https://"))
+            {
+                Bass.BASS_SetConfigPtr(BASSConfig.BASS_CONFIG_NET_PROXY, CreateProxyPtr());
+                _source = Bass.BASS_StreamCreateURL(_file, 0, flags, _streamrip, IntPtr.Zero);
+                _filetype = MediaType.Stream;
+            }
+            else if (_file.StartsWith("cd://"))
+            {
+                string[] info = _file.Replace("cd://", "").Split('/');
+                _source = BassCd.BASS_CD_StreamCreate(Convert.ToInt32(info[0]), Convert.ToInt32(info[1]), flags);
+                _filetype = MediaType.CD;
+            }
+            else
+            {
+                _source = Bass.BASS_StreamCreateFile(_file, 0, 0, flags);
+                _filetype = MediaType.File;
+            }
+            if (_source == 0)
+            {
+                Error("Load failed");
+                return;
+            }
+            var ch = Bass.BASS_ChannelGetInfo(_source);
+            _mixer = BassMix.BASS_Mixer_StreamCreate(ch.freq, ch.chans, mixerflags);
+            if (_mixer == 0)
+            {
+                Error("Mixer stream create failed");
+                return;
+            }
+            if (!BassMix.BASS_Mixer_StreamAddChannel(_mixer, _source, BASSFlag.BASS_MIXER_DOWNMIX))
+            {
+                Error("Mixer chanel adding failed");
+                return;
+            }
+
+            if (Length != entry.Time) entry.Time = Length;
         }
 
         public bool StreamRipEnabled { get; set; }
@@ -245,7 +248,7 @@ namespace BassPlayer.Classes
                     {
                         Artist = tags.artist,
                         Title = tags.title,
-                        FileName = this.FileName
+                        FileName = this._file
                     };
                 return ret;
             }

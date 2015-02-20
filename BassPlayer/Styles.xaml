@@ -5,7 +5,13 @@
                     xmlns:local="clr-namespace:BassPlayer">
     
     <classes:TextShorter x:Key="TextShort"/>
-    
+    <classes:TimeConverter x:Key="TimeConv"/>
+    <classes:FileNameConverter x:Key="NameConv"/>
+    <classes:EnableConverter x:Key="EnableConv"/>
+    <classes:LastPlayedConv x:Key="LastPlayConv"/>
+    <classes:PercentConveter x:Key="PercentConv"/>
+
+
     <Style x:Key="GlassText" TargetType="{x:Type TextBlock}">
         <Setter Property="TextWrapping" Value="NoWrap"/>
         <Setter Property="TextTrimming" Value="None"/>
@@ -97,7 +103,7 @@
                                    ToolTip="{Binding ArtistTitle}"
                                    Text="{Binding ArtistTitle, Converter={StaticResource TextShort}}"/>
                         <TextBlock Grid.Column="2"
-                                   Text="{Binding TimeString}"
+                                   Text="{Binding Time, Converter={StaticResource TimeConv}}"
                                    Margin="5,0"
                                    TextAlignment="Right"/>
                     </Grid>

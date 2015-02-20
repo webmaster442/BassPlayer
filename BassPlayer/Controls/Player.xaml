@@ -9,10 +9,6 @@
              d:DesignHeight="92" d:DesignWidth="854"
              x:Name="Control"
              Loaded="UserControl_Loaded">
-    <UserControl.Resources>
-        <local:TimeConverter x:Key="TimeConv"/>
-        <local:PercentConveter x:Key="PercentConv"/>
-    </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="55"/>

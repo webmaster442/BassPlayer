@@ -101,6 +101,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\CloudDriveProvider.cs" />
+    <Compile Include="Classes\Converters.cs" />
     <Compile Include="Classes\iTunesData.cs" />
     <Compile Include="Classes\KeyboardHook.cs" />
     <Compile Include="Classes\RecentPlays.cs" />

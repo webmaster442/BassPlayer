@@ -9,11 +9,6 @@
              Background="Transparent"
              Loaded="UserControl_Loaded"
              d:DesignHeight="400" d:DesignWidth="800">
-    <UserControl.Resources>
-        <classes:FileNameConverter x:Key="NameConv"/>
-        <classes:EnableConverter x:Key="EnableConv"/>
-        <classes:LastPlayedConv x:Key="LastPlayConv"/>
-    </UserControl.Resources>
     <UserControl.CommandBindings>
         <CommandBinding Command="{x:Static controls:CustomCommands.SortArtistTitle}"
                         Executed="SortArtistTitle_Executed"/>
@@ -447,10 +442,10 @@
                                                Source="../Images/audio_file-100.png"/>
                                     <TextBlock Grid.Column="1"
                                                Margin="2"
-                                               Text="{Binding Title, Converter={StaticResource TextShort}}"/>
+                                               Text="{Binding ArtistTitle, Converter={StaticResource TextShort}}"/>
                                     <TextBlock Grid.Column="2"
                                                Margin="2"
-                                               Text="{Binding Time}"/>
+                                               Text="{Binding Time, Converter={StaticResource TimeConv}}"/>
                                     <TextBlock Grid.Column="3"
                                                Margin="2"
                                                Text="{Binding PlayCount}"/>

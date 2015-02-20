@@ -190,7 +190,7 @@ namespace BassPlayer.Controls
             {
                 var index = LbList.SelectedIndex;
                 _index = index;
-                AudioPlayerControls.Load(_playlist[index].FileName);
+                AudioPlayerControls.Load(_playlist[index]);
                 _recent.Add(_playlist[index]);
             }
         }
@@ -201,7 +201,7 @@ namespace BassPlayer.Controls
             {
                 var index = LbLib.SelectedIndex;
                 _index = index;
-                AudioPlayerControls.Load(_tunes[index].FileName);
+                AudioPlayerControls.Load(_tunes[index]);
                 _recent.Add(PlayListEntry.FromFile(_tunes[index].FileName));
             }
         }
@@ -225,7 +225,7 @@ namespace BassPlayer.Controls
                 PlayListEntry entry = await YoutubeLoader.FromYoutubeItem(_youtube[index]);
                 _playlist.Add(entry);
                 YtProgress.Visibility = System.Windows.Visibility.Collapsed;
-                Dispatcher.BeginInvoke((Action)(() => TcView.SelectedIndex = 0));
+                await Dispatcher.BeginInvoke((Action)(() => TcView.SelectedIndex = 0));
             }
         }
 
@@ -234,7 +234,7 @@ namespace BassPlayer.Controls
             if (AudioPlayerControls != null)
             {
                 var index = LbRecent.SelectedIndex;
-                AudioPlayerControls.Load(_recent[index].FilePath);
+                AudioPlayerControls.Load(_recent[index]);
                 _recent.UpdateItemAtIndex(index);
             }
         }
@@ -254,7 +254,7 @@ namespace BassPlayer.Controls
                 else if (Shuffle) next = _rgen.Next(0, _playlist.Count);
                 else next = _index + 1;
                 if (next > _playlist.Count - 1) return;
-                AudioPlayerControls.Load(_playlist[next].FileName);
+                AudioPlayerControls.Load(_playlist[next]);
                 _index = next;
             }
             else if (TcView.SelectedIndex == 1)
@@ -265,7 +265,7 @@ namespace BassPlayer.Controls
                 else if (Shuffle) next = _rgen.Next(0, _recent.Count);
                 else next = LbRecent.SelectedIndex + 1;
                 if (next > _recent.Count - 1) return;
-                AudioPlayerControls.Load(_recent[next].FilePath);
+                AudioPlayerControls.Load(_recent[next]);
                 LbRecent.SelectedIndex = next;
             }
             else if (TcView.SelectedIndex == 2)
@@ -288,7 +288,7 @@ namespace BassPlayer.Controls
                 else if (Shuffle) next = _rgen.Next(0, _tunes.Count);
                 else next = LbLib.SelectedIndex + 1;
                 if (next > _tunes.Count - 1) return;
-                AudioPlayerControls.Load(_tunes[next].FileName);
+                AudioPlayerControls.Load(_tunes[next]);
                 LbLib.SelectedIndex = next;
             }
         }
@@ -304,7 +304,7 @@ namespace BassPlayer.Controls
                 else if (Shuffle) previous = _rgen.Next(0, _playlist.Count);
                 else previous = _index - 1;
                 if (previous < 0) return;
-                AudioPlayerControls.Load(_playlist[previous].FileName);
+                AudioPlayerControls.Load(_playlist[previous]);
                 _index = previous;
             }
             else if (TcView.SelectedIndex == 1)
@@ -315,7 +315,7 @@ namespace BassPlayer.Controls
                 else if (Shuffle) previous = _rgen.Next(0, _recent.Count);
                 else previous = LbRecent.SelectedIndex - 1;
                 if (previous < 0) return;
-                AudioPlayerControls.Load(_recent[previous].FilePath);
+                AudioPlayerControls.Load(_recent[previous]);
                 LbRecent.SelectedIndex = previous;
                 _recent.UpdateItemAtIndex(previous);
             }
@@ -338,7 +338,7 @@ namespace BassPlayer.Controls
                 else if (Shuffle) previous = _rgen.Next(0, _tunes.Count);
                 else previous = LbLib.SelectedIndex - 1;
                 if (previous < 0) return;
-                AudioPlayerControls.Load(_tunes[previous].FileName);
+                AudioPlayerControls.Load(_tunes[previous]);
                 LbLib.SelectedIndex = previous;
             }
         }

@@ -11,10 +11,10 @@ namespace BassPlayer.Classes
     [Serializable]
     public class RecentItem : INotifyPropertyChanged
     {
-        private string _title, _filepath;
+        private string _title, _filepath, _artist;
         private int _playcount;
         private DateTime _lastplayed;
-        private string _time;
+        private double _time;
 
         public string Title
         {
@@ -24,6 +24,21 @@ namespace BassPlayer.Classes
                 _title = value;
                 UpdateProperty("Title");
             }
+        }
+
+        public string Artist
+        {
+            get { return _artist; }
+            set
+            {
+                _artist = value;
+                UpdateProperty("Artist");
+            }
+        }
+
+        public string ArtistTitle
+        {
+            get { return string.Format("{0} - {1}", _artist, _title); }
         }
 
         public DateTime LastPlayed
@@ -54,7 +69,7 @@ namespace BassPlayer.Classes
             }
         }
 
-        public string Time
+        public double Time
         {
             get { return _time; }
             set
@@ -71,6 +86,15 @@ namespace BassPlayer.Classes
             if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(Name));
         }
 
+        public static implicit operator PlayListEntry(RecentItem item)
+        {
+            PlayListEntry ple = new PlayListEntry();
+            ple.Time = item.Time;
+            ple.Title = item.Title;
+            ple.Artist = item.Artist;
+            ple.FileName = item.FilePath;
+            return ple;
+        }
     }
 
 
@@ -98,7 +122,7 @@ namespace BassPlayer.Classes
                     this.AddRange(loaded);
                 }
             }
-            catch (IOException ex)
+            catch (Exception ex)
             {
                 Helpers.ErrorDialog(ex, "Recent items load error. The file is corrupted");
             }
@@ -159,7 +183,7 @@ namespace BassPlayer.Classes
             {
                 FilePath = ple.FileName,
                 Title = ple.ArtistTitle,
-                Time = ple.TimeString,
+                Time = ple.Time,
                 LastPlayed = DateTime.Now,
                 PlayCount = 1
             };

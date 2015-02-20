@@ -79,11 +79,28 @@ namespace BassPlayer.Controls
             VolSlider.Value = App.Engine.Volume;
         }
 
+        public void Load(PlayListEntry entry)
+        {
+            try
+            {
+                App.Engine.SetPlayListEntry(entry);
+                App.Engine.Play();
+                if (App.Engine.MediaType == MediaType.Stream && App.Engine.Length == 0) App.PlayUndetTaskbar();
+                else App.PlayTaskbar();
+                SPosition.Maximum = App.Engine.Length;
+                _timer.IsEnabled = (bool)!BtnPlayPause.IsChecked;
+                CoverArt.Source = App.Engine.ImageTag;
+                CoverArtLarge.Source = App.Engine.ImageTag;
+                Chapterize();
+            }
+            catch (Exception ex) { Helpers.ErrorDialog(ex, "File Load error"); }
+        }
+
         public void Load(string file)
         {
             try
             {
-                App.Engine.FileName = file;
+                App.Engine.SetFileName(file);
                 App.Engine.Play();
                 if (App.Engine.MediaType == MediaType.Stream && App.Engine.Length == 0) App.PlayUndetTaskbar();
                 else App.PlayTaskbar();
@@ -193,6 +210,7 @@ namespace BassPlayer.Controls
         {
             App.Engine.Stop();
             BtnPlayPause.IsChecked = false;
+            _timer.IsEnabled = false;
             App.SetTaskbarProgress(0);
         }
 

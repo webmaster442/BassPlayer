@@ -1,18 +1,72 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
 using Un4seen.Bass.AddOn.Tags;
 
 namespace BassPlayer.Classes
 {
     [Serializable]
-    public class PlayListEntry
+    public class PlayListEntry : INotifyPropertyChanged
     {
-        public string Title { get; set; }
-        public string Artist { get; set; }
-        public double Time { get; set; }
-        public string FileName { get; set; }
 
+        private string _title, _artist, _filename;
+        private double _time;
 
+        /// <summary>
+        /// Title String
+        /// </summary>
+        public string Title
+        {
+            get { return _title; }
+            set
+            {
+                _title = value;
+                UpdateProperty("Title");
+            }
+        }
+
+        /// <summary>
+        /// Artist
+        /// </summary>
+        public string Artist
+        {
+            get { return _artist; }
+            set
+            {
+                _artist = value;
+                UpdateProperty("Artist");
+            }
+        }
+
+        /// <summary>
+        /// Time
+        /// </summary>
+        public double Time
+        {
+            get { return _time; }
+            set
+            {
+                _time = value;
+                UpdateProperty("Time");
+            }
+        }
+
+        /// <summary>
+        /// File Name
+        /// </summary>
+        public string FileName
+        {
+            get { return _filename; }
+            set
+            {
+                _filename = value;
+                UpdateProperty("FileName");
+            }
+        }
+
+        /// <summary>
+        /// Artist & Title
+        /// </summary>
         public string ArtistTitle
         {
             get
@@ -27,15 +81,11 @@ namespace BassPlayer.Classes
             }
         }
 
-        public string TimeString
-        {
-            get
-            {
-                TimeSpan ts = TimeSpan.FromSeconds(Time);
-                return ts.ToShortTime();
-            }
-        }
-
+        /// <summary>
+        /// Creates a PlayList entry from a filename
+        /// </summary>
+        /// <param name="filename">Filename</param>
+        /// <returns>PlaylistEntry</returns>
         public static PlayListEntry FromFile(string filename)
         {
             PlayListEntry entry = new PlayListEntry();
@@ -54,6 +104,24 @@ namespace BassPlayer.Classes
             }
             catch (Exception) { }
             return entry;
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void UpdateProperty(string Name)
+        {
+            if (PropertyChanged != null) PropertyChanged(this, new PropertyChangedEventArgs(Name));
+        }
+
+        public static implicit operator RecentItem(PlayListEntry ple)
+        {
+            RecentItem ret = new RecentItem();
+            ret.FilePath = ple.FileName;
+            ret.Artist = ple.Artist;
+            ret.Title = ple.Title;
+            ret.Time = ple.Time;
+            ret.PlayCount = 1;
+            return ret;
         }
     }
 }

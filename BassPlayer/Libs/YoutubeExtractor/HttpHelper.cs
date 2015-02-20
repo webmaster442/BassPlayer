@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BassPlayer.Classes;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
@@ -22,7 +23,7 @@ namespace YoutubeExtractor
 
             return task.ContinueWith(t => ReadStreamFromResponse(t.Result)).Result;
 #else
-            using (var client = new WebClient())
+            using (var client = Helpers.CreateClient())
             {
                 client.Encoding = System.Text.Encoding.UTF8;
                 return client.DownloadString(url);
