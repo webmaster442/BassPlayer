@@ -303,12 +303,26 @@ namespace BassPlayer.Classes
         }
 
         /// <summary>
-        /// Gets or sets volume
+        /// Gets or sets the golobal volume
         /// </summary>
-        public float Volume
+        public float MasterVolume
         {
             get { return Bass.BASS_GetVolume(); }
             set { Bass.BASS_SetVolume(value); }
+        }
+
+        /// <summary>
+        /// Gets or sets the Channel volume
+        /// </summary>
+        public float ChannelVolume
+        {
+            get 
+            {
+                float temp = 0.0f;
+                Bass.BASS_ChannelGetAttribute(_mixer, BASSAttribute.BASS_ATTRIB_VOL, ref temp);
+                return temp;
+            }
+            set { Bass.BASS_ChannelSetAttribute(_mixer, BASSAttribute.BASS_ATTRIB_VOL, value); }
         }
 
         /// <summary>
