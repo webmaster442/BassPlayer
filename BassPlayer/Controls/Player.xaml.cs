@@ -55,7 +55,8 @@ namespace BassPlayer.Controls
             {
                 CbDeviceList.Items.Add(dev);
             }
-            VolSlider.Value = App.Engine.Volume;
+            VolSlider.Value = App.Engine.ChannelVolume;
+            if (VolSlider.Value == 0) VolSlider.Value = App.Engine.MasterVolume;
             _loaded = true;
             ProcessArguments();
         }
@@ -76,7 +77,7 @@ namespace BassPlayer.Controls
         {
             string devicename = CbDeviceList.SelectedItem.ToString();
             App.Engine.ChangeDevice(devicename);
-            VolSlider.Value = App.Engine.Volume;
+            VolSlider.Value = App.Engine.MasterVolume;
         }
 
         public void Load(PlayListEntry entry)
@@ -253,14 +254,14 @@ namespace BassPlayer.Controls
         private void VolSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             if (!_loaded) return;
-            App.Engine.Volume = (float)VolSlider.Value;
+            App.Engine.ChannelVolume = (float)VolSlider.Value;
         }
 
         private void BtnMute_Click(object sender, RoutedEventArgs e)
         {
             if ((bool)BtnMute.IsChecked)
             {
-                _vol = App.Engine.Volume;
+                _vol = App.Engine.ChannelVolume;
                 VolSlider.Value = 0;
             }
             else

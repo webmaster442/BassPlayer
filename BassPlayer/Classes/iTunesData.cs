@@ -13,6 +13,7 @@ namespace BassPlayer.Classes
     [Serializable]
     internal class iTunesSong
     {
+        public int Id { get; set; }             // ID
         public string Album { get; set; }       // Name
         public string Artist { get; set; }      // Album
         public string Genre { get; set; }       // Genre
@@ -44,6 +45,7 @@ namespace BassPlayer.Classes
             if (File.Exists(file))
             {
                 isLoaded = true;
+                _xml = XDocument.Load(file);
                 _db = LoadSongsFromITunes(file);
             }
         }
@@ -56,7 +58,7 @@ namespace BassPlayer.Classes
 
         private IEnumerable<iTunesSong> LoadSongsFromITunes(string filename)
         {
-            var rawsongs = from song in XDocument.Load(filename).Descendants("plist").Elements("dict").Elements("dict").Elements("dict").AsParallel()
+            var rawsongs = from song in _xml.Descendants("plist").Elements("dict").Elements("dict").Elements("dict").AsParallel()
                            select new XElement("song",
                                from key in song.Descendants("key")
                                select new XElement(((string)key).Replace(" ", ""),
@@ -65,6 +67,7 @@ namespace BassPlayer.Classes
             var songs = from s in rawsongs.AsParallel()
                         select new iTunesSong()
                             {
+                                Id = s.Element("TrackID").ToInt(0),
                                 Album = s.Element("Album").ToString(string.Empty),
                                 Artist = s.Element("Artist").ToString(string.Empty),
                                 Genre = s.Element("Genre").ToString(string.Empty),
@@ -136,6 +139,29 @@ namespace BassPlayer.Classes
                 var q = (from i in _db orderby i.Genre ascending select i.Genre).Distinct();
                 return q.ToArray();
             }
+        }
+
+        public string[] Playlists
+        {
+            get
+            {
+                if (!isLoaded) return null;
+                var q = from song in _xml.Descendants("key").AsParallel() where song.Value == "Playlist ID" select song.ElementsBeforeSelf("string").FirstOrDefault().Value;
+                return q.ToArray();
+            }
+        }
+
+        public IEnumerable<int> GetPlayListKeys(string playlistname)
+        {
+
+            var q = from song in _xml.Descendants("key").AsParallel() 
+                    where song.Value == "Playlist ID" && song.ElementsBeforeSelf("string").FirstOrDefault().Value == playlistname 
+                    select song.Parent;
+            var dict = q.FirstOrDefault();
+
+            
+
+            return null;
         }
 
         public IEnumerable<PlayListEntry> Filter(string filterstring)
