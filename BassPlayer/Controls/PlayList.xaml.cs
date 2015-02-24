@@ -27,6 +27,7 @@ namespace BassPlayer.Controls
         private ObservableCollection<PlayListEntry> _playlist;
         private ObservableCollection<PlayListEntry> _tunes;
         private ObservableCollection<string> _files;
+        private ObservableCollection<YoutubeItem> _youtube;
         private RecentPlays _recent;
         private TreeViewItem dummyNode = null;
         private int _index;
@@ -46,6 +47,7 @@ namespace BassPlayer.Controls
             _playlist = new ObservableCollection<PlayListEntry>();
             _tunes = new ObservableCollection<PlayListEntry>();
             _files = new ObservableCollection<string>();
+            _youtube = new ObservableCollection<YoutubeItem>();
             _recent = new RecentPlays();
             _rgen = new Random();
             _itunes = new iTunesData();
@@ -54,6 +56,7 @@ namespace BassPlayer.Controls
             LbFiles.ItemsSource = _files;
             LbLib.ItemsSource = _tunes;
             LbRecent.ItemsSource = _recent;
+            LbYoutube.ItemsSource = _youtube;
 
             ListItunesData(SpArtists, _itunes.Artists, "Artists");
             ListItunesData(SpAlbums, _itunes.Albums, "Albums");
@@ -187,7 +190,7 @@ namespace BassPlayer.Controls
             {
                 var index = LbList.SelectedIndex;
                 _index = index;
-                AudioPlayerControls.Load(_playlist[index].FileName);
+                AudioPlayerControls.Load(_playlist[index]);
                 _recent.Add(_playlist[index]);
             }
         }
@@ -198,7 +201,7 @@ namespace BassPlayer.Controls
             {
                 var index = LbLib.SelectedIndex;
                 _index = index;
-                AudioPlayerControls.Load(_tunes[index].FileName);
+                AudioPlayerControls.Load(_tunes[index]);
                 _recent.Add(PlayListEntry.FromFile(_tunes[index].FileName));
             }
         }
@@ -213,12 +216,25 @@ namespace BassPlayer.Controls
             }
         }
 
+        private async void LbYoutube_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (AudioPlayerControls != null)
+            {
+                var index = LbYoutube.SelectedIndex;
+                YtProgress.Visibility = System.Windows.Visibility.Visible;
+                PlayListEntry entry = await YoutubeLoader.FromYoutubeItem(_youtube[index]);
+                _playlist.Add(entry);
+                YtProgress.Visibility = System.Windows.Visibility.Collapsed;
+                await Dispatcher.BeginInvoke((Action)(() => TcView.SelectedIndex = 0));
+            }
+        }
+
         private void LbRecent_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (AudioPlayerControls != null)
             {
                 var index = LbRecent.SelectedIndex;
-                AudioPlayerControls.Load(_recent[index].FilePath);
+                AudioPlayerControls.Load(_recent[index]);
                 _recent.UpdateItemAtIndex(index);
             }
         }
@@ -238,7 +254,7 @@ namespace BassPlayer.Controls
                 else if (Shuffle) next = _rgen.Next(0, _playlist.Count);
                 else next = _index + 1;
                 if (next > _playlist.Count - 1) return;
-                AudioPlayerControls.Load(_playlist[next].FileName);
+                AudioPlayerControls.Load(_playlist[next]);
                 _index = next;
             }
             else if (TcView.SelectedIndex == 1)
@@ -249,7 +265,7 @@ namespace BassPlayer.Controls
                 else if (Shuffle) next = _rgen.Next(0, _recent.Count);
                 else next = LbRecent.SelectedIndex + 1;
                 if (next > _recent.Count - 1) return;
-                AudioPlayerControls.Load(_recent[next].FilePath);
+                AudioPlayerControls.Load(_recent[next]);
                 LbRecent.SelectedIndex = next;
             }
             else if (TcView.SelectedIndex == 2)
@@ -272,7 +288,7 @@ namespace BassPlayer.Controls
                 else if (Shuffle) next = _rgen.Next(0, _tunes.Count);
                 else next = LbLib.SelectedIndex + 1;
                 if (next > _tunes.Count - 1) return;
-                AudioPlayerControls.Load(_tunes[next].FileName);
+                AudioPlayerControls.Load(_tunes[next]);
                 LbLib.SelectedIndex = next;
             }
         }
@@ -288,7 +304,7 @@ namespace BassPlayer.Controls
                 else if (Shuffle) previous = _rgen.Next(0, _playlist.Count);
                 else previous = _index - 1;
                 if (previous < 0) return;
-                AudioPlayerControls.Load(_playlist[previous].FileName);
+                AudioPlayerControls.Load(_playlist[previous]);
                 _index = previous;
             }
             else if (TcView.SelectedIndex == 1)
@@ -299,7 +315,7 @@ namespace BassPlayer.Controls
                 else if (Shuffle) previous = _rgen.Next(0, _recent.Count);
                 else previous = LbRecent.SelectedIndex - 1;
                 if (previous < 0) return;
-                AudioPlayerControls.Load(_recent[previous].FilePath);
+                AudioPlayerControls.Load(_recent[previous]);
                 LbRecent.SelectedIndex = previous;
                 _recent.UpdateItemAtIndex(previous);
             }
@@ -322,7 +338,7 @@ namespace BassPlayer.Controls
                 else if (Shuffle) previous = _rgen.Next(0, _tunes.Count);
                 else previous = LbLib.SelectedIndex - 1;
                 if (previous < 0) return;
-                AudioPlayerControls.Load(_tunes[previous].FileName);
+                AudioPlayerControls.Load(_tunes[previous]);
                 LbLib.SelectedIndex = previous;
             }
         }
@@ -887,5 +903,21 @@ namespace BassPlayer.Controls
             _tunes.AddRange(result);
         }
         #endregion
+
+        private async void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            YtProgress.Visibility = System.Windows.Visibility.Visible;
+            try
+            {
+                var results = await YoutubeLoader.Search(TbYoutubeQuery.Text);
+                _youtube.Clear();
+                _youtube.AddRange(results);
+            }
+            catch (Exception ex)
+            {
+                Helpers.ErrorDialog(ex, "Youtube Query failed");
+            }
+            YtProgress.Visibility = System.Windows.Visibility.Collapsed;
+        }
     }
 }

@@ -75,11 +75,16 @@
     <Reference Include="Bass.Net, Version=2.4.10.4, Culture=neutral, PublicKeyToken=b7566c273e6ef480, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
@@ -96,9 +101,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\CloudDriveProvider.cs" />
+    <Compile Include="Classes\Converters.cs" />
     <Compile Include="Classes\iTunesData.cs" />
     <Compile Include="Classes\KeyboardHook.cs" />
     <Compile Include="Classes\RecentPlays.cs" />
+    <Compile Include="Classes\YoutubeLoader.cs" />
     <Compile Include="Controls\AboutDialog.xaml.cs">
       <DependentUpon>AboutDialog.xaml</DependentUpon>
     </Compile>
@@ -158,6 +165,26 @@
       <DependentUpon>PlayList.xaml</DependentUpon>
     </Compile>
     <Compile Include="Libs\SingleInstance.cs" />
+    <Compile Include="Libs\YoutubeExtractor\AacAudioExtractor.cs" />
+    <Compile Include="Libs\YoutubeExtractor\AdaptiveType.cs" />
+    <Compile Include="Libs\YoutubeExtractor\AudioDownloader.cs" />
+    <Compile Include="Libs\YoutubeExtractor\AudioExtractionException.cs" />
+    <Compile Include="Libs\YoutubeExtractor\AudioType.cs" />
+    <Compile Include="Libs\YoutubeExtractor\BigEndianBitConverter.cs" />
+    <Compile Include="Libs\YoutubeExtractor\BitHelper.cs" />
+    <Compile Include="Libs\YoutubeExtractor\Decipherer.cs" />
+    <Compile Include="Libs\YoutubeExtractor\Downloader.cs" />
+    <Compile Include="Libs\YoutubeExtractor\DownloadUrlResolver.cs" />
+    <Compile Include="Libs\YoutubeExtractor\FlvFile.cs" />
+    <Compile Include="Libs\YoutubeExtractor\HttpHelper.cs" />
+    <Compile Include="Libs\YoutubeExtractor\IAudioExtractor.cs" />
+    <Compile Include="Libs\YoutubeExtractor\Mp3AudioExtractor.cs" />
+    <Compile Include="Libs\YoutubeExtractor\ProgressEventArgs.cs" />
+    <Compile Include="Libs\YoutubeExtractor\VideoDownloader.cs" />
+    <Compile Include="Libs\YoutubeExtractor\VideoInfo.cs" />
+    <Compile Include="Libs\YoutubeExtractor\VideoNotAvailableException.cs" />
+    <Compile Include="Libs\YoutubeExtractor\VideoType.cs" />
+    <Compile Include="Libs\YoutubeExtractor\YoutubeParseException.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -187,6 +214,7 @@
     </EmbeddedResource>
     <None Include="BassPlayer.pfx" />
     <None Include="Classes.cd" />
+    <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
