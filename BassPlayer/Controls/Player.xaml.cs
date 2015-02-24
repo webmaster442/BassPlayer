@@ -78,6 +78,7 @@ namespace BassPlayer.Controls
             string devicename = CbDeviceList.SelectedItem.ToString();
             App.Engine.ChangeDevice(devicename);
             VolSlider.Value = App.Engine.MasterVolume;
+<<<<<<< HEAD
         }
 
         public void Load(PlayListEntry entry)
@@ -95,6 +96,8 @@ namespace BassPlayer.Controls
                 Chapterize();
             }
             catch (Exception ex) { Helpers.ErrorDialog(ex, "File Load error"); }
+=======
+>>>>>>> master
         }
 
         public void Load(string file)

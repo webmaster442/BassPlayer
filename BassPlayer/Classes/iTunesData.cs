@@ -35,7 +35,11 @@ namespace BassPlayer.Classes
     internal class iTunesData
     {
         private IEnumerable<iTunesSong> _db;
+<<<<<<< HEAD
         private List<string> _playlists;
+=======
+        private XDocument _xml;
+>>>>>>> master
 
         public iTunesData()
         {
