@@ -35,11 +35,7 @@ namespace BassPlayer.Classes
     internal class iTunesData
     {
         private IEnumerable<iTunesSong> _db;
-<<<<<<< HEAD
-        private List<string> _playlists;
-=======
         private XDocument _xml;
->>>>>>> master
 
         public iTunesData()
         {
@@ -85,12 +81,6 @@ namespace BassPlayer.Classes
                                 AlbumArtist = s.Element("AlbumArtist").ToString(string.Empty),
                                 DiscNumber = s.Element("DiscNumber").ToInt(0)
                             };
-
-            var linqtoxml = from element in XDocument.Load(filename).Descendants("plist").Descendants("dict").Descendants("dict").Descendants("dict").Descendants("key")
-                            where element.Value == "Playlist ID"
-                            select element.ToString();
-
-            _playlists = linqtoxml.ToList();
 
             return songs;
         }
