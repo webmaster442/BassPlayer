@@ -11,3 +11,5 @@ for /D %%d in (*) do if exist "%%d\obj" echo I | rmdir /s "%%d\obj"
 rem visual c++ cleanup
 for /D %%d in (*) do if exist "%%d\x64" echo I | rmdir /s "%%d\x64"
 for /D %%d in (*) do if exist "%%d\x64" echo Y | rmdir /s "%%d\x64"
+for /D %%d in (*) do if exist "%%d\Debug" echo I | rmdir /s "%%d\Debug"
+for /D %%d in (*) do if exist "%%d\Debug" echo Y | rmdir /s "%%d\Debug"
