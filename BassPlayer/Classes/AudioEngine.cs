@@ -1,4 +1,5 @@
-﻿using BassPlayer.Properties;
+﻿using BassEngine;
+using BassPlayer.Properties;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -340,7 +341,7 @@ namespace BassPlayer.Classes
             }
             set
             {
-                if (_filetype == Classes.MediaType.Stream)
+                if (_filetype == MediaType.Stream)
                 {
                     if (Length == 0) return;
                 }

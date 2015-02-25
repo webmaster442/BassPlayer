@@ -9,6 +9,7 @@ using System.Windows.Threading;
 using System.Linq;
 using System.Windows.Media.Imaging;
 using System.Windows.Shell;
+using BassEngine;
 
 namespace BassPlayer.Controls
 {

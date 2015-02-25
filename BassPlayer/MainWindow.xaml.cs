@@ -1,4 +1,5 @@
-﻿using BassPlayer.Classes;
+﻿using BassEngine;
+using BassPlayer.Classes;
 using BassPlayer.Properties;
 using System;
 using System.Collections.Generic;

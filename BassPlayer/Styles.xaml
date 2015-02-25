@@ -1,15 +1,15 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero"
-                    xmlns:classes="clr-namespace:BassPlayer.Classes"
+                    xmlns:converters="clr-namespace:BassEngine.Converters;assembly=BassEngine"
                     xmlns:local="clr-namespace:BassPlayer">
-    
-    <classes:TextShorter x:Key="TextShort"/>
-    <classes:TimeConverter x:Key="TimeConv"/>
-    <classes:FileNameConverter x:Key="NameConv"/>
-    <classes:EnableConverter x:Key="EnableConv"/>
-    <classes:LastPlayedConv x:Key="LastPlayConv"/>
-    <classes:PercentConveter x:Key="PercentConv"/>
+
+    <converters:TextShorter x:Key="TextShort"/>
+    <converters:TimeConverter x:Key="TimeConv"/>
+    <converters:FileNameConverter x:Key="NameConv"/>
+    <converters:EnableConverter x:Key="EnableConv"/>
+    <converters:LastPlayedConv x:Key="LastPlayConv"/>
+    <converters:PercentConveter x:Key="PercentConv"/>
 
 
     <Style x:Key="GlassText" TargetType="{x:Type TextBlock}">
