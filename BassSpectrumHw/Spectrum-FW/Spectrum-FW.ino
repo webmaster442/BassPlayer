@@ -23,7 +23,7 @@ byte _row0[32] = {
 byte _row1[32] = {
   0};
 byte *_displays[] = { 
-  _row0, r_ow1 };
+  _row0, _row1 };
 char _textbuff[32];
 tmElements_t _tm;
 int _len = 0;
@@ -41,6 +41,7 @@ void setup()
   //9 - Data
   HT1632.begin(12, 13, 10, 9);
   Serial.begin(115200);
+  
   WelcomeAnimation();
 }
 
@@ -51,11 +52,11 @@ void loop()
   {
     _value = Serial.read();
     _freeze = 0;
-    _leds = map(value, 0, 255, 0, 16);
+    _leds = map(_value, 0, 255, 0, 16);
     if (_leds > 7)
     {
       _low = 8;
-      _high = leds - 8;
+      _high = _leds - 8;
     }
     else
     {
@@ -64,7 +65,7 @@ void loop()
     }
     Display(0, _counter, _low);
     Display(1, _counter, _high);
-    counter++;
+    _counter++;
     if (_counter > 31)
     {
       _counter = 0;

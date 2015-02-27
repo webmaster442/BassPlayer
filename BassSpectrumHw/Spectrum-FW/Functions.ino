@@ -5,9 +5,9 @@ __inline void WelcomeAnimation()
 {
   strcpy(_textbuff,"Audio Spectrum");
   int j=0;
-  int wd = HT1632.getTextWidth(textbuff, FONT_5X4_END, FONT_5X4_HEIGHT);
+  int wd = HT1632.getTextWidth(_textbuff, FONT_5X4_END, FONT_5X4_HEIGHT);
   
-  for (int i=0; i<((strlen(textbuff)-1)*7)+3; i++)
+  for (int i=0; i<((strlen(_textbuff)-1)*7)+3; i++)
   {
     HT1632.renderTarget(0);
     HT1632.clear();
@@ -47,31 +47,31 @@ __inline void Display(int target, int row, byte leds)
   switch (leds)
   {
   case 0:
-    displays[target][row] = 0x00;
+    _displays[target][row] = 0x00;
     break;
   case 1:
-    displays[target][row] = 0x01;
+    _displays[target][row] = 0x01;
     break;
   case 2:
-    displays[target][row] = 0x03;
+    _displays[target][row] = 0x03;
     break;
   case 3:
-    displays[target][row] = 0x07;
+    _displays[target][row] = 0x07;
     break;
   case 4:
-    displays[target][row] = 0x0f;
+    _displays[target][row] = 0x0f;
     break;
   case 5:
-    displays[target][row] = 0x1f;
+    _displays[target][row] = 0x1f;
     break;
   case 6:
-    displays[target][row] = 0x3f;
+    _displays[target][row] = 0x3f;
     break;
   case 7:
-    displays[target][row] = 0x7f;
+    _displays[target][row] = 0x7f;
     break;
   case 8:
-    displays[target][row] = 0xff;
+    _displays[target][row] = 0xff;
     break;
   }
 }
@@ -91,8 +91,8 @@ __inline void DoRender()
 __inline float Temperature()
 {
   float temp;
-  int ADC = analogRead(THERMISTOR);
-  long resistance = PADRESISTOR * ((1024.0 / ADC) - 1);
+  int raw = analogRead(THERMISTOR);
+  long resistance = PADRESISTOR * ((1024.0 / raw) - 1);
   temp = log(resistance);
   temp = 1 / (0.001129148 + (0.000234125 * temp) + (0.0000000876741 * temp * temp * temp));
   temp = temp - 273.15;  // Convert Kelvin to Celsius
@@ -102,13 +102,13 @@ __inline float Temperature()
 __inline void DoTime()
 {
   RTC.read(_tm);
-  sprintf(textbuff, "%02d:%02d:%02d", _tm.Hour, _tm.Minute, _tm.Second);
+  sprintf(_textbuff, "%02d:%02d:%02d", _tm.Hour, _tm.Minute, _tm.Second);
   HT1632.renderTarget(0);
   HT1632.clear();
   HT1632.drawText(_textbuff, 0, 2, FONT_5X4, FONT_5X4_END, FONT_5X4_HEIGHT);
   HT1632.render();
   
-  sprintf(textbuff, "%f °C", Temperature());
+  sprintf(_textbuff, "%f °C", Temperature());
   HT1632.renderTarget(1);
   HT1632.clear();
   HT1632.drawText(_textbuff, 0, 1, FONT_5X4, FONT_5X4_END, FONT_5X4_HEIGHT);
