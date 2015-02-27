@@ -30,8 +30,8 @@ int _len = 0;
 int _freeze = 0;
 
 #define THERMISTOR 0
-#define PADRESISTOR 10000.0f
-
+#define PADRESISTOR 10000.0
+#define LEVELPOT 1
 
 void setup()
 {
@@ -41,14 +41,14 @@ void setup()
   //9 - Data
   HT1632.begin(12, 13, 10, 9);
   Serial.begin(115200);
-  
+  SetLevel();
   WelcomeAnimation();
 }
 
 void loop()
 {
-  int len = Serial.available();
-  if (len >= 32)
+  _len = Serial.available();
+  if (_len >= 32)
   {
     _value = Serial.read();
     _freeze = 0;
@@ -75,12 +75,12 @@ void loop()
   else if (_len < 1)
   {
     DoTime();
+    SetLevel();
   }
   else
   {
     ++_freeze;
-    delayMicroseconds(500);
-    if (_freeze > 4000)
+    if (_freeze > 2000)
     {
       _freeze = 0;
       FlushBuffer();
@@ -91,5 +91,6 @@ void loop()
       HT1632.clear();
       HT1632.render();
     }
+    delay(1);
   }
 }

@@ -87,7 +87,6 @@ __inline void DoRender()
   //for (int i=0; i<32; i++) HT1632.setRam(i, displays[1][i]);
   HT1632.render();
 }
-
 __inline float Temperature()
 {
   float temp;
@@ -108,12 +107,24 @@ __inline void DoTime()
   HT1632.drawText(_textbuff, 0, 2, FONT_5X4, FONT_5X4_END, FONT_5X4_HEIGHT);
   HT1632.render();
   
-  sprintf(_textbuff, "%f °C", Temperature());
+  char temp[] = {0};
+  floatToString(temp, Temperature(), 2);
+  sprintf(_textbuff, "%s °C", temp);
   HT1632.renderTarget(1);
   HT1632.clear();
   HT1632.drawText(_textbuff, 0, 1, FONT_5X4, FONT_5X4_END, FONT_5X4_HEIGHT);
   HT1632.render();
-  delay(500);
+  delay(100);
+}
+
+__inline void SetLevel()
+{
+  int adc = analogRead(LEVELPOT);
+  int level = map(adc, 0, 1023, 1, 16);
+  HT1632.renderTarget(0);
+  HT1632.setBrightness(level);
+  HT1632.renderTarget(1);
+  HT1632.setBrightness(level);
 }
 
 __inline void FlushBuffer()
