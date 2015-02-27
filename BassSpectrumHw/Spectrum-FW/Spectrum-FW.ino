@@ -3,6 +3,7 @@
  Created by: webmaster442
  */
 #include <HT1632.h>
+#include <font_8x4.h>
 #include <font_5x4.h>
 #include <images.h>
 #include <Wire.h>

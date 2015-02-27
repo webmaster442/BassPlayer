@@ -5,13 +5,13 @@ __inline void WelcomeAnimation()
 {
   strcpy(_textbuff,"Audio Spectrum");
   int j=0;
-  int wd = HT1632.getTextWidth(_textbuff, FONT_5X4_END, FONT_5X4_HEIGHT);
+  int wd = HT1632.getTextWidth(_textbuff, FONT_8X4_END, FONT_8X4_HEIGHT);
   
   for (int i=0; i<((strlen(_textbuff)-1)*7)+3; i++)
   {
     HT1632.renderTarget(0);
     HT1632.clear();
-    HT1632.drawText(_textbuff, OUT_SIZE - j, 2, FONT_5X4, FONT_5X4_END, FONT_5X4_HEIGHT);
+    HT1632.drawText(_textbuff, OUT_SIZE - j, 0, FONT_8X4, FONT_8X4_END, FONT_8X4_HEIGHT);
     HT1632.render();
     j = (i+1)%(wd + OUT_SIZE);
     
@@ -104,12 +104,12 @@ __inline void DoTime()
   sprintf(_textbuff, "%02d:%02d:%02d", _tm.Hour, _tm.Minute, _tm.Second);
   HT1632.renderTarget(0);
   HT1632.clear();
-  HT1632.drawText(_textbuff, 0, 2, FONT_5X4, FONT_5X4_END, FONT_5X4_HEIGHT);
+  HT1632.drawText(_textbuff, 0, 0, FONT_8X4, FONT_8X4_END, FONT_8X4_HEIGHT);
   HT1632.render();
   
   char temp[] = {0};
   floatToString(temp, Temperature(), 2);
-  sprintf(_textbuff, "%s °C", temp);
+  sprintf(_textbuff, " %s C", temp);
   HT1632.renderTarget(1);
   HT1632.clear();
   HT1632.drawText(_textbuff, 0, 1, FONT_5X4, FONT_5X4_END, FONT_5X4_HEIGHT);
