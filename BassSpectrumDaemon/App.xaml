@@ -15,6 +15,10 @@
             <Style TargetType="{x:Type CheckBox}">
                 <Setter Property="VerticalAlignment" Value="Center"/>
             </Style>
+            
+            <Style TargetType="{x:Type Button}">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
 
         </ResourceDictionary>
     </Application.Resources>
