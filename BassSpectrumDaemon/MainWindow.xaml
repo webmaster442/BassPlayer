@@ -1,11 +1,18 @@
 ﻿<Window x:Class="BassSpectrumDaemon.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:BassSpectrumDaemon"
+        xmlns:converters="clr-namespace:BassEngine.Converters;assembly=BassEngine"
         Title="Audio Spectrum Daemon"
-        Height="210"
+        Height="230"
         Width="500"
         Icon="icon.png"
-        ResizeMode="CanMinimize">
+        ResizeMode="CanMinimize"
+        Closing="Window_Closing"
+        Loaded="Window_Loaded">
+    <Window.Resources>
+        <converters:NegateConverter x:Key="ConvNegate"/>
+    </Window.Resources>
     <Grid Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
@@ -18,7 +25,7 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="80"/>
             <ColumnDefinition/>
-            <ColumnDefinition Width="140"/>
+            <ColumnDefinition Width="70"/>
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Row="0"
                    Grid.Column="0"
@@ -30,35 +37,53 @@
         <Button Content="Redetect Ports"
                 Grid.Row="2"
                 Grid.Column="1"
-                x:Name="BtnRedetect"/>
+                x:Name="BtnRedetect"
+                Click="BtnRedetect_Click"
+                IsEnabled="{Binding ElementName=CbSerialOutput, Path=IsChecked, Converter={StaticResource ConvNegate}}"/>
         
         <CheckBox Grid.Row="3"
                   Grid.Column="1"
-                  Content="Enable Serial Output"/>
+                  Content="Enable Serial Output"
+                  x:Name="CbSerialOutput"
+                  Checked="CbSerialOutput_Checked"
+                  IsEnabled="{Binding ElementName=CbMonitoring, Path=IsChecked}"/>
+        
         <CheckBox Grid.Row="4"
                   Grid.Column="1"
-                  Content="Enable Level monitoring"/>
+                  Content="Enable Level monitoring"
+                  x:Name="CbMonitoring"
+                  Checked="CbMonitoring_Checked"/>
         
         <ComboBox Grid.Column="1"
                   Grid.Row="0"
-                  x:Name="CbAudioDevices"/>
+                  x:Name="CbAudioDevices"
+                  IsEnabled="{Binding ElementName=CbMonitoring, Path=IsChecked, Converter={StaticResource ConvNegate}}"/>
         
         <ComboBox Grid.Column="1"
                   Grid.Row="1"
-                  x:Name="CbSerialPort"/>
+                  x:Name="CbSerialPort"
+                  IsEnabled="{Binding ElementName=CbSerialOutput, Path=IsChecked, Converter={StaticResource ConvNegate}}"/>
         
-        <Button Grid.Row="5"
-                Grid.Column="1" 
-                x:Name="BtnExit"
-                Content="Exit Application"
-                Width="100" 
-                HorizontalAlignment="Right"/>
-        <Button Grid.Row="5"
-                Grid.Column="2"
-                x:Name="BtnMinimize"
-                Content="Minimize to tray" 
-                Width="100"
-                HorizontalAlignment="Right" 
-                Margin="0,0,10,0"/>
+        <StackPanel Grid.Row="5"
+                    Grid.ColumnSpan="3"
+                    Orientation="Horizontal"
+                    HorizontalAlignment="Right">
+            
+            <Button x:Name="BtnExit"
+                    Content="Exit Application"
+                    Width="100"
+                    Click="BtnExit_Click"/>
+            
+            <Button x:Name="BtnMinimize"
+                    Content="Minimize to tray" 
+                    Width="100"
+                    Margin="10,0"
+                    Click="BtnMinimize_Click"/>
+            
+        </StackPanel>
+        
+        <local:LevelIndicator Grid.Column="2"
+                              Grid.RowSpan="5"
+                              x:Name="LelvelIdic"/>
     </Grid>
 </Window>

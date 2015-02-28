@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.IO.Ports;
+using System.Windows;
 using System.Windows.Threading;
 using Un4seen.Bass;
 using Un4seen.BassWasapi;
@@ -19,11 +20,12 @@ namespace BassSpectrumDaemon.Classes
 
         private const int _LINES = 32;
         private byte[] _spectrumbuffer;
+        private LevelIndicator _indicator;
 
         /// <summary>
         /// Ctor
         /// </summary>
-        public AudioSpectrum()
+        public AudioSpectrum(LevelIndicator indicator)
         {
             string enginedir = System.AppDomain.CurrentDomain.BaseDirectory;
             if (Utils.Is64Bit) enginedir = Path.Combine(enginedir, @"Engine\x64");
@@ -48,6 +50,7 @@ namespace BassSpectrumDaemon.Classes
             _timer.Tick += _timer_Tick;
             _fftbuffer = new float[1024];
             _spectrumbuffer = new byte[_LINES];
+            _indicator = indicator;
         }
 
         /// <summary>
@@ -130,38 +133,50 @@ namespace BassSpectrumDaemon.Classes
 
         private void _timer_Tick(object sender, EventArgs e)
         {
-            int ret = BassWasapi.BASS_WASAPI_GetData(_fftbuffer, (int)BASSData.BASS_DATA_FFT2048);
-            if (ret < 0) return;
-            int x, y;
-            int b0 = 0;
-            for (x = 0; x < _LINES; x++)
+            try
             {
-                float peak = 0;
-                int b1 = (int)Math.Pow(2, x * 10.0 / (_LINES - 1));
-                if (b1 > 1023) b1 = 1023;
-                if (b1 <= b0) b1 = b0 + 1;
-                for (; b0 < b1; b0++)
+                int ret = BassWasapi.BASS_WASAPI_GetData(_fftbuffer, (int)BASSData.BASS_DATA_FFT2048);
+                if (ret < 0) return;
+                int x, y;
+                int b0 = 0;
+                for (x = 0; x < _LINES; x++)
                 {
-                    if (peak < _fftbuffer[1 + b0]) peak = _fftbuffer[1 + b0];
+                    float peak = 0;
+                    int b1 = (int)Math.Pow(2, x * 10.0 / (_LINES - 1));
+                    if (b1 > 1023) b1 = 1023;
+                    if (b1 <= b0) b1 = b0 + 1;
+                    for (; b0 < b1; b0++)
+                    {
+                        if (peak < _fftbuffer[1 + b0]) peak = _fftbuffer[1 + b0];
+                    }
+                    y = (int)(Math.Sqrt(peak) * 3 * 255 - 4);
+                    if (y > 255) y = 255;
+                    if (y < 0) y = 0;
+                    _spectrumbuffer[x] = (byte)y;
                 }
-                y = (int)(Math.Sqrt(peak) * 3 * 255 - 4);
-                if (y > 255) y = 255;
-                if (y < 0) y = 0;
-                _spectrumbuffer[x] = (byte)y;
+                if (Serial != null) Serial.Write(_spectrumbuffer, 0, _spectrumbuffer.Length);
+
+                int level = BassWasapi.BASS_WASAPI_GetLevel();
+                if (level == _lastlevel && level != 0) _hanctrl++;
+                _lastlevel = level;
+
+                _indicator.Level = BassWasapi.BASS_WASAPI_GetLevel();
+
+                if (_hanctrl > 3)
+                {
+                    _hanctrl = 0;
+                    BassWasapi.BASS_WASAPI_Free();
+                    Bass.BASS_Free();
+                    _bass = Bass.BASS_Init(0, 44100, BASSInit.BASS_DEVICE_DEFAULT, IntPtr.Zero);
+                    _wasapi = false;
+                }
             }
-            if (Serial != null) Serial.Write(_spectrumbuffer, 0, _spectrumbuffer.Length);
-
-            int level = BassWasapi.BASS_WASAPI_GetLevel();
-            if (level == _lastlevel && level != 0) _hanctrl++;
-            _lastlevel = level;
-
-            if (_hanctrl > 3)
+            catch (Exception ex)
             {
-                _hanctrl = 0;
-                BassWasapi.BASS_WASAPI_Free();
-                Bass.BASS_Free();
-                _bass = Bass.BASS_Init(0, 44100, BASSInit.BASS_DEVICE_DEFAULT, IntPtr.Zero);
-                _wasapi = false;
+                BassEngine.Helpers.ErrorDialog(ex, "Spectrum error");
+                _timer.IsEnabled = false;
+                if (_bass) Bass.BASS_Free();
+                if (_wasapi) BassWasapi.BASS_WASAPI_Free();
             }
         }
     }

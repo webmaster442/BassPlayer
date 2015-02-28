@@ -105,6 +105,9 @@ namespace BassEngine.Converters
         }
     }
 
+    /// <summary>
+    /// Converts last played date to a time relative to current time
+    /// </summary>
     [ValueConversion(typeof(DateTime), typeof(string))]
     public class LastPlayedConv : IValueConverter
     {
@@ -124,6 +127,27 @@ namespace BassEngine.Converters
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
         {
             return DateTime.Now;
+        }
+    }
+
+    /// <summary>
+    /// Negates a bool? value during conversion 
+    /// </summary>
+    [ValueConversion(typeof(bool?), typeof(bool?))]
+    public class NegateConverter : IValueConverter
+    {
+        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value == null) return null;
+            bool? val = (bool?)value;
+            return !val;
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        {
+            if (value == null) return null;
+            bool? val = (bool?)value;
+            return !val;
         }
     }
 }
