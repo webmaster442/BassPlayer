@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.IO.Ports;
-using System.Windows;
 using System.Windows.Threading;
 using Un4seen.Bass;
 using Un4seen.BassWasapi;
@@ -93,7 +92,7 @@ namespace BassSpectrumDaemon.Classes
         /// <summary>
         /// Gets or sets the monitored device index
         /// </summary>
-        public int DeviceIndex { get; set; }
+        public string DeviceName { get; set; }
 
         /// <summary>
         /// Gets or sets device monitoring
@@ -109,7 +108,7 @@ namespace BassSpectrumDaemon.Classes
                     if (!_bass) throw new Exception("Bass Init Error");
                     if (!_wasapi)
                     {
-                        var array = _devices[DeviceIndex].Split(' ');
+                        var array = DeviceName.Split(' ');
                         int devindex = Convert.ToInt32(array[0]);
                         _wasapi = BassWasapi.BASS_WASAPI_Init(devindex, 0, 0,
                                                               BASSWASAPIInit.BASS_WASAPI_BUFFER,
@@ -117,11 +116,13 @@ namespace BassSpectrumDaemon.Classes
                                                               _process, IntPtr.Zero);
                         if (!_wasapi) throw new Exception("WASAPI Init Error");
                         else BassWasapi.BASS_WASAPI_Start();
+                        _timer.IsEnabled = true;
                     }
                 }
                 else
                 {
                     BassWasapi.BASS_WASAPI_Stop(true);
+                    _timer.IsEnabled = false;
                     if (_wasapi)
                     {
                         BassWasapi.BASS_WASAPI_Free();
@@ -131,35 +132,43 @@ namespace BassSpectrumDaemon.Classes
             }
         }
 
+        private void GetSpectrumData()
+        {
+            int x, y;
+            int b0 = 0;
+            for (x = 0; x < _LINES; x++)
+            {
+                float peak = 0;
+                int b1 = (int)Math.Pow(2, x * 10.0 / (_LINES - 1));
+                if (b1 > 1023) b1 = 1023;
+                if (b1 <= b0) b1 = b0 + 1;
+                for (; b0 < b1; b0++)
+                {
+                    if (peak < _fftbuffer[1 + b0]) peak = _fftbuffer[1 + b0];
+                }
+                y = (int)(Math.Sqrt(peak) * 3 * 255 - 4);
+                if (y > 255) y = 255;
+                if (y < 0) y = 0;
+                _spectrumbuffer[x] = (byte)y;
+            }
+        }
+
+        private void GetLevelData()
+        {
+        }
+
         private void _timer_Tick(object sender, EventArgs e)
         {
             try
             {
                 int ret = BassWasapi.BASS_WASAPI_GetData(_fftbuffer, (int)BASSData.BASS_DATA_FFT2048);
-                if (ret < 0) return;
-                int x, y;
-                int b0 = 0;
-                for (x = 0; x < _LINES; x++)
-                {
-                    float peak = 0;
-                    int b1 = (int)Math.Pow(2, x * 10.0 / (_LINES - 1));
-                    if (b1 > 1023) b1 = 1023;
-                    if (b1 <= b0) b1 = b0 + 1;
-                    for (; b0 < b1; b0++)
-                    {
-                        if (peak < _fftbuffer[1 + b0]) peak = _fftbuffer[1 + b0];
-                    }
-                    y = (int)(Math.Sqrt(peak) * 3 * 255 - 4);
-                    if (y > 255) y = 255;
-                    if (y < 0) y = 0;
-                    _spectrumbuffer[x] = (byte)y;
-                }
+                if (ret > 0) GetSpectrumData();
+               
                 if (Serial != null) Serial.Write(_spectrumbuffer, 0, _spectrumbuffer.Length);
 
                 int level = BassWasapi.BASS_WASAPI_GetLevel();
                 if (level == _lastlevel && level != 0) _hanctrl++;
                 _lastlevel = level;
-
                 _indicator.Level = BassWasapi.BASS_WASAPI_GetLevel();
 
                 if (_hanctrl > 3)

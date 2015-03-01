@@ -7,6 +7,14 @@ using System.Threading.Tasks;
 
 namespace BassSpectrumDaemon.Classes
 {
+    internal enum Messages: byte
+    {
+        Spectrum = 64,
+        Time = 128,
+        Wave = 192,
+        Level = 255,
+    }
+
     internal static class SerialPortProvider
     {
         public static SerialPort ConfigurePort(string name)
@@ -24,6 +32,22 @@ namespace BassSpectrumDaemon.Classes
         public static string[] Ports
         {
             get { return SerialPort.GetPortNames(); }
+        }
+
+        public static byte[] TimePacket
+        {
+            get
+            {
+                byte[] data = new byte[33];
+                data[0] = (byte)Messages.Time;
+                data[1] = (byte)(DateTime.Now.Year - 2000);
+                data[2] = (byte)DateTime.Now.Month;
+                data[3] = (byte)DateTime.Now.Day;
+                data[4] = (byte)DateTime.Now.Hour;
+                data[5] = (byte)DateTime.Now.Minute;
+                data[6] = (byte)DateTime.Now.Second;
+                return data;
+            }
         }
     }
 }

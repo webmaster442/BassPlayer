@@ -8,7 +8,7 @@ namespace BassSpectrumDaemon
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IDisposable
     {
         private AudioSpectrum _spectrum;
         private System.Windows.Forms.NotifyIcon _trayicon;
@@ -56,16 +56,27 @@ namespace BassSpectrumDaemon
 
         }
 
+        private void CbSerialOutput_Unchecked(object sender, RoutedEventArgs e)
+        {
+
+        }
+
         private void CbMonitoring_Checked(object sender, RoutedEventArgs e)
         {
-            if (CbMonitoring.IsChecked == true)
+            if (CbAudioDevices.SelectedItem == null)
             {
+                MessageBox.Show("Please select device first");
+                CbMonitoring.IsChecked = false;
+                return;
+            }
+                _spectrum.DeviceName = CbAudioDevices.SelectedItem.ToString();
                 _spectrum.IsEnabled = true;
-            }
-            else
-            {
-                _spectrum.IsEnabled = false;
-            }
+        }
+
+        private void CbMonitoring_Unchecked(object sender, RoutedEventArgs e)
+        {
+            _spectrum.IsEnabled = false;
+            this.LelvelIdic.Level = 0;
         }
 
         private bool DoExit()
@@ -77,7 +88,11 @@ namespace BassSpectrumDaemon
 
         private void BtnExit_Click(object sender, RoutedEventArgs e)
         {
-            if (DoExit()) this.Close();
+            if (DoExit())
+            {
+                Dispose();
+                this.Close();
+            }
         }
 
         private void BtnMinimize_Click(object sender, RoutedEventArgs e)
@@ -88,6 +103,21 @@ namespace BassSpectrumDaemon
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             e.Cancel = !DoExit();
+            if (!e.Cancel) Dispose();
+        }
+
+        protected virtual void Dispose(bool native)
+        {
+            if (_spectrum != null)
+            {
+                _spectrum.Dispose();
+                _spectrum = null;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
         }
     }
 }

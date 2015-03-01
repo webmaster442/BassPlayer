@@ -13,6 +13,39 @@
     <Window.Resources>
         <converters:NegateConverter x:Key="ConvNegate"/>
     </Window.Resources>
+    <Window.Style>
+        <Style TargetType="{x:Type local:MainWindow}">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type local:MainWindow}">
+                        <Grid>
+                            <Border Background="Transparent"
+                                    Margin="{Binding Source={x:Static SystemParameters.WindowNonClientFrameThickness}}">
+                                <ContentPresenter Content="{TemplateBinding Content}" />
+                            </Border>
+                            <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Title}" 
+                                       VerticalAlignment="Top" HorizontalAlignment="Left" 
+                                       Margin="36,8,0,0"/>
+                            <Image Source="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Icon}"
+                                   VerticalAlignment="Top" HorizontalAlignment="Left"
+                                   Margin="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(WindowChrome.WindowChrome).ResizeBorderThickness}" 
+                                   Width="{Binding Source={x:Static SystemParameters.SmallIconWidth}}"
+                                   WindowChrome.IsHitTestVisibleInChrome="True"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="WindowChrome.WindowChrome">
+                <Setter.Value>
+                    <WindowChrome GlassFrameThickness="9,230,9,0"
+                                  CaptionHeight="22"
+                                  ResizeBorderThickness="9"
+                                  NonClientFrameEdges="Bottom"/>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Background" Value="Transparent"/>
+        </Style>
+    </Window.Style>
     <Grid Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="30"/>
@@ -29,10 +62,12 @@
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Row="0"
                    Grid.Column="0"
-                   Text="Audio Output:"/>
+                   Text="Audio Output:"
+                   Style="{StaticResource GlassText}"/>
         <TextBlock Grid.Row="1"
                    Grid.Column="0"
-                   Text="Serial Port:"/>
+                   Text="Serial Port:"
+                   Style="{StaticResource GlassText}"/>
         
         <Button Content="Redetect Ports"
                 Grid.Row="2"
@@ -40,20 +75,30 @@
                 x:Name="BtnRedetect"
                 Click="BtnRedetect_Click"
                 IsEnabled="{Binding ElementName=CbSerialOutput, Path=IsChecked, Converter={StaticResource ConvNegate}}"/>
-        
+
         <CheckBox Grid.Row="3"
                   Grid.Column="1"
-                  Content="Enable Serial Output"
                   x:Name="CbSerialOutput"
                   Checked="CbSerialOutput_Checked"
-                  IsEnabled="{Binding ElementName=CbMonitoring, Path=IsChecked}"/>
-        
+                  Unchecked="CbSerialOutput_Unchecked"
+                  IsEnabled="{Binding ElementName=CbMonitoring, Path=IsChecked}">
+            <CheckBox.Content>
+                <TextBlock Style="{StaticResource GlassText}"
+                           Text="Enable Serial Output"/>
+            </CheckBox.Content>
+        </CheckBox>
+
         <CheckBox Grid.Row="4"
                   Grid.Column="1"
-                  Content="Enable Level monitoring"
                   x:Name="CbMonitoring"
-                  Checked="CbMonitoring_Checked"/>
-        
+                  Checked="CbMonitoring_Checked"
+                  Unchecked="CbMonitoring_Unchecked">
+            <CheckBox.Content>
+                <TextBlock Style="{StaticResource GlassText}"
+                           Text="Enable Output monitoring"/>
+            </CheckBox.Content>
+        </CheckBox>
+
         <ComboBox Grid.Column="1"
                   Grid.Row="0"
                   x:Name="CbAudioDevices"

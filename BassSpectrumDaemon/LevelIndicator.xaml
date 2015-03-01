@@ -30,11 +30,13 @@
                    Grid.Column="0"
                    Text="L"
                    FontSize="14"
-                   TextAlignment="Center"/>
+                   TextAlignment="Center"
+                   Style="{StaticResource GlassText}"/>
         <TextBlock Grid.Row="2"
                    Grid.Column="1"
                    Text="R"
                    FontSize="14"
-                   TextAlignment="Center"/>
+                   TextAlignment="Center"
+                   Style="{StaticResource GlassText}"/>
     </Grid>
 </UserControl>
