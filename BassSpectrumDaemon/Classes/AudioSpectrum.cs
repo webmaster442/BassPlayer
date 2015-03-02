@@ -48,7 +48,7 @@ namespace BassSpectrumDaemon.Classes
             _timer.IsEnabled = false;
             _timer.Tick += _timer_Tick;
             _fftbuffer = new float[1024];
-            _spectrumbuffer = new byte[_LINES];
+            _spectrumbuffer = new byte[_LINES+1];
             _indicator = indicator;
         }
 
@@ -93,6 +93,11 @@ namespace BassSpectrumDaemon.Classes
         /// Gets or sets the monitored device index
         /// </summary>
         public string DeviceName { get; set; }
+
+        /// <summary>
+        /// Display type
+        /// </summary>
+        public Messages DisplayTipe { get; set; }
 
         /// <summary>
         /// Gets or sets device monitoring
@@ -149,12 +154,22 @@ namespace BassSpectrumDaemon.Classes
                 y = (int)(Math.Sqrt(peak) * 3 * 255 - 4);
                 if (y > 255) y = 255;
                 if (y < 0) y = 0;
-                _spectrumbuffer[x] = (byte)y;
+                _spectrumbuffer[x+1] = (byte)y;
             }
         }
 
-        private void GetLevelData()
+        private byte Map(int x, int in_min, int in_max, int out_min, int out_max)
         {
+            return (byte)((x - in_min) * (out_max - out_min) / (in_max - in_min) + out_min);
+        }
+
+        private void GetLevelData(int level)
+        {
+            short l, r;
+            l = Utils.LowWord(level);
+            r = Utils.HighWord(level);
+            _spectrumbuffer[1] = Map(l, 0, short.MaxValue, 0, 255);
+            _spectrumbuffer[2] = Map(r, 0, short.MaxValue, 0, 255);
         }
 
         private void _timer_Tick(object sender, EventArgs e)
@@ -162,14 +177,23 @@ namespace BassSpectrumDaemon.Classes
             try
             {
                 int ret = BassWasapi.BASS_WASAPI_GetData(_fftbuffer, (int)BASSData.BASS_DATA_FFT2048);
-                if (ret > 0) GetSpectrumData();
-               
+                int level = BassWasapi.BASS_WASAPI_GetLevel();
+
+                switch (DisplayTipe)
+                {
+                    case Messages.Spectrum:
+                        if (ret > 0) GetSpectrumData();
+                        break;
+                    case Messages.Level:
+                        GetLevelData(level);
+                        break;
+
+                }
                 if (Serial != null) Serial.Write(_spectrumbuffer, 0, _spectrumbuffer.Length);
 
-                int level = BassWasapi.BASS_WASAPI_GetLevel();
                 if (level == _lastlevel && level != 0) _hanctrl++;
                 _lastlevel = level;
-                _indicator.Level = BassWasapi.BASS_WASAPI_GetLevel();
+                _indicator.Level = level;
 
                 if (_hanctrl > 3)
                 {

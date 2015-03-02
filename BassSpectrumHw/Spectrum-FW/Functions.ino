@@ -1,6 +1,8 @@
 /*==================================================================
  Functions
  ===================================================================*/
+ 
+//Welcome Animation shown, when the program starts 
 __inline void WelcomeAnimation()
 {
   strcpy(_textbuff,"Audio Spectrum");
@@ -41,6 +43,7 @@ __inline void WelcomeAnimation()
   HT1632.render();
 }
 
+//Calculates specturm data display
 __inline void Display(int target, int row, byte leds)
 {
   HT1632.renderTarget(target);
@@ -76,17 +79,18 @@ __inline void Display(int target, int row, byte leds)
   }
 }
 
+//Reders the display data to the screen
 __inline void DoRender()
 {
   HT1632.renderTarget(1);
   HT1632.SetRamBuffer(_row0, 31);
-  //for (int i=0; i<32; i++) HT1632.setRam(i, displays[0][i]);
   HT1632.render();
   HT1632.renderTarget(0);
   HT1632.SetRamBuffer(_row1, 31);
-  //for (int i=0; i<32; i++) HT1632.setRam(i, displays[1][i]);
   HT1632.render();
 }
+
+//Reads the termistor and returns value in Celsius
 __inline float Temperature()
 {
   float temp;
@@ -98,6 +102,7 @@ __inline float Temperature()
   return temp;
 }
 
+//Time Display mode
 __inline void DoTime()
 {
   RTC.read(_tm);
@@ -117,6 +122,7 @@ __inline void DoTime()
   delay(100);
 }
 
+//Sets display brightness
 __inline void SetLevel()
 {
   int adc = analogRead(LEVELPOT);
@@ -127,6 +133,7 @@ __inline void SetLevel()
   HT1632.setBrightness(level);
 }
 
+//Flushes the serial buffer
 __inline void FlushBuffer()
 {
   while (Serial.available() > 0) Serial.read();
