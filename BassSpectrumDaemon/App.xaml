@@ -12,6 +12,10 @@
                 <Setter Property="VerticalAlignment" Value="Center"/>
             </Style>
 
+            <Style TargetType="{x:Type RadioButton}">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+            </Style>
+
             <Style TargetType="{x:Type CheckBox}">
                 <Setter Property="VerticalAlignment" Value="Center"/>
             </Style>
@@ -28,6 +32,7 @@
                         <DropShadowEffect BlurRadius="10" Color="White" ShadowDepth="0"/>
                     </Setter.Value>
                 </Setter>
+                <Setter Property="VerticalAlignment" Value="Center"/>
                 <Setter Property="Foreground" Value="{StaticResource {x:Static SystemColors.ControlTextBrushKey}}"/>
             </Style>
 

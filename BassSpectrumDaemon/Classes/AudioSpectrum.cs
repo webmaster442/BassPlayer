@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Ports;
 using System.Windows.Threading;
@@ -26,20 +27,22 @@ namespace BassSpectrumDaemon.Classes
         /// </summary>
         public AudioSpectrum(LevelIndicator indicator)
         {
+            DisplayType = Messages.Spectrum;
             string enginedir = System.AppDomain.CurrentDomain.BaseDirectory;
             if (Utils.Is64Bit) enginedir = Path.Combine(enginedir, @"Engine\x64");
             else enginedir = Path.Combine(enginedir, @"Engine\x86");
             Bass.LoadMe(enginedir);
             BassWasapi.LoadMe(enginedir);
-            _devices = new string[BassWasapi.BASS_WASAPI_GetDeviceCount()];
+            List<string> devices = new List<string>();
             for (int i = 0; i < BassWasapi.BASS_WASAPI_GetDeviceCount(); i++)
             {
                 var device = BassWasapi.BASS_WASAPI_GetDeviceInfo(i);
                 if (device.IsEnabled && device.IsLoopback)
                 {
-                    _devices[i] = string.Format("{0} - {1}", i, device.name);
+                    devices.Add(string.Format("{0} - {1}", i, device.name));
                 }
             }
+            _devices = devices.ToArray();
             Bass.BASS_SetConfig(BASSConfig.BASS_CONFIG_UPDATETHREADS, false);
             _bass = Bass.BASS_Init(0, 44100, BASSInit.BASS_DEVICE_DEFAULT, IntPtr.Zero);
             _process = new WASAPIPROC(Process);
@@ -48,7 +51,7 @@ namespace BassSpectrumDaemon.Classes
             _timer.IsEnabled = false;
             _timer.Tick += _timer_Tick;
             _fftbuffer = new float[1024];
-            _spectrumbuffer = new byte[_LINES+1];
+            _spectrumbuffer = new byte[_LINES+2];
             _indicator = indicator;
         }
 
@@ -97,7 +100,7 @@ namespace BassSpectrumDaemon.Classes
         /// <summary>
         /// Display type
         /// </summary>
-        public Messages DisplayTipe { get; set; }
+        public Messages DisplayType { get; set; }
 
         /// <summary>
         /// Gets or sets device monitoring
@@ -151,11 +154,12 @@ namespace BassSpectrumDaemon.Classes
                 {
                     if (peak < _fftbuffer[1 + b0]) peak = _fftbuffer[1 + b0];
                 }
-                y = (int)(Math.Sqrt(peak) * 3 * 255 - 4);
-                if (y > 255) y = 255;
+                y = (int)(Math.Sqrt(peak) * 3 * 254 - 4);
+                if (y > 254) y = 254;
                 if (y < 0) y = 0;
                 _spectrumbuffer[x+1] = (byte)y;
             }
+            _spectrumbuffer[33] = 255;
         }
 
         private byte Map(int x, int in_min, int in_max, int out_min, int out_max)
@@ -168,8 +172,9 @@ namespace BassSpectrumDaemon.Classes
             short l, r;
             l = Utils.LowWord(level);
             r = Utils.HighWord(level);
-            _spectrumbuffer[1] = Map(l, 0, short.MaxValue, 0, 255);
-            _spectrumbuffer[2] = Map(r, 0, short.MaxValue, 0, 255);
+            _spectrumbuffer[1] = Map(l, 0, short.MaxValue, 0, 254);
+            _spectrumbuffer[2] = Map(r, 0, short.MaxValue, 0, 254);
+            _spectrumbuffer[33] = 255;
         }
 
         private void _timer_Tick(object sender, EventArgs e)
@@ -179,7 +184,7 @@ namespace BassSpectrumDaemon.Classes
                 int ret = BassWasapi.BASS_WASAPI_GetData(_fftbuffer, (int)BASSData.BASS_DATA_FFT2048);
                 int level = BassWasapi.BASS_WASAPI_GetLevel();
 
-                switch (DisplayTipe)
+                switch (DisplayType)
                 {
                     case Messages.Spectrum:
                         if (ret > 0) GetSpectrumData();
@@ -189,7 +194,11 @@ namespace BassSpectrumDaemon.Classes
                         break;
 
                 }
-                if (Serial != null) Serial.Write(_spectrumbuffer, 0, _spectrumbuffer.Length);
+                if (Serial != null)
+                {
+                    _spectrumbuffer[0] = (byte)this.DisplayType;
+                    Serial.Write(_spectrumbuffer, 0, _spectrumbuffer.Length);
+                }
 
                 if (level == _lastlevel && level != 0) _hanctrl++;
                 _lastlevel = level;

@@ -4,7 +4,7 @@
         xmlns:local="clr-namespace:BassSpectrumDaemon"
         xmlns:converters="clr-namespace:BassEngine.Converters;assembly=BassEngine"
         Title="Audio Spectrum Daemon"
-        Height="230"
+        Height="260"
         Width="500"
         Icon="icon.png"
         ResizeMode="CanMinimize"
@@ -37,7 +37,7 @@
             </Setter>
             <Setter Property="WindowChrome.WindowChrome">
                 <Setter.Value>
-                    <WindowChrome GlassFrameThickness="9,230,9,0"
+                    <WindowChrome GlassFrameThickness="9,260,9,0"
                                   CaptionHeight="22"
                                   ResizeBorderThickness="9"
                                   NonClientFrameEdges="Bottom"/>
@@ -48,6 +48,7 @@
     </Window.Style>
     <Grid Margin="5">
         <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
             <RowDefinition Height="30"/>
@@ -76,7 +77,7 @@
                 Click="BtnRedetect_Click"
                 IsEnabled="{Binding ElementName=CbSerialOutput, Path=IsChecked, Converter={StaticResource ConvNegate}}"/>
 
-        <CheckBox Grid.Row="3"
+        <CheckBox Grid.Row="4"
                   Grid.Column="1"
                   x:Name="CbSerialOutput"
                   Checked="CbSerialOutput_Checked"
@@ -88,7 +89,7 @@
             </CheckBox.Content>
         </CheckBox>
 
-        <CheckBox Grid.Row="4"
+        <CheckBox Grid.Row="3"
                   Grid.Column="1"
                   x:Name="CbMonitoring"
                   Checked="CbMonitoring_Checked"
@@ -109,7 +110,37 @@
                   x:Name="CbSerialPort"
                   IsEnabled="{Binding ElementName=CbSerialOutput, Path=IsChecked, Converter={StaticResource ConvNegate}}"/>
         
+        <TextBlock Grid.Row="5"
+                   Grid.Column="0"
+                   Text="Type:"
+                   Style="{StaticResource GlassText}"/>
+        
         <StackPanel Grid.Row="5"
+                    Grid.ColumnSpan="2"
+                    Grid.Column="1"
+                    Orientation="Horizontal">
+            <RadioButton IsChecked="True"
+                         Checked="ModeSelect"
+                         Unchecked="ModeSelect"
+                         x:Name="RbSpectrum">
+                <TextBlock Text="Spectrum"
+                           Style="{StaticResource GlassText}"/>
+            </RadioButton>
+            <RadioButton Checked="ModeSelect"
+                         Unchecked="ModeSelect"
+                         x:Name="RbLevels" Margin="10,0">
+                <TextBlock Text="Levels"
+                           Style="{StaticResource GlassText}"/>
+            </RadioButton>
+            
+            <Button x:Name="BtnConfigDate"
+                    Content="Send Date Configuration"
+                    Click="BtnConfigDate_Click"
+                    IsEnabled="{Binding ElementName=CbSerialOutput, Path=IsChecked, Converter={StaticResource ConvNegate}}"/>
+            
+        </StackPanel>
+        
+        <StackPanel Grid.Row="6"
                     Grid.ColumnSpan="3"
                     Orientation="Horizontal"
                     HorizontalAlignment="Right">

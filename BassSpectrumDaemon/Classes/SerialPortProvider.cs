@@ -9,10 +9,10 @@ namespace BassSpectrumDaemon.Classes
 {
     internal enum Messages: byte
     {
-        Spectrum = 64,
-        Time = 128,
-        Wave = 192,
-        Level = 255,
+        Spectrum = 0xF0,
+        Time = 0xF1,
+        Wave = 0xF2,
+        Level = 0xF4,
     }
 
     internal static class SerialPortProvider
@@ -38,7 +38,7 @@ namespace BassSpectrumDaemon.Classes
         {
             get
             {
-                byte[] data = new byte[33];
+                byte[] data = new byte[34];
                 data[0] = (byte)Messages.Time;
                 data[1] = (byte)(DateTime.Now.Year - 2000);
                 data[2] = (byte)DateTime.Now.Month;
@@ -46,6 +46,7 @@ namespace BassSpectrumDaemon.Classes
                 data[4] = (byte)DateTime.Now.Hour;
                 data[5] = (byte)DateTime.Now.Minute;
                 data[6] = (byte)DateTime.Now.Second;
+                data[33] = 255;
                 return data;
             }
         }

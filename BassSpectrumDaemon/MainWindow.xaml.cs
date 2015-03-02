@@ -1,6 +1,7 @@
 ﻿using BassSpectrumDaemon.Classes;
 using System;
 using System.IO;
+using System.Threading;
 using System.Windows;
 
 namespace BassSpectrumDaemon
@@ -12,6 +13,7 @@ namespace BassSpectrumDaemon
     {
         private AudioSpectrum _spectrum;
         private System.Windows.Forms.NotifyIcon _trayicon;
+        private bool _loaded;
 
         public MainWindow()
         {
@@ -43,6 +45,7 @@ namespace BassSpectrumDaemon
         {
             CbAudioDevices.ItemsSource = _spectrum.Devices;
             CbSerialPort.ItemsSource = SerialPortProvider.Ports;
+            _loaded = true;
         }
 
         private void BtnRedetect_Click(object sender, RoutedEventArgs e)
@@ -53,12 +56,24 @@ namespace BassSpectrumDaemon
 
         private void CbSerialOutput_Checked(object sender, RoutedEventArgs e)
         {
-
+            try
+            {
+                _spectrum.Serial = SerialPortProvider.ConfigurePort(CbSerialPort.SelectedItem.ToString());
+            }
+            catch (Exception ex)
+            {
+                BassEngine.Helpers.ErrorDialog(ex, "Serial port error");
+            }
         }
 
         private void CbSerialOutput_Unchecked(object sender, RoutedEventArgs e)
         {
-
+            if (_spectrum.Serial != null)
+            {
+                if (_spectrum.Serial.IsOpen) _spectrum.Serial.Close();
+                _spectrum.Serial.Dispose();
+                _spectrum.Serial = null;
+            }
         }
 
         private void CbMonitoring_Checked(object sender, RoutedEventArgs e)
@@ -118,6 +133,30 @@ namespace BassSpectrumDaemon
         public void Dispose()
         {
             Dispose(true);
+        }
+
+        private void ModeSelect(object sender, RoutedEventArgs e)
+        {
+            if (!_loaded) return;
+            if (RbSpectrum.IsChecked == true) _spectrum.DisplayType = Messages.Spectrum;
+            else if (RbLevels.IsChecked == true) _spectrum.DisplayType = Messages.Level;
+        }
+
+        private void BtnConfigDate_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var port = SerialPortProvider.ConfigurePort(CbSerialPort.SelectedItem.ToString());
+                port.Write(SerialPortProvider.TimePacket, 0, SerialPortProvider.TimePacket.Length);
+                Thread.Sleep(1000);
+                port.Close();
+                port.Dispose();
+                port = null;
+            }
+            catch (Exception ex)
+            {
+                BassEngine.Helpers.ErrorDialog(ex, "Serial port error");
+            }
         }
     }
 }
