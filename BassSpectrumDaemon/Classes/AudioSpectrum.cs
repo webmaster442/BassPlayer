@@ -192,7 +192,6 @@ namespace BassSpectrumDaemon.Classes
                     case Messages.Level:
                         GetLevelData(level);
                         break;
-
                 }
                 if (Serial != null)
                 {

@@ -9,6 +9,7 @@ namespace YoutubeExtractor
     /// </para>
     /// Please report when this exception happens at www.github.com/flagbug/YoutubeExtractor/issues
     /// </summary>
+    [Serializable]
     public class YoutubeParseException : Exception
     {
         public YoutubeParseException(string message, Exception innerException)

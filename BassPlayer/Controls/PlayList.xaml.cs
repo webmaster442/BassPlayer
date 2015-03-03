@@ -68,121 +68,133 @@ namespace BassPlayer.Controls
         }
 
         #region Private Functions
-        private async Task LoadM3u(string file)
+        private Task LoadM3u(string file)
         {
-            try
+            return Task.Run(() =>
             {
-                string filedir = System.IO.Path.GetDirectoryName(file);
-                string line;
-                using (var content = File.OpenText(file))
+                try
                 {
-                    do
+                    string filedir = System.IO.Path.GetDirectoryName(file);
+                    string line;
+                    using (var content = File.OpenText(file))
                     {
-                        line = content.ReadLine();
-                        if (line == null) continue;
-                        if (line.StartsWith("#")) continue;
-                        if (line.StartsWith("http://") || line.StartsWith("https://"))
+                        do
                         {
-                            _playlist.Add(PlayListEntry.FromFile(line));
+                            line = content.ReadLine();
+                            if (line == null) continue;
+                            if (line.StartsWith("#")) continue;
+                            if (line.StartsWith("http://") || line.StartsWith("https://"))
+                            {
+                                _playlist.Add(PlayListEntry.FromFile(line));
+                            }
+                            else if (line.Contains(":\\") || line.StartsWith("\\\\"))
+                            {
+                                if (!File.Exists(line)) continue;
+                                _playlist.Add(PlayListEntry.FromFile(line));
+                            }
+                            else
+                            {
+                                string f = System.IO.Path.Combine(filedir, line);
+                                if (!File.Exists(f)) continue;
+                                _playlist.Add(PlayListEntry.FromFile(f));
+                            }
                         }
-                        else if (line.Contains(":\\") || line.StartsWith("\\\\"))
-                        {
-                            if (!File.Exists(line)) continue;
-                            _playlist.Add(PlayListEntry.FromFile(line));
-                        }
-                        else
-                        {
-                            string f = System.IO.Path.Combine(filedir, line);
-                            if (!File.Exists(f)) continue;
-                            _playlist.Add(PlayListEntry.FromFile(f));
-                        }
-                    }
-                    while (line != null);
-                }
-            }
-            catch (Exception ex) { Helpers.ErrorDialog(ex, "File Load error"); }
-        }
-
-        private async Task LoadPls(string file)
-        {
-            try
-            {
-                string filedir = System.IO.Path.GetDirectoryName(file);
-                string line;
-                string pattern = @"^(File)([0-9])+(=)";
-                using (var content = File.OpenText(file))
-                {
-                    do
-                    {
-                        line = content.ReadLine();
-                        if (line == null) continue;
-                        if (Regex.IsMatch(line, pattern)) line = Regex.Replace(line, pattern, "");
-                        else continue;
-                        if (line.StartsWith("http://") || line.StartsWith("https://"))
-                        {
-                            _playlist.Add(PlayListEntry.FromFile(line));
-                        }
-                        else if (line.Contains(":\\") || line.StartsWith("\\\\"))
-                        {
-                            if (!File.Exists(line)) continue;
-                            _playlist.Add(PlayListEntry.FromFile(line));
-                        }
-                        else
-                        {
-                            string f = System.IO.Path.Combine(filedir, line);
-                            if (!File.Exists(f)) continue;
-                            _playlist.Add(PlayListEntry.FromFile(f));
-                        }
-                    }
-                    while (line != null);
-                }
-            }
-            catch (Exception ex) { Helpers.ErrorDialog(ex, "File Load error"); }
-        }
-
-        private async Task LoadBPL(string file)
-        {
-            try
-            {
-                var targetdir = Path.GetDirectoryName(file);
-                XmlSerializer xs = new XmlSerializer(typeof(PlayListEntry[]));
-                using (var content = File.OpenRead(file))
-                {
-                    var array = (PlayListEntry[])xs.Deserialize(content);
-                    foreach (var item in array)
-                    {
-                        if (item.FileName.StartsWith("http://") || item.FileName.StartsWith("https://")) _playlist.Add(item);
-                        else if (item.FileName.Contains(":\\") || item.FileName.StartsWith("\\\\"))
-                        {
-                            if (!File.Exists(item.FileName)) continue;
-                            _playlist.Add(item);
-                        }
-                        else
-                        {
-                            var newitem = item;
-                            string f = System.IO.Path.Combine(targetdir, item.FileName);
-                            newitem.FileName = f;
-                            _playlist.Add(newitem);
-                        }
+                        while (line != null);
                     }
                 }
-            }
-            catch (Exception ex) { Helpers.ErrorDialog(ex, "File Load error"); }
+                catch (Exception ex) { Helpers.ErrorDialog(ex, "File Load error"); }
+            });
         }
 
-        private async Task LoadWPL(string file)
+        private Task LoadPls(string file)
         {
-            try
+            return Task.Run(() =>
             {
-                var doc = XDocument.Load(file).Descendants("body").Elements("seq").Elements("media");
-                foreach (var media in doc)
+                try
                 {
-                    var src = media.Attribute("src").Value;
-                    PlayListEntry entry = PlayListEntry.FromFile(src);
-                    _playlist.Add(entry);
+                    string filedir = System.IO.Path.GetDirectoryName(file);
+                    string line;
+                    string pattern = @"^(File)([0-9])+(=)";
+                    using (var content = File.OpenText(file))
+                    {
+                        do
+                        {
+                            line = content.ReadLine();
+                            if (line == null) continue;
+                            if (Regex.IsMatch(line, pattern)) line = Regex.Replace(line, pattern, "");
+                            else continue;
+                            if (line.StartsWith("http://") || line.StartsWith("https://"))
+                            {
+                                _playlist.Add(PlayListEntry.FromFile(line));
+                            }
+                            else if (line.Contains(":\\") || line.StartsWith("\\\\"))
+                            {
+                                if (!File.Exists(line)) continue;
+                                _playlist.Add(PlayListEntry.FromFile(line));
+                            }
+                            else
+                            {
+                                string f = System.IO.Path.Combine(filedir, line);
+                                if (!File.Exists(f)) continue;
+                                _playlist.Add(PlayListEntry.FromFile(f));
+                            }
+                        }
+                        while (line != null);
+                    }
                 }
-            }
-            catch (Exception ex) { Helpers.ErrorDialog(ex, "File Load error"); }
+                catch (Exception ex) { Helpers.ErrorDialog(ex, "File Load error"); }
+            });
+        }
+
+        private Task LoadBPL(string file)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    var targetdir = Path.GetDirectoryName(file);
+                    XmlSerializer xs = new XmlSerializer(typeof(PlayListEntry[]));
+                    using (var content = File.OpenRead(file))
+                    {
+                        var array = (PlayListEntry[])xs.Deserialize(content);
+                        foreach (var item in array)
+                        {
+                            if (item.FileName.StartsWith("http://") || item.FileName.StartsWith("https://")) _playlist.Add(item);
+                            else if (item.FileName.Contains(":\\") || item.FileName.StartsWith("\\\\"))
+                            {
+                                if (!File.Exists(item.FileName)) continue;
+                                _playlist.Add(item);
+                            }
+                            else
+                            {
+                                var newitem = item;
+                                string f = System.IO.Path.Combine(targetdir, item.FileName);
+                                newitem.FileName = f;
+                                _playlist.Add(newitem);
+                            }
+                        }
+                    }
+                }
+                catch (Exception ex) { Helpers.ErrorDialog(ex, "File Load error"); }
+            });
+        }
+
+        private Task LoadWPL(string file)
+        {
+            return Task.Run(() =>
+            {
+                try
+                {
+                    var doc = XDocument.Load(file).Descendants("body").Elements("seq").Elements("media");
+                    foreach (var media in doc)
+                    {
+                        var src = media.Attribute("src").Value;
+                        PlayListEntry entry = PlayListEntry.FromFile(src);
+                        _playlist.Add(entry);
+                    }
+                }
+                catch (Exception ex) { Helpers.ErrorDialog(ex, "File Load error"); }
+            });
         }
 
         private void LbList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
@@ -344,9 +356,18 @@ namespace BassPlayer.Controls
             }
         }
 
-        public void AppendFile(string file)
+        public async void AppendFiles(IEnumerable<string> Files)
         {
-            _playlist.Add(PlayListEntry.FromFile(file));
+            List<PlayListEntry> data = await Task.Run(() =>
+                {
+                    List<PlayListEntry> processed = new List<PlayListEntry>(Files.Count());
+                    foreach (var f in Files)
+                    {
+                        processed.Add(PlayListEntry.FromFile(f));
+                    }
+                    return processed;
+                });
+            _playlist.AddRange(data);
         }
 
         public async void AppendPlaylist(string file)
@@ -606,7 +627,7 @@ namespace BassPlayer.Controls
             PlayListEntry[] Items = null;
             if (TcView.SelectedIndex == 1)
             {
-                 Items = (from RecentItem i in LbRecent.SelectedItems select PlayListEntry.FromFile(i.FilePath)).ToArray();
+                Items = (from RecentItem i in LbRecent.SelectedItems select PlayListEntry.FromFile(i.FilePath)).ToArray();
             }
             else if (TcView.SelectedIndex == 2)
             {

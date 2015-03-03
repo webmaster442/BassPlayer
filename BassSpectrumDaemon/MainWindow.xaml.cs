@@ -128,6 +128,11 @@ namespace BassSpectrumDaemon
                 _spectrum.Dispose();
                 _spectrum = null;
             }
+            if (_trayicon != null)
+            {
+                _trayicon.Dispose();
+                _trayicon = null;
+            }
         }
 
         public void Dispose()
@@ -150,7 +155,6 @@ namespace BassSpectrumDaemon
                 port.Write(SerialPortProvider.TimePacket, 0, SerialPortProvider.TimePacket.Length);
                 Thread.Sleep(1000);
                 port.Close();
-                port.Dispose();
                 port = null;
             }
             catch (Exception ex)

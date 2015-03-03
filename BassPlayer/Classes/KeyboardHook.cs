@@ -7,10 +7,10 @@ namespace BassPlayer.Classes
     public sealed class KeyboardHook : IDisposable
     {
         // Registers a hot key with Windows.
-        [DllImport("user32.dll")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1060:MovePInvokesToNativeMethodsClass"), DllImport("user32.dll")]
         private static extern bool RegisterHotKey(IntPtr hWnd, int id, uint fsModifiers, uint vk);
         // Unregisters the hot key with Windows.
-        [DllImport("user32.dll")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1060:MovePInvokesToNativeMethodsClass"), DllImport("user32.dll")]
         private static extern bool UnregisterHotKey(IntPtr hWnd, int id);
 
         /// <summary>
@@ -20,6 +20,7 @@ namespace BassPlayer.Classes
         {
             private static int WM_HOTKEY = 0x0312;
 
+            [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
             public Window()
             {
                 // create the handle for the window.

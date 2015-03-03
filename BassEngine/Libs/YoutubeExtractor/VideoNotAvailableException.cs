@@ -6,6 +6,7 @@ namespace YoutubeExtractor
     /// The exception that is thrown when the video is not available for viewing.
     /// This can happen when the uploader restricts the video to specific countries.
     /// </summary>
+    [Serializable]
     public class VideoNotAvailableException : Exception
     {
         public VideoNotAvailableException()
