@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BassEngine", "BassEngine\Ba
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BassSpectrumDaemon", "BassSpectrumDaemon\BassSpectrumDaemon.csproj", "{7346BE24-1529-42EE-8357-F7274076BCD1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BassConverter", "BassConverter\BassConverter.csproj", "{0754F826-25A2-4FE5-8203-772229390D03}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -93,6 +95,18 @@ Global
 		{7346BE24-1529-42EE-8357-F7274076BCD1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{7346BE24-1529-42EE-8357-F7274076BCD1}.Release|Win32.ActiveCfg = Release|Any CPU
 		{7346BE24-1529-42EE-8357-F7274076BCD1}.Release|x64.ActiveCfg = Release|Any CPU
+		{0754F826-25A2-4FE5-8203-772229390D03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0754F826-25A2-4FE5-8203-772229390D03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0754F826-25A2-4FE5-8203-772229390D03}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{0754F826-25A2-4FE5-8203-772229390D03}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{0754F826-25A2-4FE5-8203-772229390D03}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{0754F826-25A2-4FE5-8203-772229390D03}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{0754F826-25A2-4FE5-8203-772229390D03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0754F826-25A2-4FE5-8203-772229390D03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0754F826-25A2-4FE5-8203-772229390D03}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{0754F826-25A2-4FE5-8203-772229390D03}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{0754F826-25A2-4FE5-8203-772229390D03}.Release|Win32.ActiveCfg = Release|Any CPU
+		{0754F826-25A2-4FE5-8203-772229390D03}.Release|x64.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
