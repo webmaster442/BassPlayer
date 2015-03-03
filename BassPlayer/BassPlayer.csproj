@@ -39,6 +39,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>true</Prefer32Bit>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -49,6 +50,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>BassPlayer.App</StartupObject>
@@ -75,10 +77,6 @@
     <Reference Include="Bass.Net, Version=2.4.10.4, Culture=neutral, PublicKeyToken=b7566c273e6ef480, processorArchitecture=MSIL">
       <Private>True</Private>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=6.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Newtonsoft.Json.6.0.8\lib\net45\Newtonsoft.Json.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -101,7 +99,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\CloudDriveProvider.cs" />
-    <Compile Include="Classes\Converters.cs" />
     <Compile Include="Classes\iTunesData.cs" />
     <Compile Include="Classes\KeyboardHook.cs" />
     <Compile Include="Classes\RecentPlays.cs" />
@@ -153,7 +150,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Classes\AudioEngine.cs" />
-    <Compile Include="Classes\Misc.cs" />
     <Compile Include="Classes\PlayListEntry.cs" />
     <Compile Include="Controls\AddUrlDialog.xaml.cs">
       <DependentUpon>AddUrlDialog.xaml</DependentUpon>
@@ -164,27 +160,6 @@
     <Compile Include="Controls\PlayList.xaml.cs">
       <DependentUpon>PlayList.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Libs\SingleInstance.cs" />
-    <Compile Include="Libs\YoutubeExtractor\AacAudioExtractor.cs" />
-    <Compile Include="Libs\YoutubeExtractor\AdaptiveType.cs" />
-    <Compile Include="Libs\YoutubeExtractor\AudioDownloader.cs" />
-    <Compile Include="Libs\YoutubeExtractor\AudioExtractionException.cs" />
-    <Compile Include="Libs\YoutubeExtractor\AudioType.cs" />
-    <Compile Include="Libs\YoutubeExtractor\BigEndianBitConverter.cs" />
-    <Compile Include="Libs\YoutubeExtractor\BitHelper.cs" />
-    <Compile Include="Libs\YoutubeExtractor\Decipherer.cs" />
-    <Compile Include="Libs\YoutubeExtractor\Downloader.cs" />
-    <Compile Include="Libs\YoutubeExtractor\DownloadUrlResolver.cs" />
-    <Compile Include="Libs\YoutubeExtractor\FlvFile.cs" />
-    <Compile Include="Libs\YoutubeExtractor\HttpHelper.cs" />
-    <Compile Include="Libs\YoutubeExtractor\IAudioExtractor.cs" />
-    <Compile Include="Libs\YoutubeExtractor\Mp3AudioExtractor.cs" />
-    <Compile Include="Libs\YoutubeExtractor\ProgressEventArgs.cs" />
-    <Compile Include="Libs\YoutubeExtractor\VideoDownloader.cs" />
-    <Compile Include="Libs\YoutubeExtractor\VideoInfo.cs" />
-    <Compile Include="Libs\YoutubeExtractor\VideoNotAvailableException.cs" />
-    <Compile Include="Libs\YoutubeExtractor\VideoType.cs" />
-    <Compile Include="Libs\YoutubeExtractor\YoutubeParseException.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -214,7 +189,6 @@
     </EmbeddedResource>
     <None Include="BassPlayer.pfx" />
     <None Include="Classes.cd" />
-    <None Include="packages.config" />
     <None Include="Properties\app.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -243,66 +217,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Engine\x64\bass.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Engine\x64\basscd.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Engine\x64\bassflac.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Engine\x64\bassmix.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Engine\x64\basswma.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Engine\x64\basswv.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Engine\x64\bass_aac.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Engine\x64\bass_ac3.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Engine\x64\bass_alac.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Engine\x64\tags.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Engine\x86\bass.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Engine\x86\basscd.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Engine\x86\bassflac.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Engine\x86\bassmix.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Engine\x86\basswma.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Engine\x86\basswv.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Engine\x86\bass_aac.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Engine\x86\bass_ac3.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Engine\x86\bass_alac.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Engine\x86\tags.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Resource Include="Images\Menu\note_music-50.png" />
     <Resource Include="Images\filemanager\cloud_storage-50.png" />
     <Resource Include="Images\filemanager\cd-50.png" />
@@ -355,6 +269,12 @@
     <Resource Include="Images\repeat-100.png" />
     <Resource Include="Images\shuffle-100.png" />
     <Resource Include="Images\skip_to_start-100.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BassEngine\BassEngine.csproj">
+      <Project>{b04cbd07-78a1-4f76-81f7-e1a5072cf8b9}</Project>
+      <Name>BassEngine</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

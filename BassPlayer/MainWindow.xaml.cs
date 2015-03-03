@@ -1,4 +1,5 @@
-﻿using BassPlayer.Classes;
+﻿using BassEngine;
+using BassPlayer.Classes;
 using BassPlayer.Properties;
 using System;
 using System.Collections.Generic;
@@ -11,7 +12,7 @@ namespace BassPlayer
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IDisposable
     {
         private KeyboardHook _keyboardhook;
 
@@ -114,6 +115,20 @@ namespace BassPlayer
         private void ThumbMute_Click(object sender, EventArgs e)
         {
             Player.DoThumbCommand(Controls.Player.ThumbCommands.MuteUnMute);
+        }
+
+        protected virtual void Dispose(bool native)
+        {
+            if (_keyboardhook != null)
+            {
+                _keyboardhook.Dispose();
+                _keyboardhook = null;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
         }
     }
 }

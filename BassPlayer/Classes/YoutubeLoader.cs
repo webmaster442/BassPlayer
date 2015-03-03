@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BassEngine;
+using BassPlayer.Properties;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -23,9 +25,23 @@ namespace BassPlayer.Classes
 
     internal static class YoutubeLoader
     {
+        private static ProxyConfig GetProxyConfig()
+        {
+            ProxyConfig config = new ProxyConfig
+            {
+                URL = Settings.Default.ProxyAddress,
+                Port = Convert.ToInt32(Settings.Default.ProxyPort),
+                Enabled = Settings.Default.ProxyEnabled,
+                Username = Settings.Default.ProxyUser,
+                Passwd = Settings.Default.ProxyPassword,
+                RequiresAuth = Settings.Default.ProxyAuthReq
+            };
+            return config;
+        }
+
         private static BitmapImage DownloadImage(string id)
         {
-            WebClient wc = Helpers.CreateClient();
+            WebClient wc = Helpers.CreateWebClient(GetProxyConfig());
             byte[] data = wc.DownloadData(string.Format("http://img.youtube.com/vi/{0}/mqdefault.jpg", id));
             MemoryStream ms = new MemoryStream(data);
             BitmapImage bitmap = new BitmapImage();
@@ -56,7 +72,7 @@ namespace BassPlayer.Classes
         {
             string query = HttpUtility.UrlEncode(s);
 
-            WebClient wc = Helpers.CreateClient();
+            WebClient wc = Helpers.CreateWebClient(GetProxyConfig());
             byte[] data = wc.DownloadData("https://gdata.youtube.com/feeds/api/videos?q=" + query);
             MemoryStream ms = new MemoryStream(data);
 

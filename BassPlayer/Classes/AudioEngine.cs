@@ -1,4 +1,5 @@
-﻿using BassPlayer.Properties;
+﻿using BassEngine;
+using BassPlayer.Properties;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -69,6 +70,11 @@ namespace BassPlayer.Classes
             Dispose(true);
         }
 
+        ~AudioEngine()
+        {
+            Dispose(true);
+        }
+
         /// <summary>
         /// Display Error message
         /// </summary>
@@ -115,7 +121,12 @@ namespace BassPlayer.Classes
         {
             string name = url.Replace("/", "-");
             name = name.Replace(":", "_");
-            string timestamp = string.Format("{0}{1}{2}{3}{4}{6}", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, DateTime.Now.Hour, DateTime.Now.Minute, DateTime.Now.Second);
+            string timestamp = string.Format("{0}{1}{2}{3}{4}{5}", DateTime.Now.Year,
+                                                                   DateTime.Now.Month,
+                                                                   DateTime.Now.Day,
+                                                                   DateTime.Now.Hour,
+                                                                   DateTime.Now.Minute,
+                                                                   DateTime.Now.Second);
             return string.Format("{0}-{1}.{2}", name, timestamp, ext);
         }
 
@@ -126,11 +137,19 @@ namespace BassPlayer.Classes
         {
             if (Settings.Default.ProxyEnabled)
             {
-                //user:pass@server:port
-                string proxyconfig = string.Format("{0}:{1}@{2}:{3}", Settings.Default.ProxyUser,
-                                                                     Settings.Default.ProxyPassword,
-                                                                     Settings.Default.ProxyAddress,
-                                                                     Settings.Default.ProxyPort);
+                string proxyconfig = null;
+                if (Settings.Default.ProxyAuthReq)
+                {
+                    proxyconfig = string.Format("{0}:{1}@{2}:{3}", Settings.Default.ProxyUser,
+                                                                   Settings.Default.ProxyPassword,
+                                                                   Settings.Default.ProxyAddress,
+                                                                   Settings.Default.ProxyPort);
+                }
+                else
+                {
+                    proxyconfig = string.Format("{0}:{1}", Settings.Default.ProxyAddress,
+                                                           Settings.Default.ProxyPort);
+                }
                 if (_proxyptr != IntPtr.Zero) Marshal.FreeHGlobal(_proxyptr);
                 _proxyptr = Marshal.StringToHGlobalAnsi(proxyconfig);
                 return _proxyptr;
@@ -141,7 +160,6 @@ namespace BassPlayer.Classes
                 return IntPtr.Zero;
             }
         }
-
 
         public void SetFileName(string file)
         {
@@ -269,7 +287,7 @@ namespace BassPlayer.Classes
             }
         }
 
-        [DllImport("gdi32.dll")]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1060:MovePInvokesToNativeMethodsClass"), DllImport("gdi32.dll")]
         private static extern bool DeleteObject(IntPtr hObject);
 
         private BitmapSource Bitmap2BitmapImage(Bitmap bitmap)
@@ -340,7 +358,7 @@ namespace BassPlayer.Classes
             }
             set
             {
-                if (_filetype == Classes.MediaType.Stream)
+                if (_filetype == MediaType.Stream)
                 {
                     if (Length == 0) return;
                 }

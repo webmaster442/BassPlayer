@@ -9,6 +9,7 @@ using System.Windows.Threading;
 using System.Linq;
 using System.Windows.Media.Imaging;
 using System.Windows.Shell;
+using BassEngine;
 
 namespace BassPlayer.Controls
 {
@@ -64,11 +65,20 @@ namespace BassPlayer.Controls
         public void ProcessArguments(IEnumerable<string> args = null)
         {
             if (args == null) args = Environment.GetCommandLineArgs();
+            List<string> ok = new List<string>();
             foreach (var file in args)
             {
                 var extension = Path.GetExtension(file);
-                if (_filters.Contains(extension)) PlayList.AppendFile(file);
+
+                if (_filters.Contains(extension))
+                {
+                    ok.Add(file);
+                }
                 else if (_lists.Contains(extension)) PlayList.AppendPlaylist(file);
+            }
+            if (ok.Count > 0)
+            {
+                PlayList.AppendFiles(ok);
             }
             App.Current.MainWindow.Activate();
         }

@@ -2,8 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Settings"
-        Height="340"
-        Width="350"
+        Height="345"
+        Width="400"
         WindowStyle="ToolWindow"
         Loaded="Window_Loaded">
     <Grid>
@@ -16,33 +16,48 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <StackPanel Grid.Row="0"
+        <TabControl TabStripPlacement="Left"
+                    Grid.Row="0"
                     Grid.ColumnSpan="3">
-            <CheckBox Content="Network requires a Proxy"
-                      x:Name="CbProxyEnabled"
-                      Margin="10,10,0,10"/>
-            <GroupBox Header="Proxy Settings"
-                      IsEnabled="{Binding ElementName=CbProxyEnabled, Path=IsChecked}"
-                      Margin="20,0">
+            <TabItem Header="Proxy">
                 <StackPanel>
-                    <TextBlock Text="Url:"/>
-                    <TextBox x:Name="TbProxyUrl"
-                             Margin="5"/>
-                    <TextBlock Text="Port:"/>
-                    <TextBox x:Name="TbProxyPort"
-                             Margin="5"/>
-                    <TextBlock Text="User:"/>
-                    <TextBox x:Name="TbProxyUser"
-                             Margin="5"/>
-                    <TextBlock Text="Password:"/>
-                    <PasswordBox x:Name="TbbProxyPass"
-                                 Margin="5"/>
+                    <CheckBox Content="Network requires a Proxy"
+                              x:Name="CbProxyEnabled"
+                              Margin="10,10,0,10"/>
+                    <GroupBox Header="Proxy Settings"
+                              IsEnabled="{Binding ElementName=CbProxyEnabled, Path=IsChecked}"
+                              Margin="20,0">
+                        <StackPanel>
+                            <TextBlock Text="Url:"/>
+                            <TextBox x:Name="TbProxyUrl"
+                                     Margin="5"/>
+                            <TextBlock Text="Port:"/>
+                            <TextBox x:Name="TbProxyPort"
+                                     Margin="5"/>
+                            <CheckBox Content="Requires Authentication"
+                                      Margin="5"
+                                      x:Name="CbProxyAuth"/>
+                            <TextBlock Text="User:"/>
+                            <TextBox x:Name="TbProxyUser"
+                                     Margin="5"
+                                     IsEnabled="{Binding ElementName=CbProxyAuth, Path=IsChecked}"/>
+                            <TextBlock Text="Password:"/>
+                            <PasswordBox x:Name="TbbProxyPass"
+                                         Margin="5"
+                                         IsEnabled="{Binding ElementName=CbProxyAuth, Path=IsChecked}"/>
+                        </StackPanel>
+                    </GroupBox>
                 </StackPanel>
-            </GroupBox>
-            <CheckBox Content="Use Keyboard media keys"
-                       Margin="10,10,0,10"
-                      x:Name="CbMediaKeys"/>
-        </StackPanel>
+            </TabItem>
+            <TabItem Header="Player">
+                <StackPanel>
+                    <CheckBox Content="Use Keyboard media keys"
+                              Margin="10,10,0,10"
+                              x:Name="CbMediaKeys"/>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+
         <Button Grid.Row="1"
                 Grid.Column="1"
                 x:Name="BtnOk"

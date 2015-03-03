@@ -130,5 +130,17 @@ namespace BassPlayer.Properties {
                 this["RecentCount"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ProxyAuthReq {
+            get {
+                return ((bool)(this["ProxyAuthReq"]));
+            }
+            set {
+                this["ProxyAuthReq"] = value;
+            }
+        }
     }
 }

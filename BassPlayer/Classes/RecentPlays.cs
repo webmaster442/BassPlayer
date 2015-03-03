@@ -1,4 +1,5 @@
-﻿using BassPlayer.Properties;
+﻿using BassEngine;
+using BassPlayer.Properties;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
