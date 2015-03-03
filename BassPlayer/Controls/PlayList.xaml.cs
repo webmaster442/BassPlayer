@@ -358,6 +358,7 @@ namespace BassPlayer.Controls
 
         public async void AppendFiles(IEnumerable<string> Files)
         {
+            Processing.Visibility = System.Windows.Visibility.Visible;
             List<PlayListEntry> data = await Task.Run(() =>
                 {
                     List<PlayListEntry> processed = new List<PlayListEntry>(Files.Count());
@@ -368,6 +369,7 @@ namespace BassPlayer.Controls
                     return processed;
                 });
             _playlist.AddRange(data);
+            Processing.Visibility = System.Windows.Visibility.Collapsed;
         }
 
         public async void AppendPlaylist(string file)
