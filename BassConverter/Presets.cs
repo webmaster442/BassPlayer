@@ -16,6 +16,13 @@ namespace BassConverter
         public string CommandLine { get; set; }
     }
 
+    internal interface IPresetControl
+    {
+        string InputPattern { get; set; }
+        string GeneratePattern();
+        void SetupFromTokens(Dictionary<string, string> Tokens);
+    }
+
     internal class PresetManager: ObservableCollection<Preset>
     {
         public PresetManager() : base()

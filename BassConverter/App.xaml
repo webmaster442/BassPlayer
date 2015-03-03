@@ -13,12 +13,20 @@
             </Style>
 
             <Style TargetType="{x:Type TextBox}">
-                <Setter Property="Margin" Value="4"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="2"/>
             </Style>
 
             <Style TargetType="{x:Type Button}">
-                <Setter Property="Margin" Value="4"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="2"/>
             </Style>
+
+            <Style TargetType="{x:Type Slider}">
+                <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="Margin" Value="2"/>
+            </Style>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

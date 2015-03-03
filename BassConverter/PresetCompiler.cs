@@ -12,7 +12,7 @@ namespace BassConverter
     {
         private const string pattern = @"\{.*\}";
 
-        public static void Compile(Preset p, StackPanel target)
+        public static void CompileToUi(Preset p, StackPanel target)
         {
             target.Children.Clear();
             int matches = 0;
@@ -28,7 +28,6 @@ namespace BassConverter
                 t.Text = "Current Preset has no options";
                 target.Children.Add(t);
             }
-
         }
     }
 }
