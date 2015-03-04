@@ -55,6 +55,7 @@ namespace FFConverter
             sfd.FilterIndex = 0;
             if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
+                _currentpreset.CommandLine = PresetCompiler.CompileUiToString(_currentpreset, SpOptions);
                 BatCompiler.CreateBatFile(_currentpreset, _files, sfd.FileName, TbOutputFolder.Text);
             }
         }

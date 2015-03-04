@@ -28,6 +28,7 @@ namespace FFConverter
         public static void CreateBatFile(Preset p, string[] files, string filename, string outdir)
         {
             string ffmpeg = GetFFMpegPath();
+
             string drive = Path.GetPathRoot(ffmpeg).Replace("\\", "");
             int counter = 0;
 
