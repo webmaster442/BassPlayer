@@ -27,6 +27,7 @@ namespace BassPlayer.Classes
     {
         private static ProxyConfig GetProxyConfig()
         {
+            if (!Settings.Default.ProxyEnabled) return null;
             ProxyConfig config = new ProxyConfig
             {
                 URL = Settings.Default.ProxyAddress,

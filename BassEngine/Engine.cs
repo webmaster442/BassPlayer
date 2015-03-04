@@ -95,14 +95,17 @@ namespace BassEngine
         public static WebClient CreateWebClient(ProxyConfig proxy)
         {
             WebClient client = new WebClient();
-            if (proxy.Enabled)
+            if (proxy != null)
             {
-                WebProxy p = new WebProxy(proxy.URL, proxy.Port);
-                if (proxy.RequiresAuth)
+                if (proxy.Enabled)
                 {
-                    p.Credentials = new NetworkCredential(proxy.Username, proxy.Passwd);
+                    WebProxy p = new WebProxy(proxy.URL, proxy.Port);
+                    if (proxy.RequiresAuth)
+                    {
+                        p.Credentials = new NetworkCredential(proxy.Username, proxy.Passwd);
+                    }
+                    client.Proxy = p;
                 }
-                client.Proxy = p;
             }
             return client;
         }
