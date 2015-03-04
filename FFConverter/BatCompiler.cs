@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BassConverter
+namespace FFConverter
 {
     internal static class BatCompiler
     {
@@ -18,22 +18,33 @@ namespace BassConverter
 
         private static string MapInputOutput(string cmdline, string input, string outfolder, string ext)
         {
-            string ret = cmdline.Replace("{input}", input);
-            string outfile = Path.Combine(outfolder, Path.ChangeExtension(input, ext));
-            ret = ret.Replace("{output}", outfile);
+            string ret = cmdline.Replace("{input}", "\"" + input + "\"");
+            string of =  Path.GetFileName(Path.ChangeExtension(input, ext));
+            string outfile = Path.Combine(outfolder, of);
+            ret = ret.Replace("{output}", "\"" + outfile + "\"");
             return ret;
         }
 
         public static void CreateBatFile(Preset p, string[] files, string filename, string outdir)
         {
             string ffmpeg = GetFFMpegPath();
+            string drive = Path.GetPathRoot(ffmpeg).Replace("\\", "");
+            int counter = 0;
 
             using (var file = File.CreateText(filename))
             {
+                file.WriteLine(drive);
+                file.WriteLine("cd \"{0}\"", ffmpeg);
                 foreach (var f in files)
                 {
-                    string line = string.Format("{0}\\{1}", ffmpeg, MapInputOutput(p.CommandLine, f, outdir, p.Extension));
+                    if (counter == 0)
+                    {
+                        counter++;
+                        continue;
+                    }
+                    string line = MapInputOutput(p.CommandLine, f, outdir, p.Extension);
                     file.WriteLine(line);
+                    counter++;
                 }
             }
         }

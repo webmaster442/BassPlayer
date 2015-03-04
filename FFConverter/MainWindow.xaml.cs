@@ -1,19 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
-namespace BassConverter
+namespace FFConverter
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -35,7 +24,7 @@ namespace BassConverter
                 this.Close();
             }
             #endif
-            this.Title = string.Format("Bass Audio Converter - {0} files", _files.Length - 1);
+            this.Title = string.Format("Bass Audio Converter - {0} file(s)", _files.Length - 1);
             _presets = new PresetManager();
             LbPresets.ItemsSource = _presets;
             LbPresets.SelectedIndex = 0;
@@ -56,6 +45,17 @@ namespace BassConverter
             if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 TbOutputFolder.Text = fbd.SelectedPath;
+            }
+        }
+
+        private void BtnSaveCmd_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.SaveFileDialog sfd = new System.Windows.Forms.SaveFileDialog();
+            sfd.Filter = "Cmd files | *.cmd";
+            sfd.FilterIndex = 0;
+            if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                BatCompiler.CreateBatFile(_currentpreset, _files, sfd.FileName, TbOutputFolder.Text);
             }
         }
     }

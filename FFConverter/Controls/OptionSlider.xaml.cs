@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Controls;
 
-namespace BassConverter.Controls
+namespace FFConverter.Controls
 {
     /// <summary>
     /// Interaction logic for OptionSlider.xaml
