@@ -647,6 +647,19 @@
                                 <Expander>
                                     <Expander.Header>
                                         <StackPanel Orientation="Horizontal">
+                                            <Image Source="../Images/Menu/to_do-50.png"
+                                                   Width="22"
+                                                   Height="22"/>
+                                            <TextBlock Text="Playlists"
+                                                       VerticalAlignment="Center"
+                                                       Margin="5"/>
+                                        </StackPanel>
+                                    </Expander.Header>
+                                    <StackPanel x:Name="SpPlaylists"/>
+                                </Expander>
+                                <Expander>
+                                    <Expander.Header>
+                                        <StackPanel Orientation="Horizontal">
                                             <Image Source="../Images/itunes/songs-50.png"
                                                    Width="22"
                                                    Height="22"/>
@@ -715,13 +728,16 @@
                                    VerticalAlignment="Center"/>
                         <TextBox Grid.Column="1"
                                  Grid.Row="0"
-                                 x:Name="TbYoutubeQuery" 
+                                 Margin="5,0"
+                                 x:Name="TbYoutubeQuery"
+                                 PreviewKeyDown="TbYoutubeQuery_PreviewKeyDown"
                                  VerticalAlignment="Center"/>
                         <Button Grid.Row="0"
                                 Grid.Column="2"
                                 Content="Search"
                                 Click="Button_Click_1" 
-                                VerticalAlignment="Center"/>
+                                VerticalAlignment="Center"
+                                Margin="5,0"/>
                         <ListBox Grid.Row="1"
                                  VerticalContentAlignment="Stretch"
                                  Grid.ColumnSpan="3"

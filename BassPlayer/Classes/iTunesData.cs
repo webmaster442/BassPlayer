@@ -141,21 +141,29 @@ namespace BassPlayer.Classes
             {
                 if (!isLoaded) return null;
                 var q = from song in _xml.Descendants("key").AsParallel() where song.Value == "Playlist ID" select song.ElementsBeforeSelf("string").FirstOrDefault().Value;
-                return q.ToArray();
+                return (from item in q orderby item ascending select item).ToArray();
             }
         }
 
-        public IEnumerable<int> GetPlayListKeys(string playlistname)
+        public IEnumerable<PlayListEntry> GetPlayList(string playlistname)
         {
 
             var q = from song in _xml.Descendants("key").AsParallel() 
                     where song.Value == "Playlist ID" && song.ElementsBeforeSelf("string").FirstOrDefault().Value == playlistname 
                     select song.Parent;
-            var dict = q.FirstOrDefault();
+            var dict = q.FirstOrDefault().Descendants("array").Descendants("dict");
 
-            
+            var keys = from i in dict select i.Element("integer").ToInt(0);
 
-            return null;
+            return (from d in _db 
+                         join k in keys on d.Id equals k
+                         where d.Id == k select new PlayListEntry
+                         {
+                                Artist = d.Artist,
+                                Title = d.Name,
+                                Time = d.TotalTime / 1000,
+                                FileName = FileFromUrl(d.Location)
+                         }).ToArray();
         }
 
         public IEnumerable<PlayListEntry> Filter(string filterstring)
@@ -208,6 +216,8 @@ namespace BassPlayer.Classes
                                 Time = i.TotalTime / 1000,
                                 FileName = FileFromUrl(i.Location)
                             }).ToArray();
+                case "Playlists":
+                    return GetPlayList(parts[1]);
                 default:
                     return null;
             }

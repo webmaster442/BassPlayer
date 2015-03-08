@@ -102,6 +102,7 @@ namespace BassPlayer.Controls
                 _timer.IsEnabled = (bool)!BtnPlayPause.IsChecked;
                 CoverArt.Source = App.Engine.ImageTag;
                 CoverArtLarge.Source = App.Engine.ImageTag;
+                BtnPlayPause.IsChecked = false;
                 Chapterize();
             }
             catch (Exception ex) { Helpers.ErrorDialog(ex, "File Load error"); }
@@ -119,6 +120,7 @@ namespace BassPlayer.Controls
                 _timer.IsEnabled = (bool)!BtnPlayPause.IsChecked;
                 CoverArt.Source = App.Engine.ImageTag;
                 CoverArtLarge.Source = App.Engine.ImageTag;
+                BtnPlayPause.IsChecked = false;
                 Chapterize();
             }
             catch (Exception ex) { Helpers.ErrorDialog(ex, "File Load error"); }
@@ -196,9 +198,9 @@ namespace BassPlayer.Controls
         {
             if ((bool)BtnPlayPause.IsChecked)
             {
-                return new BitmapImage(new Uri("pack://application:,,,/BassPlayer;component/Images/pause-100.png"));
+                return new BitmapImage(new Uri("pack://application:,,,/BassPlayer;component/Images/play-100.png"));
             }
-            return new BitmapImage(new Uri("pack://application:,,,/BassPlayer;component/Images/play-100.png"));
+            return new BitmapImage(new Uri("pack://application:,,,/BassPlayer;component/Images/pause-100.png"));
         }
 
         private void BtnPlayPause_Click(object sender, RoutedEventArgs e)
@@ -207,11 +209,13 @@ namespace BassPlayer.Controls
             {
                 App.Engine.Pause();
                 App.PauseTaskbar();
+                BtnPlayPause.ToolTip = "Play";
             }
             else
             {
                 App.Engine.Play();
                 App.PlayTaskbar();
+                BtnPlayPause.ToolTip = "Pause";
             }
             ImgPlayPause.Source = GetPlayPauseIcon();
             _timer.IsEnabled = (bool)!BtnPlayPause.IsChecked;

@@ -112,9 +112,9 @@
                 x:Name="BtnPlayPause"
                 Height="50"
                 Width="50"
-                ToolTip="Play"
+                ToolTip="Pause"
                 Click="BtnPlayPause_Click">
-            <Image Source="../Images/play-100.png"           
+            <Image Source="../Images/pause-100.png"           
                    Width="40"
                    Height="40"
                    x:Name="ImgPlayPause"/>

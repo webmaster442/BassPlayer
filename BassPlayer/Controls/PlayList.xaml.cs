@@ -64,6 +64,7 @@ namespace BassPlayer.Controls
             ListItunesData(SpCompilations, _itunes.Compilations, "Compilations");
             ListItunesData(SpGenres, _itunes.Genres, "Genres");
             ListItunesData(SpPodcasts, _itunes.Podcasts, "Podcasts");
+            ListItunesData(SpPlaylists, _itunes.Playlists, "Playlists");
             TabTunes.IsEnabled = _itunes.isLoaded;
         }
 
@@ -942,6 +943,15 @@ namespace BassPlayer.Controls
                 Helpers.ErrorDialog(ex, "Youtube Query failed");
             }
             YtProgress.Visibility = System.Windows.Visibility.Collapsed;
+        }
+
+        private void TbYoutubeQuery_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                Button_Click_1(null, null);
+                e.Handled = true;
+            }
         }
     }
 }
