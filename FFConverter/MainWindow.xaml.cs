@@ -28,6 +28,7 @@ namespace FFConverter
             _presets = new PresetManager();
             LbPresets.ItemsSource = _presets;
             LbPresets.SelectedIndex = 0;
+            _currentpreset = _presets[0];
         }
 
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -35,6 +36,7 @@ namespace FFConverter
             if (TcPages.SelectedIndex == 1)
             {
                 _currentpreset = _presets[LbPresets.SelectedIndex];
+                TbExtension.Text = _currentpreset.Extension;
                 PresetCompiler.CompileToUi(_currentpreset, SpOptions);
             }
         }
@@ -53,6 +55,7 @@ namespace FFConverter
             System.Windows.Forms.SaveFileDialog sfd = new System.Windows.Forms.SaveFileDialog();
             sfd.Filter = "Cmd files | *.cmd";
             sfd.FilterIndex = 0;
+            _currentpreset.Extension = TbExtension.Text;
             if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 _currentpreset.CommandLine = PresetCompiler.CompileUiToString(_currentpreset, SpOptions);

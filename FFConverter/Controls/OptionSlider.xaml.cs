@@ -43,6 +43,8 @@ namespace FFConverter.Controls
                     case "text":
                         TbDescription.Text = token.Value;
                         break;
+                    case "stops":
+                        break;
                 }
             }
         }

@@ -66,12 +66,29 @@
                         <ColumnDefinition/>
                         <ColumnDefinition Width="100"/>
                     </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition/>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Ouput folder:"
+                               Grid.Row="0"
+                               Grid.Column="0"/>
                     <TextBox Grid.Column="0"
+                             Grid.Row="1"
                              x:Name="TbOutputFolder"/>
                     <Button Grid.Column="1"
+                            Grid.Row="1"
                             x:Name="BtnBrowse"
                             Content="Browse ..."
                             Click="BtnBrowse_Click"/>
+                    <TextBlock Text="Override output extension: (May cause problems!)"
+                               Grid.Row="2"
+                               Grid.Column="0"/>
+                    <TextBox Grid.Row="3"
+                             x:Name="TbExtension"
+                             Grid.ColumnSpan="2"/>
                 </Grid>
             </TabItem>
             <TabItem>

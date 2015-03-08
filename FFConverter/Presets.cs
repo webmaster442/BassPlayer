@@ -55,6 +55,13 @@ namespace FFConverter
                 CommandLine = "ffmpeg -i {input} -vn -acodec copy {output}",
                 Extension = "m4a"
             });
+            this.Add(new Preset
+            {
+                Name = "MP3 CBR",
+                Description = "Mp3 format with Constant bitra",
+                CommandLine = "ffmpeg -i {input} -acodec mp3 -b:a {slider text=\"Bitrate\"} {output}",
+                Extension = "mp3"
+            });
         }
     }
 }

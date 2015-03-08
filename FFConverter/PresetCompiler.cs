@@ -12,6 +12,22 @@ namespace FFConverter
     internal static class PresetCompiler
     {
         private const string pattern = @"\{.*\}";
+        private const string attrs = "(?<tag>[a-zA-Z]+)( (?<name>\\w+)=\"?(?<value>\\w+)\"?)*";
+
+        private static Dictionary<string, string> GetAtttrs(string[] parts)
+        {
+            Dictionary<string, string> dict = new Dictionary<string, string>();
+
+            for (int i = 1; i < parts.Length; i++ )
+            {
+                if (Regex.IsMatch(parts[i], attrs))
+                {
+                    string[] r = Regex.Split(parts[i], attrs);
+                    dict.Add(parts[0], parts[1]);
+                }
+            }
+            return dict;
+        }
 
         public static void CompileToUi(Preset p, StackPanel target)
         {
@@ -19,12 +35,19 @@ namespace FFConverter
             int matches = 0;
             string[] tags = p.CommandLine.Split(' ');
             string[] parts;
+            Dictionary<string, string> parameters;
             foreach (var t in tags)
             {
                 if (!Regex.IsMatch(t, pattern)) continue;
                 parts = t.Replace("{", "").Replace("}", "").Split(' ');
                 switch (parts[0])
                 {
+                    case "slider":
+                        parameters = GetAtttrs(parts);
+                        OptionSlider opt = new OptionSlider();
+                        opt.SetupFromTokens(parameters);
+                        target.Children.Add(opt);
+                        break;
                 }
                 matches++;
             }
