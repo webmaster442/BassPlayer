@@ -58,8 +58,8 @@ namespace FFConverter
             this.Add(new Preset
             {
                 Name = "MP3 CBR",
-                Description = "Mp3 format with Constant bitra",
-                CommandLine = "ffmpeg -i {input} -acodec mp3 -b:a {slider text=\"Bitrate\"} {output}",
+                Description = "Mp3 format with Constant bitrate",
+                CommandLine = "ffmpeg -i {input} -acodec mp3 -b:a {slider text=\"Bitrate\" stops=\"8;16;32;40;48;56;64;80;96;112;128;160;192;224;256;320\" val=\"192\"} {output}",
                 Extension = "mp3"
             });
         }

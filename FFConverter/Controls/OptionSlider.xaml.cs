@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Controls;
+using System.Linq;
 
 namespace FFConverter.Controls
 {
@@ -44,6 +45,13 @@ namespace FFConverter.Controls
                         TbDescription.Text = token.Value;
                         break;
                     case "stops":
+                        var list = (from i in token.Value.Split(';') select Convert.ToDouble(i)).ToArray();
+                        var minval = list.Min();
+                        var maxval = list.Max();
+                        if (SValue.Minimum > minval) SValue.Minimum = minval;
+                        if (SValue.Maximum < maxval) SValue.Maximum = maxval;
+                        SValue.IsSnapToTickEnabled = true;
+                        SValue.Ticks = new System.Windows.Media.DoubleCollection(list);
                         break;
                 }
             }

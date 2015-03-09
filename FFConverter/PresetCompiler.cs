@@ -11,8 +11,8 @@ namespace FFConverter
 {
     internal static class PresetCompiler
     {
-        private const string pattern = @"\{.*\}";
-        private const string attrs = "(?<tag>[a-zA-Z]+)( (?<name>\\w+)=\"?(?<value>\\w+)\"?)*";
+        private const string pattern = @"\{(.*?)\}\s";
+        private const string attrs = "\\w+\\=\".+\"";
 
         private static Dictionary<string, string> GetAtttrs(string[] parts)
         {
@@ -22,8 +22,8 @@ namespace FFConverter
             {
                 if (Regex.IsMatch(parts[i], attrs))
                 {
-                    string[] r = Regex.Split(parts[i], attrs);
-                    dict.Add(parts[0], parts[1]);
+                    string[] r = parts[i].Replace("\"", "").Split('=');
+                    dict.Add(r[0], r[1]);
                 }
             }
             return dict;
@@ -33,18 +33,19 @@ namespace FFConverter
         {
             target.Children.Clear();
             int matches = 0;
-            string[] tags = p.CommandLine.Split(' ');
+            string[] tags = Regex.Split(p.CommandLine, pattern);
             string[] parts;
             Dictionary<string, string> parameters;
             foreach (var t in tags)
             {
-                if (!Regex.IsMatch(t, pattern)) continue;
-                parts = t.Replace("{", "").Replace("}", "").Split(' ');
+                if (string.IsNullOrEmpty(t)) continue;
+                parts = t.Split(' ');
                 switch (parts[0])
                 {
                     case "slider":
                         parameters = GetAtttrs(parts);
                         OptionSlider opt = new OptionSlider();
+                        opt.InputPattern = "{" + t + "}";
                         opt.SetupFromTokens(parameters);
                         target.Children.Add(opt);
                         break;
