@@ -56,11 +56,11 @@ namespace FFConverter
                         opt.InputPattern = "{" + t + "}";
                         opt.SetupFromTokens(parameters);
                         target.Children.Add(opt);
+                        matches++;
                         break;
                 }
-                matches++;
             }
-            if (matches == 2)
+            if (matches < 1)
             {
                 TextBlock t = new TextBlock();
                 t.Text = "Current Preset has no options";
