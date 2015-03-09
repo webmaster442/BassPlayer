@@ -44,6 +44,10 @@ namespace FFConverter.Controls
                     case "text":
                         TbDescription.Text = token.Value;
                         break;
+                    case "step":
+                        SValue.TickFrequency = Convert.ToDouble(token.Value);
+                        SValue.IsSnapToTickEnabled = true;
+                        break;
                     case "stops":
                         var list = (from i in token.Value.Split(';') select Convert.ToDouble(i)).ToArray();
                         var minval = list.Min();

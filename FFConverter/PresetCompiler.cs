@@ -9,6 +9,9 @@ using FFConverter.Controls;
 
 namespace FFConverter
 {
+    /// <summary>
+    /// Preset compilation stuff
+    /// </summary>
     internal static class PresetCompiler
     {
         private const string pattern = @"\{(.*?)\}\s";
@@ -29,6 +32,11 @@ namespace FFConverter
             return dict;
         }
 
+        /// <summary>
+        /// Creates a UI from a given preset
+        /// </summary>
+        /// <param name="p">The preset</param>
+        /// <param name="target">Render target stackpanel</param>
         public static void CompileToUi(Preset p, StackPanel target)
         {
             target.Children.Clear();
@@ -60,6 +68,12 @@ namespace FFConverter
             }
         }
 
+        /// <summary>
+        /// Compiles Ui options to a command string
+        /// </summary>
+        /// <param name="p">Preset</param>
+        /// <param name="target">Source stackapanel</param>
+        /// <returns>command string</returns>
         public static string CompileUiToString(Preset p, StackPanel target)
         {
             StringBuilder sb = new StringBuilder();

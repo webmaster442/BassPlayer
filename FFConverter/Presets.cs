@@ -10,9 +10,21 @@ namespace FFConverter
     [Serializable]
     public class Preset
     {
+        /// <summary>
+        /// Preset name
+        /// </summary>
         public string Name { get; set; }
+        /// <summary>
+        /// Preset Description
+        /// </summary>
         public string Description { get; set; }
+        /// <summary>
+        /// Output Extension
+        /// </summary>
         public string Extension { get; set; }
+        /// <summary>
+        /// Preset command line
+        /// </summary>
         public string CommandLine { get; set; }
     }
 
@@ -60,6 +72,13 @@ namespace FFConverter
                 Name = "MP3 CBR",
                 Description = "Mp3 format with Constant bitrate",
                 CommandLine = "ffmpeg -i {input} -acodec mp3 -b:a {slider text=\"Bitrate\" stops=\"8;16;32;40;48;56;64;80;96;112;128;160;192;224;256;320\" val=\"192\"} {output}",
+                Extension = "mp3"
+            });
+            this.Add(new Preset
+            {
+                Name = "MP3 VBR",
+                Description = "Mp3 format with Variable bitrate",
+                CommandLine = "ffmpeg -i {input} -acodec mp3 -q:a {slider text=\"Quality\" min=\"0\" max=\"9\" val=\"7\" step=\"1\"} {output}",
                 Extension = "mp3"
             });
         }
