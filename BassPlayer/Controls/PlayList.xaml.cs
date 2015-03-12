@@ -1,5 +1,6 @@
 ﻿using BassEngine;
 using BassPlayer.Classes;
+using BassPlayer.SongSources;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -203,6 +204,7 @@ namespace BassPlayer.Controls
             if (AudioPlayerControls != null)
             {
                 var index = LbList.SelectedIndex;
+                if (index < 0) return;
                 _index = index;
                 AudioPlayerControls.Load(_playlist[index]);
                 _recent.Add(_playlist[index]);
@@ -214,6 +216,7 @@ namespace BassPlayer.Controls
             if (AudioPlayerControls != null)
             {
                 var index = LbLib.SelectedIndex;
+                if (index < 0) return;
                 _index = index;
                 AudioPlayerControls.Load(_tunes[index]);
                 _recent.Add(PlayListEntry.FromFile(_tunes[index].FileName));
@@ -225,6 +228,7 @@ namespace BassPlayer.Controls
             if (AudioPlayerControls != null)
             {
                 var index = LbFiles.SelectedIndex;
+                if (index < 0) return;
                 AudioPlayerControls.Load(_files[index]);
                 _recent.Add(PlayListEntry.FromFile(_files[index]));
             }

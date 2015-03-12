@@ -10,6 +10,7 @@ using System.Linq;
 using System.Windows.Media.Imaging;
 using System.Windows.Shell;
 using BassEngine;
+using BassPlayer.SongSources;
 
 namespace BassPlayer.Controls
 {

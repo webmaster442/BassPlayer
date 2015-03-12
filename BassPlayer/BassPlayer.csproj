@@ -99,9 +99,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\CloudDriveProvider.cs" />
-    <Compile Include="Classes\iTunesData.cs" />
+    <Compile Include="SongSources\iTunesData.cs" />
     <Compile Include="Classes\KeyboardHook.cs" />
-    <Compile Include="Classes\RecentPlays.cs" />
+    <Compile Include="SongSources\RecentPlays.cs" />
+    <Compile Include="SongSources\TrackData.cs" />
+    <Compile Include="SongSources\TrackDb.cs" />
     <Compile Include="Classes\YoutubeLoader.cs" />
     <Compile Include="Controls\AboutDialog.xaml.cs">
       <DependentUpon>AboutDialog.xaml</DependentUpon>
@@ -150,7 +152,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Classes\AudioEngine.cs" />
-    <Compile Include="Classes\PlayListEntry.cs" />
+    <Compile Include="SongSources\PlayListEntry.cs" />
     <Compile Include="Controls\AddUrlDialog.xaml.cs">
       <DependentUpon>AddUrlDialog.xaml</DependentUpon>
     </Compile>

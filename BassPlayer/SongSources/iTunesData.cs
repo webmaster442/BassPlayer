@@ -5,7 +5,7 @@ using System.Linq;
 using System.Web;
 using System.Xml.Linq;
 
-namespace BassPlayer.Classes
+namespace BassPlayer.SongSources
 {
     /// <summary>
     /// Represents tags in iTunes XML

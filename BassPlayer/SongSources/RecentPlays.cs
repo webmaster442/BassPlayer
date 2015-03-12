@@ -7,7 +7,7 @@ using System.IO;
 using System.Linq;
 using System.Xml.Serialization;
 
-namespace BassPlayer.Classes
+namespace BassPlayer.SongSources
 {
     [Serializable]
     public class RecentItem : INotifyPropertyChanged

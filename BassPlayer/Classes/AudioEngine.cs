@@ -1,5 +1,6 @@
 ﻿using BassEngine;
 using BassPlayer.Properties;
+using BassPlayer.SongSources;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -276,30 +277,29 @@ namespace BassPlayer.Classes
         {
             get
             {
-                TAG_INFO tags = new TAG_INFO();
-                BassTags.BASS_TAG_GetFromFile(_source, tags);
-                if (tags.PictureCount > 0)
+                try
                 {
-                    var img = tags.PictureGetImage(0);
-                    return Bitmap2BitmapImage((Bitmap)img);
+                    TagLib.File tags = TagLib.File.Create(_file);
+                    if (tags.Tag.Pictures.Length > 0)
+                    {
+                        var picture = tags.Tag.Pictures[0].Data;
+                        MemoryStream ms = new MemoryStream(picture.Data);
+                        BitmapImage ret = new BitmapImage();
+                        ret.BeginInit();
+                        ret.StreamSource = ms;
+                        ret.DecodePixelWidth = 200;
+                        ret.CacheOption = BitmapCacheOption.OnLoad;
+                        ret.EndInit();
+                        ms.Close();
+                        return ret;
+                    }
+                    else return new BitmapImage(new Uri("/BassPlayer;component/Images/audio_file-100.png", UriKind.Relative));
                 }
-                else return new BitmapImage(new Uri("/BassPlayer;component/Images/audio_file-100.png", UriKind.Relative));
+                catch (Exception)
+                {
+                    return new BitmapImage(new Uri("/BassPlayer;component/Images/audio_file-100.png", UriKind.Relative));
+                }
             }
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1060:MovePInvokesToNativeMethodsClass"), DllImport("gdi32.dll")]
-        private static extern bool DeleteObject(IntPtr hObject);
-
-        private BitmapSource Bitmap2BitmapImage(Bitmap bitmap)
-        {
-            IntPtr hBitmap = bitmap.GetHbitmap();
-            BitmapSource retval;
-            try
-            {
-                retval = Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-            }
-            finally { DeleteObject(hBitmap); }
-            return retval;
         }
 
         /// <summary>
