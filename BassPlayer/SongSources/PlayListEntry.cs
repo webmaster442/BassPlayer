@@ -104,15 +104,6 @@ namespace BassPlayer.SongSources
                 entry.Time = file.Properties.Duration.TotalSeconds;
             }
             catch (Exception) { }
-            /*try
-            {
-                var tags = BassTags.BASS_TAG_GetFromFile(filename);
-                entry.Artist = tags.artist;
-                entry.Title = tags.title;
-                entry.Time = tags.duration;
-            }
-            catch (Exception) { }
-            */
             return entry;
         }
 

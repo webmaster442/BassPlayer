@@ -33,12 +33,12 @@
                Grid.Column="4"
                Grid.RowSpan="2"
                Source="../Images/audio_file-100.png"
-               StretchDirection="DownOnly">
+               Stretch="Uniform">
             <Image.ToolTip>
                 <Image Width="120"
                        Height="120"
                        x:Name="CoverArtLarge"
-                       StretchDirection="DownOnly"
+                       Stretch="Uniform"
                        Source="../Images/audio_file-100.png"/>
             </Image.ToolTip>
         </Image>

@@ -120,6 +120,7 @@ namespace BassPlayer.SongSources
                     this.Clear();
                     XmlSerializer xs = new XmlSerializer(typeof(RecentItem[]));
                     RecentItem[] loaded = (RecentItem[])xs.Deserialize(stream);
+                    loaded = (from i in loaded.AsParallel() orderby i.LastPlayed descending, i.PlayCount descending select i).ToArray();
                     this.AddRange(loaded);
                 }
             }
@@ -180,16 +181,7 @@ namespace BassPlayer.SongSources
                 return;
             }
 
-            var item = new RecentItem
-            {
-                FilePath = ple.FileName,
-                Title = ple.ArtistTitle,
-                Time = ple.Time,
-                LastPlayed = DateTime.Now,
-                PlayCount = 1
-            };
-
-            base.Add(item);
+            base.Add(ple);
         }
 
         /// <summary>

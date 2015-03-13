@@ -102,17 +102,17 @@ namespace BassPlayer.SongSources
             {
                 case QueryType.Album:
                     return (from track in this.AsParallel()
-                            where track.Album == parameter
+                            where track.Album == (string)parameter
                             orderby track.Disc, track.Track, track.Artist, track.Title
                             select track).ToArray();
                 case QueryType.Artist:
                     return (from track in this.AsParallel()
-                            where track.Artist == parameter
+                            where track.Artist == (string)parameter
                             orderby track.Title
                             select track).ToArray();
                 case QueryType.Genre:
                     return (from track in this.AsParallel()
-                            where track.Genre == parameter
+                            where track.Genre == (string)parameter
                             orderby track.Artist, track.Title
                             select track).ToArray();
                 case QueryType.Year:

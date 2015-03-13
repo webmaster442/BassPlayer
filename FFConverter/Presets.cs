@@ -69,16 +69,23 @@ namespace FFConverter
             });
             this.Add(new Preset
             {
+                Name = "FLAC",
+                Description = "Convert Audio to Free Losless Audio Codec (FLAC) format",
+                CommandLine = "ffmpeg -i {input} -vn -acodec flac -aq {slider text=\"compression:\" min=\"1\" max=\"8\" step=\"1\" val=\"3\"} {output}", 
+                Extension = "flac"
+            });
+            this.Add(new Preset
+            {
                 Name = "MP3 CBR",
                 Description = "Mp3 format with Constant bitrate",
-                CommandLine = "ffmpeg -i {input} -acodec mp3 -b:a {slider text=\"Bitrate\" stops=\"8;16;32;40;48;56;64;80;96;112;128;160;192;224;256;320\" val=\"192\"} {output}",
+                CommandLine = "ffmpeg -i {input} -acodec mp3 -b:a {slider text=\"Bitrate\" min=\"8\" stops=\"8;16;32;40;48;56;64;80;96;112;128;160;192;224;256;320\" val=\"192\"} {output}",
                 Extension = "mp3"
             });
             this.Add(new Preset
             {
                 Name = "MP3 VBR",
                 Description = "Mp3 format with Variable bitrate",
-                CommandLine = "ffmpeg -i {input} -acodec mp3 -q:a {slider text=\"Quality\" min=\"0\" max=\"9\" val=\"7\" step=\"1\"} {output}",
+                CommandLine = "ffmpeg -i {input} -acodec mp3 -q:a {slider text=\"Quality\" min=\"1\" max=\"9\" val=\"7\" step=\"1\"} {output}",
                 Extension = "mp3"
             });
         }
