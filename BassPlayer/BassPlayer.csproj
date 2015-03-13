@@ -99,6 +99,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\CloudDriveProvider.cs" />
+    <Compile Include="Controls\MediaLib.xaml.cs">
+      <DependentUpon>MediaLib.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SongSources\iTunesData.cs" />
     <Compile Include="Classes\KeyboardHook.cs" />
     <Compile Include="SongSources\RecentPlays.cs" />
@@ -124,6 +127,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\AddUrlDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MediaLib.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

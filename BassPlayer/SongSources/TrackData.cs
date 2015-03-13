@@ -10,8 +10,8 @@ namespace BassPlayer.SongSources
     [Serializable]
     class TrackData : INotifyPropertyChanged
     {
-        private string _title, _artist, _album, _file;
-        private uint _year, _playcount, _disc;
+        private string _title, _artist, _album, _file, _genre;
+        private uint _year, _playcount, _disc, _track;
         private double _time;
 
         public string File
@@ -31,6 +31,16 @@ namespace BassPlayer.SongSources
             {
                 _title = value;
                 UpdateProperty("Title");
+            }
+        }
+
+        public string Genre
+        {
+            get { return _genre; }
+            set
+            {
+                _genre = value;
+                UpdateProperty("Genre");
             }
         }
 
@@ -94,6 +104,16 @@ namespace BassPlayer.SongSources
             }
         }
 
+        public uint Track
+        {
+            get { return _track; }
+            set
+            {
+                _track = value;
+                UpdateProperty("Track");
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         public void UpdateProperty(string Name)
@@ -113,9 +133,11 @@ namespace BassPlayer.SongSources
                     Artist = file.Tag.FirstPerformer,
                     Album = file.Tag.Album,
                     Year = file.Tag.Year,
+                    Genre = file.Tag.FirstGenre,
                     PlayCount = 0,
                     Time = file.Properties.Duration.TotalSeconds,
-                    Disc = file.Tag.Disc
+                    Disc = file.Tag.Disc,
+                    Track = file.Tag.Track
                 };
                 return ret;
             }
