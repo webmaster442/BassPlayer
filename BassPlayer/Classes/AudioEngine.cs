@@ -1,12 +1,10 @@
 ﻿using BassEngine;
 using BassPlayer.Properties;
+using BassPlayer.SongSources;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Windows;
-using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Un4seen.Bass;
@@ -29,6 +27,7 @@ namespace BassPlayer.Classes
         private FileStream _writer;
         private byte[] _data;
         private IntPtr _proxyptr;
+        private float _lastvol;
 
         /// <summary>
         /// Ctor
@@ -50,6 +49,8 @@ namespace BassPlayer.Classes
             Bass.BASS_PluginLoad(enginedir + "\\basswv.dll");
             _data = new byte[4096];
             _streamrip = new DOWNLOADPROC(DownloadStream);
+            _lastvol = MasterVolume;
+            Bass.BASS_SetConfig(BASSConfig.BASS_CONFIG_CURVE_VOL, false);
         }
 
         protected virtual void Dispose(bool disposing)
@@ -109,6 +110,7 @@ namespace BassPlayer.Classes
                         return;
                     }
                     Bass.BASS_Start();
+                    _lastvol = MasterVolume;
                 }
             }
         }
@@ -168,6 +170,11 @@ namespace BassPlayer.Classes
             SetPlayListEntry(entry);
         }
 
+
+        /// <summary>
+        /// Loads a PlayListEntry for playback
+        /// </summary>
+        /// <param name="entry">an instance of PlayListEntry</param>
         public void SetPlayListEntry(PlayListEntry entry)
         {
             _file = entry.FileName;
@@ -217,6 +224,7 @@ namespace BassPlayer.Classes
                 Error("Mixer chanel adding failed");
                 return;
             }
+            Bass.BASS_ChannelSetAttribute(_mixer, BASSAttribute.BASS_ATTRIB_VOL, _lastvol);
 
             if (Length != entry.Time) entry.Time = Length;
         }
@@ -272,34 +280,36 @@ namespace BassPlayer.Classes
             }
         }
 
+        /// <summary>
+        /// Gets the current file's cover image
+        /// </summary>
         public ImageSource ImageTag
         {
             get
             {
-                TAG_INFO tags = new TAG_INFO();
-                BassTags.BASS_TAG_GetFromFile(_source, tags);
-                if (tags.PictureCount > 0)
+                try
                 {
-                    var img = tags.PictureGetImage(0);
-                    return Bitmap2BitmapImage((Bitmap)img);
+                    TagLib.File tags = TagLib.File.Create(_file);
+                    if (tags.Tag.Pictures.Length > 0)
+                    {
+                        var picture = tags.Tag.Pictures[0].Data;
+                        MemoryStream ms = new MemoryStream(picture.Data);
+                        BitmapImage ret = new BitmapImage();
+                        ret.BeginInit();
+                        ret.StreamSource = ms;
+                        ret.DecodePixelWidth = 200;
+                        ret.CacheOption = BitmapCacheOption.OnLoad;
+                        ret.EndInit();
+                        ms.Close();
+                        return ret;
+                    }
+                    else return new BitmapImage(new Uri("/BassPlayer;component/Images/audio_file-100.png", UriKind.Relative));
                 }
-                else return new BitmapImage(new Uri("/BassPlayer;component/Images/audio_file-100.png", UriKind.Relative));
+                catch (Exception)
+                {
+                    return new BitmapImage(new Uri("/BassPlayer;component/Images/audio_file-100.png", UriKind.Relative));
+                }
             }
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1060:MovePInvokesToNativeMethodsClass"), DllImport("gdi32.dll")]
-        private static extern bool DeleteObject(IntPtr hObject);
-
-        private BitmapSource Bitmap2BitmapImage(Bitmap bitmap)
-        {
-            IntPtr hBitmap = bitmap.GetHbitmap();
-            BitmapSource retval;
-            try
-            {
-                retval = Imaging.CreateBitmapSourceFromHBitmap(hBitmap, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-            }
-            finally { DeleteObject(hBitmap); }
-            return retval;
         }
 
         /// <summary>
@@ -343,7 +353,11 @@ namespace BassPlayer.Classes
                 Bass.BASS_ChannelGetAttribute(_mixer, BASSAttribute.BASS_ATTRIB_VOL, ref temp);
                 return temp;
             }
-            set { Bass.BASS_ChannelSetAttribute(_mixer, BASSAttribute.BASS_ATTRIB_VOL, value); }
+            set 
+            { 
+                Bass.BASS_ChannelSetAttribute(_mixer, BASSAttribute.BASS_ATTRIB_VOL, value);
+                _lastvol = value;
+            }
         }
 
         /// <summary>

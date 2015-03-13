@@ -23,11 +23,13 @@ namespace BassDeviceCopy
         {
             InitializeComponent();
             _files = Environment.GetCommandLineArgs();
+            #if RELEASE
             if (_files.Length < 2)
             {
                 MessageBox.Show("No files selected.\r\nThis Program can be used from BassPlayer.\r\nApplicaton Will now Exit", "Warning", MessageBoxButton.OK, MessageBoxImage.Warning);
                 this.Close();
             }
+            #endif
             _buffer = new byte[131072]; //128KiB
             _error = false;
             Title = string.Format("Copy To Device - {0} files", _files.Length - 1);

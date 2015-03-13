@@ -1,7 +1,7 @@
 ﻿using BassEngine;
 using BassPlayer.Properties;
+using BassPlayer.SongSources;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -9,7 +9,6 @@ using System.ServiceModel.Syndication;
 using System.Threading.Tasks;
 using System.Web;
 using System.Windows.Media.Imaging;
-using System.Windows.Threading;
 using System.Xml;
 using YoutubeExtractor;
 
@@ -27,6 +26,7 @@ namespace BassPlayer.Classes
     {
         private static ProxyConfig GetProxyConfig()
         {
+            if (!Settings.Default.ProxyEnabled) return null;
             ProxyConfig config = new ProxyConfig
             {
                 URL = Settings.Default.ProxyAddress,

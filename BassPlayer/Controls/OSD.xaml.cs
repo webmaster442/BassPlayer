@@ -7,6 +7,7 @@ using System.Windows.Shapes;
 using System.Windows.Threading;
 using Un4seen.Bass;
 using BassEngine;
+using BassPlayer.SongSources;
 
 namespace BassPlayer.Controls
 {

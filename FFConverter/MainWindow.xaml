@@ -1,0 +1,126 @@
+﻿<Window x:Class="FFConverter.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="FFConverter - 0 files"
+        Height="380"
+        Width="600">
+    <Grid>
+        <TabControl Grid.Row="0"
+                    TabStripPlacement="Bottom"
+                    SelectionChanged="TabControl_SelectionChanged"
+                    x:Name="TcPages">
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Icons\presets-50.png"
+                               Width="24"
+                               Height="24"/>
+                        <TextBlock Text="Presets" Margin="5,0"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <ListBox x:Name="LbPresets">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <TextBlock FontWeight="Bold"
+                                           Text="{Binding Name}"
+                                           Grid.Row="0"/>
+                                <TextBlock FontStyle="Italic"
+                                           Text="{Binding Description}"
+                                           Grid.Row="1"/>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Icons\preset-options-50.png"
+                               Width="24"
+                               Height="24"/>
+                        <TextBlock Text="Preset options" Margin="5,0"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <ScrollViewer>
+                    <StackPanel x:Name="SpOptions">
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Icons\output-folder-50.png"
+                               Width="24"
+                               Height="24"/>
+                        <TextBlock Text="Output folder" Margin="5,0"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="100"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition/>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Ouput folder:"
+                               Grid.Row="0"
+                               Grid.Column="0"/>
+                    <TextBox Grid.Column="0"
+                             Grid.Row="1"
+                             x:Name="TbOutputFolder"/>
+                    <Button Grid.Column="1"
+                            Grid.Row="1"
+                            x:Name="BtnBrowse"
+                            Content="Browse ..."
+                            Click="BtnBrowse_Click"/>
+                    <TextBlock Text="Override output extension: (May cause problems!)"
+                               Grid.Row="2"
+                               Grid.Column="0"/>
+                    <TextBox Grid.Row="3"
+                             x:Name="TbExtension"
+                             Grid.ColumnSpan="2"/>
+                </Grid>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Icons\run-50.png"
+                               Width="24"
+                               Height="24"/>
+                        <TextBlock Text="Run" Margin="5,0"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Button Grid.Row="0"
+                            x:Name="BtnSaveCmd"
+                            Content="Save as Cmd &amp; Run later..."
+                            Click="BtnSaveCmd_Click"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Center" 
+                            Height="50"
+                            Width="200"/>
+                    <Button Grid.Row="1"
+                            Content="Run Now"
+                            x:Name="BtnRun"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            Height="50"
+                            Width="200"/>
+                </Grid>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

@@ -4,6 +4,6 @@
     <StartArguments>"d:\video\Fall Silently - Ephixa Ft Veela %28Dubstyle%29.mp4"</StartArguments>
   </PropertyGroup>
   <PropertyGroup>
-    <ProjectView>ShowAllFiles</ProjectView>
+    <ProjectView>ProjectFiles</ProjectView>
   </PropertyGroup>
 </Project>

@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.IO;
 using Un4seen.Bass.AddOn.Tags;
 
-namespace BassPlayer.Classes
+namespace BassPlayer.SongSources
 {
     [Serializable]
     public class PlayListEntry : INotifyPropertyChanged
@@ -95,12 +95,13 @@ namespace BassPlayer.Classes
                 return entry;
             }
             entry.FileName = filename;
+
             try
             {
-                var tags = BassTags.BASS_TAG_GetFromFile(filename);
-                entry.Artist = tags.artist;
-                entry.Title = tags.title;
-                entry.Time = tags.duration;
+                TagLib.File file = TagLib.File.Create(filename);
+                entry.Artist = file.Tag.FirstPerformer;
+                entry.Title = file.Tag.Title;
+                entry.Time = file.Properties.Duration.TotalSeconds;
             }
             catch (Exception) { }
             return entry;

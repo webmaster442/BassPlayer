@@ -33,12 +33,12 @@
                Grid.Column="4"
                Grid.RowSpan="2"
                Source="../Images/audio_file-100.png"
-               StretchDirection="DownOnly">
+               Stretch="Uniform">
             <Image.ToolTip>
                 <Image Width="120"
                        Height="120"
                        x:Name="CoverArtLarge"
-                       StretchDirection="DownOnly"
+                       Stretch="Uniform"
                        Source="../Images/audio_file-100.png"/>
             </Image.ToolTip>
         </Image>
@@ -112,9 +112,9 @@
                 x:Name="BtnPlayPause"
                 Height="50"
                 Width="50"
-                ToolTip="Play"
+                ToolTip="Pause"
                 Click="BtnPlayPause_Click">
-            <Image Source="../Images/play-100.png"           
+            <Image Source="../Images/pause-100.png"           
                    Width="40"
                    Height="40"
                    x:Name="ImgPlayPause"/>

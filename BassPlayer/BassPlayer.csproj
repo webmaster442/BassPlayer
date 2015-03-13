@@ -39,7 +39,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>true</Prefer32Bit>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -99,9 +99,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\CloudDriveProvider.cs" />
-    <Compile Include="Classes\iTunesData.cs" />
+    <Compile Include="Controls\MediaLib.xaml.cs">
+      <DependentUpon>MediaLib.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="SongSources\iTunesData.cs" />
     <Compile Include="Classes\KeyboardHook.cs" />
-    <Compile Include="Classes\RecentPlays.cs" />
+    <Compile Include="SongSources\RecentPlays.cs" />
+    <Compile Include="SongSources\TrackData.cs" />
+    <Compile Include="SongSources\TrackDb.cs" />
     <Compile Include="Classes\YoutubeLoader.cs" />
     <Compile Include="Controls\AboutDialog.xaml.cs">
       <DependentUpon>AboutDialog.xaml</DependentUpon>
@@ -122,6 +127,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\AddUrlDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MediaLib.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -150,7 +159,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Classes\AudioEngine.cs" />
-    <Compile Include="Classes\PlayListEntry.cs" />
+    <Compile Include="SongSources\PlayListEntry.cs" />
     <Compile Include="Controls\AddUrlDialog.xaml.cs">
       <DependentUpon>AddUrlDialog.xaml</DependentUpon>
     </Compile>
