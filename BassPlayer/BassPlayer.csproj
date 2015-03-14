@@ -102,6 +102,9 @@
     <Compile Include="Controls\MediaLib.xaml.cs">
       <DependentUpon>MediaLib.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\MiniPlayer.xaml.cs">
+      <DependentUpon>MiniPlayer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SongSources\iTunesData.cs" />
     <Compile Include="Classes\KeyboardHook.cs" />
     <Compile Include="SongSources\RecentPlays.cs" />
@@ -131,6 +134,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\MediaLib.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MiniPlayer.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -284,6 +291,13 @@
       <Project>{b04cbd07-78a1-4f76-81f7-e1a5072cf8b9}</Project>
       <Name>BassEngine</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Menu\maximize-window-50.png" />
+    <Resource Include="Images\Menu\minimize-window-50.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Menu\restore-window-50.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

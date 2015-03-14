@@ -103,6 +103,7 @@ namespace BassPlayer.Controls
                 _timer.IsEnabled = (bool)!BtnPlayPause.IsChecked;
                 CoverArt.Source = App.Engine.ImageTag;
                 CoverArtLarge.Source = App.Engine.ImageTag;
+                App.MiniPlayer.SetCover(App.Engine.ImageTag);
                 BtnPlayPause.IsChecked = false;
                 Chapterize();
             }
@@ -252,9 +253,19 @@ namespace BassPlayer.Controls
                 return;
             }
 
-            OSD.SongPosition = epos;
-            OSD.SongLength = elen;
-            OSD.Tags = App.Engine.Tags;
+            if (App.MiniPlayer.Visibility == System.Windows.Visibility.Visible)
+            {
+                App.MiniPlayer.SongPosition = epos;
+                App.MiniPlayer.SongLength = elen;
+                App.MiniPlayer.Tags = App.Engine.Tags;
+            }
+            else
+            {
+                OSD.SongPosition = epos;
+                OSD.SongLength = elen;
+                OSD.Tags = App.Engine.Tags;
+            }
+
             if (App.Engine.MediaType == MediaType.Stream && elen == 0) return;
             SPosition.Value = epos;
             double progress = epos / elen;
@@ -308,6 +319,12 @@ namespace BassPlayer.Controls
         protected virtual void Dispose(bool disposing)
         {
             App.Engine.Dispose();
+        }
+
+        private void BtnMiniView_Click(object sender, RoutedEventArgs e)
+        {
+            Application.Current.MainWindow.Hide();
+            App.MiniPlayer.Visibility = System.Windows.Visibility.Visible;
         }
 
         public void Dispose()

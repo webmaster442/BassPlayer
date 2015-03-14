@@ -1,5 +1,6 @@
 ﻿using BassEngine;
 using BassPlayer.Classes;
+using BassPlayer.Controls;
 using BassPlayer.Properties;
 using System;
 using System.Collections.Generic;
@@ -52,6 +53,13 @@ namespace BassPlayer
             }
             if (IntPtr.Size == 4) this.Title += " | x86";
             else this.Title += " | x64";
+
+            App.MiniPlayer = new MiniPlayer();
+            App.MiniPlayer.NextClick += ThumbNext_Click;
+            App.MiniPlayer.PreviousClick += ThumbPrevious_Click;
+            App.MiniPlayer.PlayClick += ThumbPlayPause_Click;
+            App.MiniPlayer.StopClick += ThumbStop_Click;
+            App.MiniPlayer.MuteClick += ThumbMute_Click;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -61,6 +69,7 @@ namespace BassPlayer
             Settings.Default.Save();
             Playlist.SaveRecent();
             e.Cancel = false;
+            App.Current.Shutdown();
         }
 
         private void Window_Drop(object sender, DragEventArgs e)

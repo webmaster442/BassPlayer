@@ -38,13 +38,13 @@
         <CommandBinding Command="{x:Static controls:CustomCommands.ContextRefresh}"
                         Executed="ContextRefresh_Executed"/>
     </UserControl.CommandBindings>
-    <Expander IsExpanded="True"
-              x:Name="MainExpander"
-              Collapsed="Expander_Collapsed"
-              Expanded="Expander_Expanded">
-        <Expander.Header>
-            <Menu Grid.Row="0"
-                  VerticalAlignment="Center"
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Border Grid.Row="0">
+            <Menu VerticalAlignment="Center"
                   Background="Transparent">
                 <MenuItem Header="BassPlayer">
                     <MenuItem.Icon>
@@ -290,8 +290,9 @@
                     </MenuItem>
                 </MenuItem>
             </Menu>
-        </Expander.Header>
-        <Grid Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}">
+        </Border>
+        <Grid Grid.Row="1"
+              Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="6*"/>
                 <ColumnDefinition/>
@@ -791,5 +792,6 @@
                 </TabItem>
             </TabControl>
         </Grid>
-    </Expander>
+    </Grid>
 </UserControl>
+    

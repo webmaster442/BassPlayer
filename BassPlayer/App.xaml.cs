@@ -1,4 +1,5 @@
 ﻿using BassPlayer.Classes;
+using BassPlayer.Controls;
 using Microsoft.Shell;
 using System;
 using System.Collections.Generic;
@@ -47,6 +48,8 @@ namespace BassPlayer
         public const string Playlists = "*.pls;*.m3u;*.bpl;*.wpl";
 
         internal static AudioEngine Engine;
+
+        internal static MiniPlayer MiniPlayer;
         
         [STAThread]
         public static void Main()
@@ -59,6 +62,7 @@ namespace BassPlayer
                 var application = new App();
                 Engine = new AudioEngine();
                 application.InitializeComponent();
+                application.ShutdownMode = ShutdownMode.OnMainWindowClose;
                 application.Run();
                 // Allow single instance code to perform cleanup operations
                 SingleInstance<App>.Cleanup();

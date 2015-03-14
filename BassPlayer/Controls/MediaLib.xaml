@@ -6,6 +6,24 @@
              mc:Ignorable="d" 
              d:DesignHeight="500" d:DesignWidth="700">
     <Grid>
-        
+        <TabControl TabStripPlacement="Left">
+            <TabItem Header="Albums">
+                <ListBox>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <Image Width="200"
+                                       Height="200"
+                                       Stretch="Uniform"
+                                       Source="{Binding Conver}"/>
+                                <TextBlock TextAlignment="Center"
+                                           TextWrapping="Wrap"
+                                           Text="{Binding AlbumName}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </TabItem>
+        </TabControl>
     </Grid>
 </UserControl>

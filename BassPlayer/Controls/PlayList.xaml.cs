@@ -872,28 +872,6 @@ namespace BassPlayer.Controls
         }
         #endregion
 
-        #region Global expander handling
-        private void Expander_Collapsed(object sender, RoutedEventArgs e)
-        {
-            if (DesignerProperties.GetIsInDesignMode(this)) return;
-            if (sender == e.OriginalSource)
-            {
-                App.Current.MainWindow.Height = 155;
-                e.Handled = true;
-            }
-        }
-
-        private void Expander_Expanded(object sender, RoutedEventArgs e)
-        {
-            if (DesignerProperties.GetIsInDesignMode(this)) return;
-            if (sender == e.OriginalSource)
-            {
-                App.Current.MainWindow.Height = 480;
-                e.Handled = true;
-            }
-        }
-        #endregion
-
         #region iTunes
 
         private void ListItunesData(StackPanel target, string[] items, string linkcat)

@@ -1,4 +1,5 @@
-﻿using BassPlayer.Classes;
+﻿using BassEngine;
+using BassPlayer.SongSources;
 using System;
 using System.Windows;
 using System.Windows.Controls;
@@ -6,8 +7,6 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using System.Windows.Threading;
 using Un4seen.Bass;
-using BassEngine;
-using BassPlayer.SongSources;
 
 namespace BassPlayer.Controls
 {
