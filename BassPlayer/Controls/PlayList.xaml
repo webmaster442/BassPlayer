@@ -30,7 +30,6 @@
                         Executed="ManageDelete_Executed"/>
         <CommandBinding Command="{x:Static controls:CustomCommands.ManageClear}"
                         Executed="ManageClear_Executed"/>
-
         <CommandBinding Command="{x:Static controls:CustomCommands.ContextAddPlaylist}"
                         Executed="ContextAddPlaylist_Executed"/>
         <CommandBinding Command="{x:Static controls:CustomCommands.ContextCopyToDevice}"
@@ -39,759 +38,762 @@
                         Executed="ContextRefresh_Executed"/>
     </UserControl.CommandBindings>
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="30"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <Border Grid.Row="0">
-            <Menu VerticalAlignment="Center"
-                  Background="Transparent">
-                <MenuItem Header="BassPlayer">
+        <Menu VerticalAlignment="Top"
+              Background="Transparent">
+            <MenuItem Header="BassPlayer">
+                <MenuItem.Icon>
+                    <Image Width="16"
+                           Height="16"
+                           Source="../Images/Menu/treble_clef-50.png"/>
+                </MenuItem.Icon>
+                <MenuItem Header="Settings..."
+                          x:Name="MenBassSettings"
+                          Click="MenBassSettings_Click">
                     <MenuItem.Icon>
                         <Image Width="16"
                                Height="16"
-                               Source="../Images/Menu/treble_clef-50.png"/>
+                               Source="../Images/Menu/settings-50.png"/>
                     </MenuItem.Icon>
-                    <MenuItem Header="Settings..."
-                              x:Name="MenBassSettings"
-                              Click="MenBassSettings_Click">
-                        <MenuItem.Icon>
-                            <Image Width="16"
-                                   Height="16"
-                                   Source="../Images/Menu/settings-50.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Header="About..."
-                              x:Name="MenBassAbout"
-                              Click="MenBassAbout_Click">
-                        <MenuItem.Icon>
-                            <Image Width="16"
-                                   Height="16"
-                                   Source="../Images/Menu/about-50.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <Separator/>
-                    <MenuItem Header="Exit"
-                              x:Name="MenBassExit"
-                              Click="MenBassExit_Click">
-                        <MenuItem.Icon>
-                            <Image Width="16"
-                                   Height="16"
-                                   Source="../Images/Menu/exit-50.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
                 </MenuItem>
-                <MenuItem Header="Add"
-                          IsEnabled="{Binding ElementName=TcView, Path=SelectedIndex, ConverterParameter=0, Converter={StaticResource EnableConv}}">
+                <MenuItem Header="About..."
+                          x:Name="MenBassAbout"
+                          Click="MenBassAbout_Click">
                     <MenuItem.Icon>
                         <Image Width="16"
                                Height="16"
-                               Source="../Images/Menu/plus-50.png"/>
+                               Source="../Images/Menu/about-50.png"/>
                     </MenuItem.Icon>
-                    <MenuItem Header="Load Playlist..."
-                              x:Name="MenLoadPlaylist"
-                              Click="MenLoadPlaylist_Click">
-                        <MenuItem.Icon>
-                            <Image Width="16"
-                                   Height="16"
-                                   Source="../Images/Menu/add_list-50.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <Separator/>
-                    <MenuItem Header="Add URL..."
-                              x:Name="MenAddUrl"
-                              Click="MenAddUrl_Click">
-                        <MenuItem.Icon>
-                            <Image Width="16"
-                                   Height="16"
-                                   Source="../Images/Menu/add_link-50.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <Separator/>
-                    <MenuItem Header="Add Files..."
-                              x:Name="MenAddFiles"
-                              Click="MenAddFiles_Click">
-                        <MenuItem.Icon>
-                            <Image Width="16"
-                                   Height="16"
-                                   Source="../Images/Menu/add_file-50.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Header="Add Folder..."
-                              x:Name="MenAddFolder"
-                              Click="MenAddFolder_Click">
-                        <MenuItem.Icon>
-                            <Image Width="16"
-                                   Height="16"
-                                   Source="../Images/Menu/add_folder-50.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <Separator/>
-                    <MenuItem Header="Import CD"
-                              x:Name="MenLoadCD"
-                              Click="MenLoadCD_SubmenuOpened"
-                              SubmenuOpened="MenLoadCD_SubmenuOpened">
-                        <MenuItem.Icon>
-                            <Image Width="16"
-                                   Height="16"
-                                   Source="../Images/Menu/cd-50.png"/>
-                        </MenuItem.Icon>
-                        <MenuItem Header="No Disc"/>
-                    </MenuItem>
                 </MenuItem>
-                <MenuItem Header="Sort"
-                          IsEnabled="{Binding ElementName=TcView, Path=SelectedIndex, ConverterParameter=0, Converter={StaticResource EnableConv}}">
+                <Separator/>
+                <MenuItem Header="Exit"
+                          x:Name="MenBassExit"
+                          Click="MenBassExit_Click">
+                    <MenuItem.Icon>
+                        <Image Width="16"
+                               Height="16"
+                               Source="../Images/Menu/exit-50.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="Add"
+                      IsEnabled="{Binding ElementName=TcView, Path=SelectedIndex, ConverterParameter=0, Converter={StaticResource EnableConv}}">
+                <MenuItem.Icon>
+                    <Image Width="16"
+                           Height="16"
+                           Source="../Images/Menu/plus-50.png"/>
+                </MenuItem.Icon>
+                <MenuItem Header="Load Playlist..."
+                          x:Name="MenLoadPlaylist"
+                          Click="MenLoadPlaylist_Click">
+                    <MenuItem.Icon>
+                        <Image Width="16"
+                               Height="16"
+                               Source="../Images/Menu/add_list-50.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="Add URL..."
+                          x:Name="MenAddUrl"
+                          Click="MenAddUrl_Click">
+                    <MenuItem.Icon>
+                        <Image Width="16"
+                               Height="16"
+                               Source="../Images/Menu/add_link-50.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="Add Files..."
+                          x:Name="MenAddFiles"
+                          Click="MenAddFiles_Click">
+                    <MenuItem.Icon>
+                        <Image Width="16"
+                               Height="16"
+                               Source="../Images/Menu/add_file-50.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="Add Folder..."
+                          x:Name="MenAddFolder"
+                          Click="MenAddFolder_Click">
+                    <MenuItem.Icon>
+                        <Image Width="16"
+                               Height="16"
+                               Source="../Images/Menu/add_folder-50.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Header="Import CD"
+                          x:Name="MenLoadCD"
+                          Click="MenLoadCD_SubmenuOpened"
+                          SubmenuOpened="MenLoadCD_SubmenuOpened">
+                    <MenuItem.Icon>
+                        <Image Width="16"
+                               Height="16"
+                               Source="../Images/Menu/cd-50.png"/>
+                    </MenuItem.Icon>
+                    <MenuItem Header="No Disc"/>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="Sort"
+                      IsEnabled="{Binding ElementName=TcView, Path=SelectedIndex, ConverterParameter=0, Converter={StaticResource EnableConv}}">
+                <MenuItem.Icon>
+                    <Image Width="16"
+                           Height="16"
+                           Source="../Images/Menu/generic_sorting_2-50.png"/>
+                </MenuItem.Icon>
+                <MenuItem Command="{x:Static controls:CustomCommands.SortArtistTitle}">
+                    <MenuItem.Icon>
+                        <Image Width="16"
+                               Height="16"
+                               Source="../Images/Menu/alphabetical_sorting-50.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Command="{x:Static controls:CustomCommands.SortArtist}">
+                    <MenuItem.Icon>
+                        <Image Width="16"
+                               Height="16"
+                               Source="../Images/Menu/alphabetical_sorting-50.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Command="{x:Static controls:CustomCommands.SortTitle}">
+                    <MenuItem.Icon>
+                        <Image Width="16"
+                               Height="16"
+                               Source="../Images/Menu/alphabetical_sorting-50.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Command="{x:Static controls:CustomCommands.SortLength}">
+                    <MenuItem.Icon>
+                        <Image Width="16"
+                               Height="16"
+                               Source="../Images/Menu/alphabetical_sorting-50.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Command="{x:Static controls:CustomCommands.SortFileName}">
+                    <MenuItem.Icon>
+                        <Image Width="16"
+                               Height="16"
+                               Source="../Images/Menu/alphabetical_sorting-50.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Command="{x:Static controls:CustomCommands.SortRandom}">
+                    <MenuItem.Icon>
+                        <Image Width="16"
+                               Height="16"
+                               Source="../Images/Menu/dice-50.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Command="{x:Static controls:CustomCommands.SortReverse}">
                     <MenuItem.Icon>
                         <Image Width="16"
                                Height="16"
                                Source="../Images/Menu/generic_sorting_2-50.png"/>
                     </MenuItem.Icon>
-                    <MenuItem Command="{x:Static controls:CustomCommands.SortArtistTitle}">
-                        <MenuItem.Icon>
-                            <Image Width="16"
-                                   Height="16"
-                                   Source="../Images/Menu/alphabetical_sorting-50.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Command="{x:Static controls:CustomCommands.SortArtist}">
-                        <MenuItem.Icon>
-                            <Image Width="16"
-                                   Height="16"
-                                   Source="../Images/Menu/alphabetical_sorting-50.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Command="{x:Static controls:CustomCommands.SortTitle}">
-                        <MenuItem.Icon>
-                            <Image Width="16"
-                                   Height="16"
-                                   Source="../Images/Menu/alphabetical_sorting-50.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Command="{x:Static controls:CustomCommands.SortLength}">
-                        <MenuItem.Icon>
-                            <Image Width="16"
-                                   Height="16"
-                                   Source="../Images/Menu/alphabetical_sorting-50.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Command="{x:Static controls:CustomCommands.SortFileName}">
-                        <MenuItem.Icon>
-                            <Image Width="16"
-                                   Height="16"
-                                   Source="../Images/Menu/alphabetical_sorting-50.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <Separator/>
-                    <MenuItem Command="{x:Static controls:CustomCommands.SortRandom}">
-                        <MenuItem.Icon>
-                            <Image Width="16"
-                                   Height="16"
-                                   Source="../Images/Menu/dice-50.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Command="{x:Static controls:CustomCommands.SortReverse}">
-                        <MenuItem.Icon>
-                            <Image Width="16"
-                                   Height="16"
-                                   Source="../Images/Menu/generic_sorting_2-50.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
                 </MenuItem>
-                <MenuItem Header="Manage"
-                          IsEnabled="{Binding ElementName=TcView, Path=SelectedIndex, ConverterParameter=0, Converter={StaticResource EnableConv}}">
+            </MenuItem>
+            <MenuItem Header="Manage"
+                      IsEnabled="{Binding ElementName=TcView, Path=SelectedIndex, ConverterParameter=0, Converter={StaticResource EnableConv}}">
+                <MenuItem.Icon>
+                    <Image Width="16"
+                           Height="16"
+                           Source="../Images/Menu/to_do-50.png"/>
+                </MenuItem.Icon>
+                <MenuItem Header="Save list..."
+                          x:Name="MenManageSave"
+                          Click="MenManageSave_Click">
                     <MenuItem.Icon>
                         <Image Width="16"
                                Height="16"
-                               Source="../Images/Menu/to_do-50.png"/>
+                               Source="../Images/Menu/save-50.png"/>
                     </MenuItem.Icon>
-                    <MenuItem Header="Save list..."
-                              x:Name="MenManageSave"
-                              Click="MenManageSave_Click">
-                        <MenuItem.Icon>
-                            <Image Width="16"
-                                   Height="16"
-                                   Source="../Images/Menu/save-50.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <Separator/>
-                    <MenuItem Command="{x:Static controls:CustomCommands.ManageClear}">
-                        <MenuItem.Icon>
-                            <Image Width="16"
-                                   Height="16"
-                                   Source="../Images/Menu/delete-50.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Command="{x:Static controls:CustomCommands.ManageDelete}">
-                        <MenuItem.Icon>
-                            <Image Width="16"
-                                   Height="16"
-                                   Source="../Images/Menu/delete_sign-50.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
                 </MenuItem>
-                <MenuItem Header="Recent"
-                          IsEnabled="{Binding ElementName=TcView, Path=SelectedIndex, ConverterParameter=1, Converter={StaticResource EnableConv}}"
-                          x:Name="MenRecent">
+                <Separator/>
+                <MenuItem Command="{x:Static controls:CustomCommands.ManageClear}">
                     <MenuItem.Icon>
                         <Image Width="16"
                                Height="16"
-                               Source="../Images/Menu/note_music-50.png"/>
+                               Source="../Images/Menu/delete-50.png"/>
                     </MenuItem.Icon>
-                    <MenuItem Command="{x:Static controls:CustomCommands.SortArtistTitle}">
-                        <MenuItem.Icon>
-                            <Image Width="16"
-                                   Height="16"
-                                   Source="../Images/Menu/alphabetical_sorting-50.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Command="{x:Static controls:CustomCommands.SortDate}">
-                        <MenuItem.Icon>
-                            <Image Width="16"
-                                   Height="16"
-                                   Source="../Images/Menu/alphabetical_sorting-50.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Command="{x:Static controls:CustomCommands.SortFileName}">
-                        <MenuItem.Icon>
-                            <Image Width="16"
-                                   Height="16"
-                                   Source="../Images/Menu/alphabetical_sorting-50.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Command="{x:Static controls:CustomCommands.SortLength}">
-                        <MenuItem.Icon>
-                            <Image Width="16"
-                                   Height="16"
-                                   Source="../Images/Menu/alphabetical_sorting-50.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <Separator/>
-                    <MenuItem Command="{x:Static controls:CustomCommands.SortRandom}">
-                        <MenuItem.Icon>
-                            <Image Width="16"
-                                   Height="16"
-                                   Source="../Images/Menu/dice-50.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <MenuItem Command="{x:Static controls:CustomCommands.SortReverse}">
-                        <MenuItem.Icon>
-                            <Image Width="16"
-                                   Height="16"
-                                   Source="../Images/Menu/generic_sorting_2-50.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
-                    <Separator/>
-                    <MenuItem Command="{x:Static controls:CustomCommands.ManageClear}">
-                        <MenuItem.Icon>
-                            <Image Width="16"
-                                   Height="16"
-                                   Source="../Images/Menu/delete-50.png"/>
-                        </MenuItem.Icon>
-                    </MenuItem>
                 </MenuItem>
-            </Menu>
-        </Border>
-        <Grid Grid.Row="1"
-              Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="6*"/>
-                <ColumnDefinition/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <StackPanel x:Name="Processing"
-                        Visibility="Collapsed"
-                        Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}"
-                        Panel.ZIndex="99" Grid.ColumnSpan="2">
-                <ProgressBar Height="30"
-                             IsIndeterminate="True"
-                             Margin="30,160,30,10"/>
-                <TextBlock Text="Processing ..."
-                           TextAlignment="Center"
-                           FontSize="22"/>
-            </StackPanel>
-            <TabControl
-                        TabStripPlacement="Left"
-                        x:Name="TcView"
-                        Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}" Grid.ColumnSpan="2">
-                <TabItem Background="Transparent">
-                    <TabItem.Header>
-                        <StackPanel>
-                            <Image Source="../Images/Menu/ingredients_list-50.png"
-                                   Width="32"
-                                   Height="32"/>
-                            <TextBlock Text="Playlist"
-                                       TextAlignment="Center"/>
-                        </StackPanel>
-                    </TabItem.Header>
-                    <ListBox x:Name="LbList"
-                             Style="{StaticResource Playlist}"
-                             MouseDoubleClick="LbList_MouseDoubleClick" >
-                        <ListBox.ContextMenu>
-                            <ContextMenu IsEnabled="{Binding ElementName=TcView, Path=SelectedIndex, ConverterParameter=0, Converter={StaticResource EnableConv}}">
-                                <MenuItem Command="{x:Static controls:CustomCommands.ContextCopyToDevice}"/>
-                                <Separator/>
-                                <MenuItem Header="Sort">
-                                    <MenuItem.Icon>
-                                        <Image Width="16"
-                                               Height="16"
-                                               Source="../Images/Menu/generic_sorting_2-50.png"/>
-                                    </MenuItem.Icon>
-                                    <MenuItem Command="{x:Static controls:CustomCommands.SortArtistTitle}">
-                                        <MenuItem.Icon>
-                                            <Image Width="16"
-                                                   Height="16"
-                                                   Source="../Images/Menu/alphabetical_sorting-50.png"/>
-                                        </MenuItem.Icon>
-                                    </MenuItem>
-                                    <MenuItem Command="{x:Static controls:CustomCommands.SortArtist}">
-                                        <MenuItem.Icon>
-                                            <Image Width="16"
-                                                   Height="16"
-                                                   Source="../Images/Menu/alphabetical_sorting-50.png"/>
-                                        </MenuItem.Icon>
-                                    </MenuItem>
-                                    <MenuItem Command="{x:Static controls:CustomCommands.SortTitle}">
-                                        <MenuItem.Icon>
-                                            <Image Width="16"
-                                                   Height="16"
-                                                   Source="../Images/Menu/alphabetical_sorting-50.png"/>
-                                        </MenuItem.Icon>
-                                    </MenuItem>
-                                    <MenuItem Command="{x:Static controls:CustomCommands.SortLength}">
-                                        <MenuItem.Icon>
-                                            <Image Width="16"
-                                                   Height="16"
-                                                   Source="../Images/Menu/alphabetical_sorting-50.png"/>
-                                        </MenuItem.Icon>
-                                    </MenuItem>
-                                    <MenuItem Command="{x:Static controls:CustomCommands.SortFileName}">
-                                        <MenuItem.Icon>
-                                            <Image Width="16"
-                                                   Height="16"
-                                                   Source="../Images/Menu/alphabetical_sorting-50.png"/>
-                                        </MenuItem.Icon>
-                                    </MenuItem>
-                                    <Separator/>
-                                    <MenuItem Command="{x:Static controls:CustomCommands.SortRandom}">
-                                        <MenuItem.Icon>
-                                            <Image Width="16"
-                                                   Height="16"
-                                                   Source="../Images/Menu/dice-50.png"/>
-                                        </MenuItem.Icon>
-                                    </MenuItem>
-                                    <MenuItem Command="{x:Static controls:CustomCommands.SortReverse}">
-                                        <MenuItem.Icon>
-                                            <Image Width="16"
-                                                   Height="16"
-                                                   Source="../Images/Menu/generic_sorting_2-50.png"/>
-                                        </MenuItem.Icon>
-                                    </MenuItem>
-                                </MenuItem>
-                                <MenuItem Header="Manage">
-                                    <MenuItem.Icon>
-                                        <Image Width="16"
-                                               Height="16"
-                                               Source="../Images/Menu/to_do-50.png"/>
-                                    </MenuItem.Icon>
-                                    <MenuItem Command="{x:Static controls:CustomCommands.ManageClear}">
-                                        <MenuItem.Icon>
-                                            <Image Width="16"
-                                                   Height="16"
-                                                   Source="../Images/Menu/delete-50.png"/>
-                                        </MenuItem.Icon>
-                                    </MenuItem>
-                                    <MenuItem Command="{x:Static controls:CustomCommands.ManageDelete}">
-                                        <MenuItem.Icon>
-                                            <Image Width="16"
-                                                   Height="16"
-                                                   Source="../Images/Menu/delete_sign-50.png"/>
-                                        </MenuItem.Icon>
-                                    </MenuItem>
-                                </MenuItem>
-                            </ContextMenu>
-                        </ListBox.ContextMenu>
-                    </ListBox>
-                </TabItem>
-                <TabItem x:Name="TabRecent">
-                    <TabItem.Header>
-                        <StackPanel>
-                            <Image Source="../Images/Menu/note_music-50.png"
-                                   Width="32"
-                                   Height="32"/>
-                            <TextBlock Text="Recent"
-                                       TextAlignment="Center"/>
-                        </StackPanel>
-                    </TabItem.Header>
-                    <ListBox x:Name="LbRecent"
-                             HorizontalContentAlignment="Stretch"
-                             Background="Transparent"
-                             MouseDoubleClick="LbRecent_MouseDoubleClick">
-                        <ListBox.ItemTemplate>
-                            <DataTemplate>
-                                <Grid ToolTip="{Binding LastPlayed, Converter={StaticResource LastPlayConv}}">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="30"/>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition Width="60"/>
-                                        <ColumnDefinition Width="30"/>
-                                    </Grid.ColumnDefinitions>
-                                    <Image Width="25"
-                                               Height="25"
-                                               Grid.Column="0"
-                                               Source="../Images/audio_file-100.png"/>
-                                    <TextBlock Grid.Column="1"
-                                               Margin="2"
-                                               Text="{Binding ArtistTitle, Converter={StaticResource TextShort}}"/>
-                                    <TextBlock Grid.Column="2"
-                                               Margin="2"
-                                               Text="{Binding Time, Converter={StaticResource TimeConv}}"/>
-                                    <TextBlock Grid.Column="3"
-                                               Margin="2"
-                                               Text="{Binding PlayCount}"/>
-                                </Grid>
-                            </DataTemplate>
-                        </ListBox.ItemTemplate>
-                        <ListBox.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Command="{x:Static controls:CustomCommands.ContextAddPlaylist}"/>
-                                <Separator/>
-                                <MenuItem Command="{x:Static controls:CustomCommands.ContextCopyToDevice}"/>
-                            </ContextMenu>
-                        </ListBox.ContextMenu>
-                    </ListBox>
-                </TabItem>
-                <TabItem>
-                    <TabItem.Header>
-                        <StackPanel>
-                            <Image Source="../Images/Menu/stack-50.png"
-                                   Width="32"
-                                   Height="32"/>
-                            <TextBlock Text="Files"
-                                       TextAlignment="Center"/>
-                        </StackPanel>
-                    </TabItem.Header>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="25"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="220"/>
-                            <ColumnDefinition Width="3"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <StackPanel Grid.Column="0"
-                                    Grid.Row="0"
-                                    Grid.ColumnSpan="3"
-                                    Orientation="Horizontal">
-                            <TextBlock Text="Drives:"
-                                       Margin="5,0"
-                                       VerticalAlignment="Center"/>
+                <MenuItem Command="{x:Static controls:CustomCommands.ManageDelete}">
+                    <MenuItem.Icon>
+                        <Image Width="16"
+                               Height="16"
+                               Source="../Images/Menu/delete_sign-50.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="Recent"
+                      IsEnabled="{Binding ElementName=TcView, Path=SelectedIndex, ConverterParameter=1, Converter={StaticResource EnableConv}}"
+                      x:Name="MenRecent">
+                <MenuItem.Icon>
+                    <Image Width="16"
+                           Height="16"
+                           Source="../Images/Menu/note_music-50.png"/>
+                </MenuItem.Icon>
+                <MenuItem Command="{x:Static controls:CustomCommands.SortArtistTitle}">
+                    <MenuItem.Icon>
+                        <Image Width="16"
+                               Height="16"
+                               Source="../Images/Menu/alphabetical_sorting-50.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Command="{x:Static controls:CustomCommands.SortDate}">
+                    <MenuItem.Icon>
+                        <Image Width="16"
+                               Height="16"
+                               Source="../Images/Menu/alphabetical_sorting-50.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Command="{x:Static controls:CustomCommands.SortFileName}">
+                    <MenuItem.Icon>
+                        <Image Width="16"
+                               Height="16"
+                               Source="../Images/Menu/alphabetical_sorting-50.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Command="{x:Static controls:CustomCommands.SortLength}">
+                    <MenuItem.Icon>
+                        <Image Width="16"
+                               Height="16"
+                               Source="../Images/Menu/alphabetical_sorting-50.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Command="{x:Static controls:CustomCommands.SortRandom}">
+                    <MenuItem.Icon>
+                        <Image Width="16"
+                               Height="16"
+                               Source="../Images/Menu/dice-50.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Command="{x:Static controls:CustomCommands.SortReverse}">
+                    <MenuItem.Icon>
+                        <Image Width="16"
+                               Height="16"
+                               Source="../Images/Menu/generic_sorting_2-50.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+                <Separator/>
+                <MenuItem Command="{x:Static controls:CustomCommands.ManageClear}">
+                    <MenuItem.Icon>
+                        <Image Width="16"
+                               Height="16"
+                               Source="../Images/Menu/delete-50.png"/>
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="Media Lib">
+                <MenuItem Command="{x:Static controls:CustomCommands.MediaTest}"/>
+            </MenuItem>
+        </Menu>
+        <TabControl Style="{DynamicResource TabRight}">
+            <TabItem Header="Sources">
+                <Grid Grid.Row="1"
+                      Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="6*"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <StackPanel x:Name="Processing"
+                                Visibility="Collapsed"
+                                Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}"
+                                Panel.ZIndex="99"
+                                Grid.ColumnSpan="2">
+                        <ProgressBar Height="30"
+                                     IsIndeterminate="True"
+                                     Margin="30,160,30,10"/>
+                        <TextBlock Text="Processing ..."
+                                   TextAlignment="Center"
+                                   FontSize="22"/>
+                    </StackPanel>
+                    <TabControl TabStripPlacement="Left"
+                                x:Name="TcView"
+                                Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}" Grid.ColumnSpan="2">
+                        <TabItem Background="Transparent">
+                            <TabItem.Header>
+                                <StackPanel>
+                                    <Image Source="../Images/Menu/ingredients_list-50.png"
+                                           Width="32"
+                                           Height="32"/>
+                                    <TextBlock Text="Playlist"
+                                               TextAlignment="Center"/>
+                                </StackPanel>
+                            </TabItem.Header>
+                            <ListBox x:Name="LbList"
+                                     Style="{StaticResource Playlist}"
+                                     MouseDoubleClick="LbList_MouseDoubleClick" Margin="289,394,-289,-394" >
+                                <ListBox.ContextMenu>
+                                    <ContextMenu IsEnabled="{Binding ElementName=TcView, Path=SelectedIndex, ConverterParameter=0, Converter={StaticResource EnableConv}}">
+                                        <MenuItem Command="{x:Static controls:CustomCommands.ContextCopyToDevice}"/>
+                                        <Separator/>
+                                        <MenuItem Header="Sort">
+                                            <MenuItem.Icon>
+                                                <Image Width="16"
+                                                       Height="16"
+                                                       Source="../Images/Menu/generic_sorting_2-50.png"/>
+                                            </MenuItem.Icon>
+                                            <MenuItem Command="{x:Static controls:CustomCommands.SortArtistTitle}">
+                                                <MenuItem.Icon>
+                                                    <Image Width="16"
+                                                           Height="16"
+                                                           Source="../Images/Menu/alphabetical_sorting-50.png"/>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                            <MenuItem Command="{x:Static controls:CustomCommands.SortArtist}">
+                                                <MenuItem.Icon>
+                                                    <Image Width="16"
+                                                           Height="16"
+                                                           Source="../Images/Menu/alphabetical_sorting-50.png"/>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                            <MenuItem Command="{x:Static controls:CustomCommands.SortTitle}">
+                                                <MenuItem.Icon>
+                                                    <Image Width="16"
+                                                           Height="16"
+                                                           Source="../Images/Menu/alphabetical_sorting-50.png"/>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                            <MenuItem Command="{x:Static controls:CustomCommands.SortLength}">
+                                                <MenuItem.Icon>
+                                                    <Image Width="16"
+                                                           Height="16"
+                                                           Source="../Images/Menu/alphabetical_sorting-50.png"/>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                            <MenuItem Command="{x:Static controls:CustomCommands.SortFileName}">
+                                                <MenuItem.Icon>
+                                                    <Image Width="16"
+                                                           Height="16"
+                                                           Source="../Images/Menu/alphabetical_sorting-50.png"/>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                            <Separator/>
+                                            <MenuItem Command="{x:Static controls:CustomCommands.SortRandom}">
+                                                <MenuItem.Icon>
+                                                    <Image Width="16"
+                                                           Height="16"
+                                                           Source="../Images/Menu/dice-50.png"/>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                            <MenuItem Command="{x:Static controls:CustomCommands.SortReverse}">
+                                                <MenuItem.Icon>
+                                                    <Image Width="16"
+                                                           Height="16"
+                                                           Source="../Images/Menu/generic_sorting_2-50.png"/>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                        </MenuItem>
+                                        <MenuItem Header="Manage">
+                                            <MenuItem.Icon>
+                                                <Image Width="16"
+                                                       Height="16"
+                                                       Source="../Images/Menu/to_do-50.png"/>
+                                            </MenuItem.Icon>
+                                            <MenuItem Command="{x:Static controls:CustomCommands.ManageClear}">
+                                                <MenuItem.Icon>
+                                                    <Image Width="16"
+                                                           Height="16"
+                                                           Source="../Images/Menu/delete-50.png"/>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                            <MenuItem Command="{x:Static controls:CustomCommands.ManageDelete}">
+                                                <MenuItem.Icon>
+                                                    <Image Width="16"
+                                                           Height="16"
+                                                           Source="../Images/Menu/delete_sign-50.png"/>
+                                                </MenuItem.Icon>
+                                            </MenuItem>
+                                        </MenuItem>
+                                    </ContextMenu>
+                                </ListBox.ContextMenu>
+                            </ListBox>
+                        </TabItem>
+                        <TabItem x:Name="TabRecent">
+                            <TabItem.Header>
+                                <StackPanel>
+                                    <Image Source="../Images/Menu/note_music-50.png"
+                                           Width="32"
+                                           Height="32"/>
+                                    <TextBlock Text="Recent"
+                                               TextAlignment="Center"/>
+                                </StackPanel>
+                            </TabItem.Header>
+                            <ListBox x:Name="LbRecent"
+                                     HorizontalContentAlignment="Stretch"
+                                     Background="Transparent"
+                                     MouseDoubleClick="LbRecent_MouseDoubleClick">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid ToolTip="{Binding LastPlayed, Converter={StaticResource LastPlayConv}}">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="30"/>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition Width="60"/>
+                                                <ColumnDefinition Width="30"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Image Width="25"
+                                                   Height="25"
+                                                   Grid.Column="0"
+                                                   Source="../Images/audio_file-100.png"/>
+                                            <TextBlock Grid.Column="1"
+                                                       Margin="2"
+                                                       Text="{Binding ArtistTitle, Converter={StaticResource TextShort}}"/>
+                                            <TextBlock Grid.Column="2"
+                                                       Margin="2"
+                                                       Text="{Binding Time, Converter={StaticResource TimeConv}}"/>
+                                            <TextBlock Grid.Column="3"
+                                                       Margin="2"
+                                                       Text="{Binding PlayCount}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                                <ListBox.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Command="{x:Static controls:CustomCommands.ContextAddPlaylist}"/>
+                                        <Separator/>
+                                        <MenuItem Command="{x:Static controls:CustomCommands.ContextCopyToDevice}"/>
+                                    </ContextMenu>
+                                </ListBox.ContextMenu>
+                            </ListBox>
+                        </TabItem>
+                        <TabItem>
+                            <TabItem.Header>
+                                <StackPanel>
+                                    <Image Source="../Images/Menu/stack-50.png"
+                                           Width="32"
+                                           Height="32"/>
+                                    <TextBlock Text="Files"
+                                               TextAlignment="Center"/>
+                                </StackPanel>
+                            </TabItem.Header>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="25"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="220"/>
+                                    <ColumnDefinition Width="3"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <StackPanel Grid.Column="0"
+                                            Grid.Row="0"
+                                            Grid.ColumnSpan="3"
+                                            Orientation="Horizontal">
+                                    <TextBlock Text="Drives:"
+                                               Margin="5,0"
+                                               VerticalAlignment="Center"/>
 
-                            <StackPanel Orientation="Horizontal"
-                                        x:Name="SpDriveList">
+                                    <StackPanel Orientation="Horizontal"
+                                                x:Name="SpDriveList">
 
-                            </StackPanel>
-                            <Button Content="Refresh"
-                                    x:Name="BtnRefresh"
-                                    Margin="5,0"
-                                    Click="BtnRefresh_Click"/>
-                        </StackPanel>
-                        <TreeView Grid.Column="0"
-                                  Grid.Row="1"
-                                  x:Name="TvDirs"
-                                  SelectedItemChanged="TvDirs_SelectedItemChanged"
-                                  Background="Transparent">
-                            <TreeView.Resources>
-                                <Style TargetType="{x:Type TreeViewItem}">
-                                    <Setter Property="HeaderTemplate">
-                                        <Setter.Value>
-                                            <DataTemplate>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <Image Name="img"
-                                                           Width="25"
-                                                           Height="25"
-                                                           Margin="2"
-                                                           Stretch="Fill"
-                                                           Source="../Images/folder-100.png"/>
-                                                    <TextBlock Text="{Binding}" Margin="5,0" />
-                                                </StackPanel>
-                                            </DataTemplate>
-                                        </Setter.Value>
-                                    </Setter>
-                                </Style>
-                            </TreeView.Resources>
-                        </TreeView>
-                        <GridSplitter Grid.Row="1"
-                                      Grid.Column="1"
-                                      HorizontalAlignment="Stretch"
-                                      Background="{StaticResource {x:Static SystemColors.GradientActiveCaptionBrushKey}}"/>
-                        <ListBox Grid.Column="2"
-                                 Grid.Row="1"
-                                 x:Name="LbFiles"
-                                 SelectionMode="Extended"
-                                 HorizontalContentAlignment="Stretch"
-                                 MouseDoubleClick="LbFiles_MouseDoubleClick"
-                                 Background="Transparent">
-                            <ListBox.ContextMenu>
-                                <ContextMenu>
-                                    <MenuItem Command="{x:Static controls:CustomCommands.ContextAddPlaylist}"/>
-                                    <Separator/>
-                                    <MenuItem Command="{x:Static controls:CustomCommands.ContextCopyToDevice}"/>
-                                </ContextMenu>
-                            </ListBox.ContextMenu>
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="30"/>
-                                            <ColumnDefinition/>
-                                        </Grid.ColumnDefinitions>
-                                        <Image Width="25"
-                                               Height="25"
-                                               Grid.Column="0"
-                                               Source="../Images/audio_file-100.png"/>
-                                        <TextBlock Grid.Column="1"
-                                                   Margin="2"
-                                                   Text="{Binding Converter={StaticResource NameConv}}"/>
-                                    </Grid>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                    </Grid>
-                </TabItem>
-                <TabItem x:Name="TabTunes">
-                    <TabItem.Header>
-                        <StackPanel>
-                            <Image Source="../Images/Menu/mac_os-50.png"
-                                   Width="32"
-                                   Height="32"/>
-                            <TextBlock Text="iTunes"
-                                       TextAlignment="Center"/>
-                        </StackPanel>
-                    </TabItem.Header>
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="220"/>
-                            <ColumnDefinition Width="3"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <ScrollViewer Grid.Column="0">
-                            <StackPanel>
-                                <Expander>
-                                    <Expander.Header>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Image Source="../Images/itunes/album.png"
-                                                   Width="22"
-                                                   Height="22"/>
-                                            <TextBlock Text="Albums"
-                                                       VerticalAlignment="Center"
-                                                       Margin="5"/>
-                                        </StackPanel>
-                                    </Expander.Header>
-                                    <StackPanel x:Name="SpAlbums"/>
-                                </Expander>
-                                <Expander>
-                                    <Expander.Header>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Image Source="../Images/itunes/album-compilation-50.png"
-                                                   Width="22"
-                                                   Height="22"/>
-                                            <TextBlock Text="Compilations"
-                                                       VerticalAlignment="Center"
-                                                       Margin="5"/>
-                                        </StackPanel>
-                                    </Expander.Header>
-                                    <StackPanel x:Name="SpCompilations"/>
-                                </Expander>
-                                <Expander>
-                                    <Expander.Header>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Image Source="../Images/itunes/artist-50.png"
-                                                   Width="22"
-                                                   Height="22"/>
-                                            <TextBlock Text="Artists"
-                                                       VerticalAlignment="Center"
-                                                       Margin="5"/>
-                                        </StackPanel>
-                                    </Expander.Header>
-                                    <StackPanel x:Name="SpArtists"/>
-                                </Expander>
-                                <Expander>
-                                    <Expander.Header>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Image Source="../Images/itunes/genres-50.png"
-                                                   Width="22"
-                                                   Height="22"/>
-                                            <TextBlock Text="Genres"
-                                                       VerticalAlignment="Center"
-                                                       Margin="5"/>
-                                        </StackPanel>
-                                    </Expander.Header>
-                                    <StackPanel x:Name="SpGenres"/>
-                                </Expander>
-                                <Expander>
-                                    <Expander.Header>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Image Source="../Images/itunes/podcast-50.png"
-                                                   Width="22"
-                                                   Height="22"/>
-                                            <TextBlock Text="Podcasts"
-                                                       VerticalAlignment="Center"
-                                                       Margin="5"/>
-                                        </StackPanel>
-                                    </Expander.Header>
-                                    <StackPanel x:Name="SpPodcasts"/>
-                                </Expander>
-                                <Expander>
-                                    <Expander.Header>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Image Source="../Images/Menu/to_do-50.png"
-                                                   Width="22"
-                                                   Height="22"/>
-                                            <TextBlock Text="Playlists"
-                                                       VerticalAlignment="Center"
-                                                       Margin="5"/>
-                                        </StackPanel>
-                                    </Expander.Header>
-                                    <StackPanel x:Name="SpPlaylists"/>
-                                </Expander>
-                                <Expander>
-                                    <Expander.Header>
-                                        <StackPanel Orientation="Horizontal">
-                                            <Image Source="../Images/itunes/songs-50.png"
-                                                   Width="22"
-                                                   Height="22"/>
-                                            <TextBlock Text="Songs"
-                                                       VerticalAlignment="Center"
-                                                       Margin="5"/>
-                                        </StackPanel>
-                                    </Expander.Header>
-                                    <StackPanel>
-                                        <Button Content="List all songs"
-                                                x:Name="BtnListAll"
-                                                Click="BtnListAll_Click"
-                                                Margin="30,5,5,2"/>
-                                        <TextBlock Text="Filter:"
-                                                   Margin="30,2,0,2"/>
-                                        <TextBox Margin="30,2,5,8"
-                                                 x:Name="TbFilter"/>
-                                        <Button Content="Aply Filter"
-                                                Margin="30,0,5,0"
-                                                x:Name="BtnFilter"
-                                                Click="BtnFilter_Click"/>
                                     </StackPanel>
-                                </Expander>
-                            </StackPanel>
-                        </ScrollViewer>
-                        <GridSplitter Grid.Column="1"
-                                      HorizontalAlignment="Stretch"
-                                      Background="{StaticResource {x:Static SystemColors.GradientActiveCaptionBrushKey}}"/>
-                        <ListBox Grid.Column="2"
-                                 Style="{StaticResource Playlist}"
-                                 x:Name="LbLib"
-                                 MouseDoubleClick="LbLib_MouseDoubleClick">
-                            <ListBox.ContextMenu>
-                                <ContextMenu>
-                                    <MenuItem Command="{x:Static controls:CustomCommands.ContextAddPlaylist}"/>
-                                    <Separator/>
-                                    <MenuItem Command="{x:Static controls:CustomCommands.ContextCopyToDevice}"/>
-                                </ContextMenu>
-                            </ListBox.ContextMenu>
-                        </ListBox>
-                    </Grid>
-                </TabItem>
-                <TabItem>
-                    <TabItem.Header>
-                        <StackPanel>
-                            <Image Width="32"
-                                   Height="32"
-                                   Source="../Images/Menu/youtube-50.png"/>
-                            <TextBlock Text="YouTube"
-                                       TextAlignment="Center"/>
-                        </StackPanel>
-                    </TabItem.Header>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="25"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="50"/>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="100"/>
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" 
-                                   Grid.Row="0" 
-                                   Text="Search:" 
-                                   VerticalAlignment="Center"/>
-                        <TextBox Grid.Column="1"
-                                 Grid.Row="0"
-                                 Margin="5,0"
-                                 x:Name="TbYoutubeQuery"
-                                 PreviewKeyDown="TbYoutubeQuery_PreviewKeyDown"
-                                 VerticalAlignment="Center"/>
-                        <Button Grid.Row="0"
-                                Grid.Column="2"
-                                Content="Search"
-                                Click="Button_Click_1" 
-                                VerticalAlignment="Center"
-                                Margin="5,0"/>
-                        <ListBox Grid.Row="1"
-                                 VerticalContentAlignment="Stretch"
-                                 Grid.ColumnSpan="3"
-                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                                 x:Name="LbYoutube"
-                                 MouseDoubleClick="LbYoutube_MouseDoubleClick">
-                            <ListBox.ItemTemplate>
-                                <DataTemplate>
-                                    <Grid Margin="2">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition/>
-                                            <RowDefinition/>
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="150"/>
-                                            <ColumnDefinition/>
-                                        </Grid.ColumnDefinitions>
-                                        <Image Grid.Column="0"
-                                               Grid.RowSpan="2"
-                                               Margin="2"
-                                               Source="{Binding Thumbnail}"/>
-                                        <TextBlock Grid.Row="0"
-                                                   Grid.Column="1"
-                                                   Margin="2"
-                                                   Text="{Binding Title, Converter={StaticResource TextShort}}"
-                                                   FontWeight="Bold"
-                                                   FontSize="14"/>
-                                        <TextBlock Grid.Row="1"
-                                                   Grid.Column="1"
-                                                   Margin="2"
-                                                   Text="{Binding Date}"/>
-                                    </Grid>
-                                </DataTemplate>
-                            </ListBox.ItemTemplate>
-                        </ListBox>
-                        <Grid Panel.ZIndex="44"
-                              Grid.RowSpan="2"
-                              Grid.ColumnSpan="3"
-                              x:Name="YtProgress"
-                              Visibility="Collapsed"
-                              Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
-                            <TextBlock Text="Connecting YouTube..."
-                                       VerticalAlignment="Center" 
-                                       HorizontalAlignment="Center" 
-                                       Margin="0,0,0,60"/>
-                            <ProgressBar Height="30"
-                                         IsIndeterminate="true"
-                                         Margin="10"/>
-                        </Grid>
-                    </Grid>
-                </TabItem>
-            </TabControl>
-        </Grid>
+                                    <Button Content="Refresh"
+                                            x:Name="BtnRefresh"
+                                            Margin="5,0"
+                                            Click="BtnRefresh_Click"/>
+                                </StackPanel>
+                                <TreeView Grid.Column="0"
+                                          Grid.Row="1"
+                                          x:Name="TvDirs"
+                                          SelectedItemChanged="TvDirs_SelectedItemChanged"
+                                          Background="Transparent">
+                                    <TreeView.Resources>
+                                        <Style TargetType="{x:Type TreeViewItem}">
+                                            <Setter Property="HeaderTemplate">
+                                                <Setter.Value>
+                                                    <DataTemplate>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <Image Name="img"
+                                                                   Width="25"
+                                                                   Height="25"
+                                                                   Margin="2"
+                                                                   Stretch="Fill"
+                                                                   Source="../Images/folder-100.png"/>
+                                                            <TextBlock Text="{Binding}" Margin="5,0" />
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </TreeView.Resources>
+                                </TreeView>
+                                <GridSplitter Grid.Row="1"
+                                              Grid.Column="1"
+                                              HorizontalAlignment="Stretch"
+                                              Background="{StaticResource {x:Static SystemColors.GradientActiveCaptionBrushKey}}"/>
+                                <ListBox Grid.Column="2"
+                                         Grid.Row="1"
+                                         x:Name="LbFiles"
+                                         SelectionMode="Extended"
+                                         HorizontalContentAlignment="Stretch"
+                                         MouseDoubleClick="LbFiles_MouseDoubleClick"
+                                         Background="Transparent">
+                                    <ListBox.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Command="{x:Static controls:CustomCommands.ContextAddPlaylist}"/>
+                                            <Separator/>
+                                            <MenuItem Command="{x:Static controls:CustomCommands.ContextCopyToDevice}"/>
+                                        </ContextMenu>
+                                    </ListBox.ContextMenu>
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="30"/>
+                                                    <ColumnDefinition/>
+                                                </Grid.ColumnDefinitions>
+                                                <Image Width="25"
+                                                       Height="25"
+                                                       Grid.Column="0"
+                                                       Source="../Images/audio_file-100.png"/>
+                                                <TextBlock Grid.Column="1"
+                                                           Margin="2"
+                                                           Text="{Binding Converter={StaticResource NameConv}}"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </Grid>
+                        </TabItem>
+                        <TabItem x:Name="TabTunes">
+                            <TabItem.Header>
+                                <StackPanel>
+                                    <Image Source="../Images/Menu/mac_os-50.png"
+                                           Width="32"
+                                           Height="32"/>
+                                    <TextBlock Text="iTunes"
+                                               TextAlignment="Center"/>
+                                </StackPanel>
+                            </TabItem.Header>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="220"/>
+                                    <ColumnDefinition Width="3"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <ScrollViewer Grid.Column="0">
+                                    <StackPanel>
+                                        <Expander>
+                                            <Expander.Header>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Image Source="../Images/itunes/album.png"
+                                                           Width="22"
+                                                           Height="22"/>
+                                                    <TextBlock Text="Albums"
+                                                               VerticalAlignment="Center"
+                                                               Margin="5"/>
+                                                </StackPanel>
+                                            </Expander.Header>
+                                            <StackPanel x:Name="SpAlbums"/>
+                                        </Expander>
+                                        <Expander>
+                                            <Expander.Header>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Image Source="../Images/itunes/album-compilation-50.png"
+                                                           Width="22"
+                                                           Height="22"/>
+                                                    <TextBlock Text="Compilations"
+                                                               VerticalAlignment="Center"
+                                                               Margin="5"/>
+                                                </StackPanel>
+                                            </Expander.Header>
+                                            <StackPanel x:Name="SpCompilations"/>
+                                        </Expander>
+                                        <Expander>
+                                            <Expander.Header>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Image Source="../Images/itunes/artist-50.png"
+                                                           Width="22"
+                                                           Height="22"/>
+                                                    <TextBlock Text="Artists"
+                                                               VerticalAlignment="Center"
+                                                               Margin="5"/>
+                                                </StackPanel>
+                                            </Expander.Header>
+                                            <StackPanel x:Name="SpArtists"/>
+                                        </Expander>
+                                        <Expander>
+                                            <Expander.Header>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Image Source="../Images/itunes/genres-50.png"
+                                                           Width="22"
+                                                           Height="22"/>
+                                                    <TextBlock Text="Genres"
+                                                               VerticalAlignment="Center"
+                                                               Margin="5"/>
+                                                </StackPanel>
+                                            </Expander.Header>
+                                            <StackPanel x:Name="SpGenres"/>
+                                        </Expander>
+                                        <Expander>
+                                            <Expander.Header>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Image Source="../Images/itunes/podcast-50.png"
+                                                           Width="22"
+                                                           Height="22"/>
+                                                    <TextBlock Text="Podcasts"
+                                                               VerticalAlignment="Center"
+                                                               Margin="5"/>
+                                                </StackPanel>
+                                            </Expander.Header>
+                                            <StackPanel x:Name="SpPodcasts"/>
+                                        </Expander>
+                                        <Expander>
+                                            <Expander.Header>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Image Source="../Images/Menu/to_do-50.png"
+                                                           Width="22"
+                                                           Height="22"/>
+                                                    <TextBlock Text="Playlists"
+                                                               VerticalAlignment="Center"
+                                                               Margin="5"/>
+                                                </StackPanel>
+                                            </Expander.Header>
+                                            <StackPanel x:Name="SpPlaylists"/>
+                                        </Expander>
+                                        <Expander>
+                                            <Expander.Header>
+                                                <StackPanel Orientation="Horizontal">
+                                                    <Image Source="../Images/itunes/songs-50.png"
+                                                           Width="22"
+                                                           Height="22"/>
+                                                    <TextBlock Text="Songs"
+                                                               VerticalAlignment="Center"
+                                                               Margin="5"/>
+                                                </StackPanel>
+                                            </Expander.Header>
+                                            <StackPanel>
+                                                <Button Content="List all songs"
+                                                        x:Name="BtnListAll"
+                                                        Click="BtnListAll_Click"
+                                                        Margin="30,5,5,2"/>
+                                                <TextBlock Text="Filter:"
+                                                           Margin="30,2,0,2"/>
+                                                <TextBox Margin="30,2,5,8"
+                                                         x:Name="TbFilter"/>
+                                                <Button Content="Aply Filter"
+                                                        Margin="30,0,5,0"
+                                                        x:Name="BtnFilter"
+                                                        Click="BtnFilter_Click"/>
+                                            </StackPanel>
+                                        </Expander>
+                                    </StackPanel>
+                                </ScrollViewer>
+                                <GridSplitter Grid.Column="1"
+                                              HorizontalAlignment="Stretch"
+                                              Background="{StaticResource {x:Static SystemColors.GradientActiveCaptionBrushKey}}"/>
+                                <ListBox Grid.Column="2"
+                                         Style="{StaticResource Playlist}"
+                                         x:Name="LbLib"
+                                         MouseDoubleClick="LbLib_MouseDoubleClick">
+                                    <ListBox.ContextMenu>
+                                        <ContextMenu>
+                                            <MenuItem Command="{x:Static controls:CustomCommands.ContextAddPlaylist}"/>
+                                            <Separator/>
+                                            <MenuItem Command="{x:Static controls:CustomCommands.ContextCopyToDevice}"/>
+                                        </ContextMenu>
+                                    </ListBox.ContextMenu>
+                                </ListBox>
+                            </Grid>
+                        </TabItem>
+                        <TabItem>
+                            <TabItem.Header>
+                                <StackPanel>
+                                    <Image Width="32"
+                                           Height="32"
+                                           Source="../Images/Menu/youtube-50.png"/>
+                                    <TextBlock Text="YouTube"
+                                               TextAlignment="Center"/>
+                                </StackPanel>
+                            </TabItem.Header>
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="25"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="100"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="0" 
+                                           Grid.Row="0" 
+                                           Text="Search:" 
+                                           VerticalAlignment="Center"/>
+                                <TextBox Grid.Column="1"
+                                         Grid.Row="0"
+                                         Margin="5,0"
+                                         x:Name="TbYoutubeQuery"
+                                         PreviewKeyDown="TbYoutubeQuery_PreviewKeyDown"
+                                         VerticalAlignment="Center"/>
+                                <Button Grid.Row="0"
+                                        Grid.Column="2"
+                                        Content="Search"
+                                        Click="Button_Click_1" 
+                                        VerticalAlignment="Center"
+                                        Margin="5,0"/>
+                                <ListBox Grid.Row="1"
+                                         VerticalContentAlignment="Stretch"
+                                         Grid.ColumnSpan="3"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                         x:Name="LbYoutube"
+                                         MouseDoubleClick="LbYoutube_MouseDoubleClick">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Margin="2">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition/>
+                                                    <RowDefinition/>
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="150"/>
+                                                    <ColumnDefinition/>
+                                                </Grid.ColumnDefinitions>
+                                                <Image Grid.Column="0"
+                                                       Grid.RowSpan="2"
+                                                       Margin="2"
+                                                       Source="{Binding Thumbnail}"/>
+                                                <TextBlock Grid.Row="0"
+                                                           Grid.Column="1"
+                                                           Margin="2"
+                                                           Text="{Binding Title, Converter={StaticResource TextShort}}"
+                                                           FontWeight="Bold"
+                                                           FontSize="14"/>
+                                                <TextBlock Grid.Row="1"
+                                                           Grid.Column="1"
+                                                           Margin="2" 
+                                                           Text="{Binding Date}"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                                <Grid Panel.ZIndex="44"
+                                      Grid.RowSpan="2"
+                                      Grid.ColumnSpan="3"
+                                      x:Name="YtProgress"
+                                      Visibility="Collapsed"
+                                      Background="{DynamicResource {x:Static SystemColors.ControlBrushKey}}">
+                                    <TextBlock Text="Connecting YouTube..."
+                                               VerticalAlignment="Center" 
+                                               HorizontalAlignment="Center" 
+                                               Margin="0,0,0,60"/>
+                                    <ProgressBar Height="30"
+                                                 IsIndeterminate="true"
+                                                 Margin="10"/>
+                                </Grid>
+                            </Grid>
+                        </TabItem>
+                    </TabControl>
+                </Grid>
+            </TabItem>
+            <TabItem Header="Media Lib">
+                <controls:MediaLib/>
+            </TabItem>
+        </TabControl>
     </Grid>
 </UserControl>
-    

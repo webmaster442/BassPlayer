@@ -2,12 +2,20 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:BassPlayer.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="500" d:DesignWidth="700">
+             d:DesignHeight="500"
+             d:DesignWidth="700">
+    <UserControl.CommandBindings>
+        <CommandBinding Command="{x:Static controls:CustomCommands.MediaTest}"
+                        Executed="CommandBinding_Executed"/>
+    </UserControl.CommandBindings>
     <Grid>
-        <TabControl TabStripPlacement="Left">
-            <TabItem Header="Albums">
+        <TabControl TabStripPlacement="Left"
+                    Background="Transparent">
+            <TabItem Header="Albums"
+                     Background="Transparent">
                 <ListBox>
                     <ListBox.ItemTemplate>
                         <DataTemplate>

@@ -24,5 +24,10 @@ namespace BassPlayer.Controls
         {
             InitializeComponent();
         }
+
+        private void CommandBinding_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            MessageBox.Show("Test");
+        }
     }
 }

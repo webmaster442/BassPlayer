@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FFConverter
 {
@@ -35,6 +32,9 @@ namespace FFConverter
         void SetupFromTokens(Dictionary<string, string> Tokens);
     }
 
+    /// <summary>
+    /// Preset management class
+    /// </summary>
     internal class PresetManager: ObservableCollection<Preset>
     {
         public PresetManager() : base()
@@ -42,7 +42,7 @@ namespace FFConverter
             this.Add(new Preset
             {
                 Name = "Wav",
-                Description = "Converts input file(s) to wav, as it is.\r\nNo additional processing is involved",
+                Description = "Converts input file(s) to wav, as it is. No additional processing is involved",
                 CommandLine = "ffmpeg.exe -i {input} {output} {extension}",
                 Extension = "wav"
             });

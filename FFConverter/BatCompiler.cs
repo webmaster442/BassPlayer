@@ -1,14 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FFConverter
 {
+    /// <summary>
+    /// Creates CMD files that can be run
+    /// </summary>
     internal static class BatCompiler
     {
+        /// <summary>
+        /// Returns the FFMPEG Path
+        /// </summary>
+        /// <returns></returns>
         private static string GetFFMpegPath()
         {
             string enginedir = System.AppDomain.CurrentDomain.BaseDirectory;
@@ -16,6 +19,14 @@ namespace FFConverter
             else return Path.Combine(enginedir, @"Engine\x86");
         }
 
+        /// <summary>
+        /// Replaces {input} and {output} tags in a command line to valid filenames
+        /// </summary>
+        /// <param name="cmdline">Command line</param>
+        /// <param name="input">input file path</param>
+        /// <param name="outfolder">output folder path</param>
+        /// <param name="ext">Output extension</param>
+        /// <returns>A command line string with apropiate input & output files</returns>
         private static string MapInputOutput(string cmdline, string input, string outfolder, string ext)
         {
             string ret = cmdline.Replace("{input}", "\"" + input + "\"");
@@ -25,6 +36,13 @@ namespace FFConverter
             return ret;
         }
 
+        /// <summary>
+        /// Creates a bat/cmd file
+        /// </summary>
+        /// <param name="p">a preset</param>
+        /// <param name="files">an array of filenames</param>
+        /// <param name="filename">Output filename</param>
+        /// <param name="outdir">Output directory</param>
         public static void CreateBatFile(Preset p, string[] files, string filename, string outdir)
         {
             string ffmpeg = GetFFMpegPath();

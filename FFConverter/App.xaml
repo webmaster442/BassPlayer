@@ -7,10 +7,6 @@
             <Style TargetType="{x:Type TextBlock}">
                 <Setter Property="VerticalAlignment" Value="Center"/>
             </Style>
-            
-            <Style TargetType="{x:Type Grid}">
-                <Setter Property="Margin" Value="4"/>
-            </Style>
 
             <Style TargetType="{x:Type TextBox}">
                 <Setter Property="VerticalAlignment" Value="Center"/>

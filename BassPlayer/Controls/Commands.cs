@@ -29,5 +29,7 @@ namespace BassPlayer.Controls
         public static readonly RoutedUICommand ContextCopyToDevice = new RoutedUICommand("Copy to Device...", "ContextCopyToDevice", typeof(CustomCommands));
 
         public static readonly RoutedUICommand ContextRefresh = new RoutedUICommand("Refresh", "ContextRefresh", typeof(CustomCommands));
+
+        public static readonly RoutedUICommand MediaTest = new RoutedUICommand("Test", "MediaTest", typeof(CustomCommands));
     }
 }

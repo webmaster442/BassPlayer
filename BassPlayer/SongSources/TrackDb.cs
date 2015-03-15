@@ -20,7 +20,7 @@ namespace BassPlayer.SongSources
         public TrackDb() : base()
         {
             string profile = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
-            _file = Path.Combine(profile, "iTunes\\BassPlayerLib.xml");
+            _file = Path.Combine(profile, "BassPlayerLib.xml");
         }
 
         private void Load()
