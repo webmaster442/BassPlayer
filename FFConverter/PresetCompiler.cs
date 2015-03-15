@@ -1,4 +1,5 @@
 ﻿using FFConverter.Controls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,6 +31,29 @@ namespace FFConverter
             return dict;
         }
 
+        public static string[] SplitArguments(string commandLine)
+        {
+            var parmChars = commandLine.ToCharArray();
+            var inSingleQuote = false;
+            var inDoubleQuote = false;
+            for (var index = 0; index < parmChars.Length; index++)
+            {
+                if (parmChars[index] == '"' && !inSingleQuote)
+                {
+                    inDoubleQuote = !inDoubleQuote;
+                    parmChars[index] = '\n';
+                }
+                if (parmChars[index] == '\'' && !inDoubleQuote)
+                {
+                    inSingleQuote = !inSingleQuote;
+                    parmChars[index] = '\n';
+                }
+                if (!inSingleQuote && !inDoubleQuote && parmChars[index] == ' ')
+                    parmChars[index] = '\n';
+            }
+            return (new string(parmChars)).Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
+        }
+
         /// <summary>
         /// Creates a UI from a given preset
         /// </summary>
@@ -45,7 +69,7 @@ namespace FFConverter
             foreach (var t in tags)
             {
                 if (string.IsNullOrEmpty(t)) continue;
-                parts = t.Split(' ');
+                parts = SplitArguments(t);
                 switch (parts[0])
                 {
                     case "slider":
@@ -54,6 +78,14 @@ namespace FFConverter
                         opt.InputPattern = "{" + t + "}";
                         opt.SetupFromTokens(parameters);
                         target.Children.Add(opt);
+                        matches++;
+                        break;
+                    case "combo":
+                        parameters = GetAtttrs(parts);
+                        OptionCombo combo = new OptionCombo();
+                        combo.InputPattern = "{" + t + "}";
+                        combo.SetupFromTokens(parameters);
+                        target.Children.Add(combo);
                         matches++;
                         break;
                 }

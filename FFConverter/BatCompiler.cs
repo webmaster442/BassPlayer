@@ -9,17 +9,6 @@ namespace FFConverter
     internal static class BatCompiler
     {
         /// <summary>
-        /// Returns the FFMPEG Path
-        /// </summary>
-        /// <returns></returns>
-        private static string GetFFMpegPath()
-        {
-            string enginedir = System.AppDomain.CurrentDomain.BaseDirectory;
-            if (IntPtr.Size == 8) return Path.Combine(enginedir, @"Engine\x64");
-            else return Path.Combine(enginedir, @"Engine\x86");
-        }
-
-        /// <summary>
         /// Replaces {input} and {output} tags in a command line to valid filenames
         /// </summary>
         /// <param name="cmdline">Command line</param>
@@ -43,9 +32,10 @@ namespace FFConverter
         /// <param name="files">an array of filenames</param>
         /// <param name="filename">Output filename</param>
         /// <param name="outdir">Output directory</param>
-        public static void CreateBatFile(Preset p, string[] files, string filename, string outdir)
+        /// <param name="deleteself">delete cmd file after execution</param>
+        public static void CreateBatFile(Preset p, string[] files, string filename, string outdir, bool deleteself = false)
         {
-            string ffmpeg = GetFFMpegPath();
+            string ffmpeg = Path.GetDirectoryName(FFConverter.Properties.Settings.Default.FFmpegPath);
 
             string drive = Path.GetPathRoot(ffmpeg).Replace("\\", "");
             int counter = 0;
@@ -56,14 +46,14 @@ namespace FFConverter
                 file.WriteLine("cd \"{0}\"", ffmpeg);
                 foreach (var f in files)
                 {
-                    if (counter == 0)
-                    {
-                        counter++;
-                        continue;
-                    }
                     string line = MapInputOutput(p.CommandLine, f, outdir, p.Extension);
                     file.WriteLine(line);
                     counter++;
+                }
+                if (deleteself)
+                {
+                    file.WriteLine("PAUSE");
+                    file.WriteLine("DEL \"%~f0\"");
                 }
             }
         }

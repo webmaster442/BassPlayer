@@ -76,6 +76,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\OptionCombo.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\OptionSlider.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -89,6 +93,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BatCompiler.cs" />
+    <Compile Include="Controls\OptionCombo.xaml.cs">
+      <DependentUpon>OptionCombo.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\OptionSlider.xaml.cs">
       <DependentUpon>OptionSlider.xaml</DependentUpon>
     </Compile>
@@ -157,6 +164,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="ffmpeg.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icons\File-50.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -10,9 +10,12 @@ namespace FFConverter.Controls
     /// </summary>
     public partial class OptionSlider : UserControl, IPresetControl
     {
+        private string _unit;
+
         public OptionSlider()
         {
             InitializeComponent();
+            _unit = "";
         }
 
         public string InputPattern
@@ -23,7 +26,7 @@ namespace FFConverter.Controls
 
         public string GeneratePattern()
         {
-            return SValue.Value.ToString();
+            return string.Format("{0}{1}", SValue.Value, _unit);
         }
 
         public void SetupFromTokens(Dictionary<string, string> Tokens)
@@ -56,6 +59,9 @@ namespace FFConverter.Controls
                         if (SValue.Maximum < maxval) SValue.Maximum = maxval;
                         SValue.IsSnapToTickEnabled = true;
                         SValue.Ticks = new System.Windows.Media.DoubleCollection(list);
+                        break;
+                    case "unit":
+                        _unit = token.Value;
                         break;
                 }
             }

@@ -6,7 +6,8 @@
         Height="409"
         ResizeMode="CanMinimize"
         Width="653"
-        Loaded="Window_Loaded">
+        Loaded="Window_Loaded"
+        Closing="Window_Closing">
     <Grid Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}"
           Margin="4">
         <Grid.RowDefinitions>
@@ -47,6 +48,7 @@
                     SelectionChanged="TabControl_SelectionChanged"
                     x:Name="TcPages"
                     Background="Transparent">
+
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
@@ -75,6 +77,36 @@
                         </DataTemplate>
                     </ListBox.ItemTemplate>
                 </ListBox>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <Image Source="Icons\File-50.png"
+                               Width="24"
+                               Height="24"/>
+                        <TextBlock Text="Input Files" TextWrapping="Wrap" Width="50" Margin="5,0"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="27"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Menu Grid.Row="0">
+                        <MenuItem Header="Add Files ..."
+                                  x:Name="AddFiles"
+                                  Click="AddFiles_Click"/>
+                        <MenuItem Header="Remove selected"
+                                  x:Name="RemSelected"
+                                  Click="RemSelected_Click"/>
+                        <MenuItem Header="Remove All"
+                                  x:Name="RemAll"
+                                  Click="RemAll_Click"/>
+                    </Menu>
+                    <ListBox Grid.Row="1"
+                             x:Name="LbFiles"
+                             Background="Transparent"/>
+                </Grid>
             </TabItem>
             <TabItem>
                 <TabItem.Header>
@@ -129,6 +161,15 @@
                     <TextBox Grid.Row="3"
                              x:Name="TbExtension"
                              Grid.ColumnSpan="2"/>
+                    <TextBlock Text="FFMpeg Path:"
+                               Grid.Row="4"/>
+                    <TextBox Grid.Row="5"
+                             x:Name="TbFFMpeg"/>
+                    <Button Grid.Column="1"
+                            Grid.Row="5"
+                            x:Name="BtnFFBrowse"
+                            Content="Browse ..."
+                            Click="BtnFFBrowse_Click"/>
                 </Grid>
             </TabItem>
             <TabItem>
@@ -159,7 +200,8 @@
                             HorizontalAlignment="Center"
                             VerticalAlignment="Top"
                             Height="50"
-                            Width="200"/>
+                            Width="200"
+                            Click="BtnRun_Click"/>
                 </Grid>
             </TabItem>
         </TabControl>
