@@ -14,46 +14,40 @@ namespace BassPlayer.SongSources
     {
         public string Name { get; set; }
         public byte[] Data { get; set; }
+
+        public BitmapSource Cover
+        {
+            get
+            {
+                using (var ms = new MemoryStream(Data))
+                {
+                    BitmapImage ret = new BitmapImage();
+                    ret.BeginInit();
+                    ret.CacheOption = BitmapCacheOption.OnLoad;
+                    ret.StreamSource = ms;
+                    ret.EndInit();
+                    return ret;
+                }
+            }
+        }
     }
 
     internal class AlbumArtStorage
     {
-        private Dictionary<string, byte[]> _storage;
+        private List<AlbumArt> _albumdata;
 
         public AlbumArtStorage()
         {
-            _storage = new Dictionary<string, byte[]>();
+            _albumdata = new List<AlbumArt>();
         }
 
-        private void AddItem(string Key, BitmapSource src)
+        public void Add(AlbumArt art)
         {
-            using (var ms = new MemoryStream())
+            if (_albumdata.Contains(art))
             {
-                var encoder = new JpegBitmapEncoder();
-                encoder.Frames.Add(BitmapFrame.Create(src));
-                encoder.QualityLevel = 100;
-                encoder.Save(ms);
-                _storage.Add(Key, ms.ToArray());
+                var index = _albumdata.IndexOf(art);
+                _albumdata[index] = art;
             }
-        }
-
-        private BitmapSource GetItem(string Key)
-        {
-            using (var ms = new MemoryStream(_storage[Key]))
-            {
-                BitmapImage ret = new BitmapImage();
-                ret.BeginInit();
-                ret.CacheOption = BitmapCacheOption.OnLoad;
-                ret.StreamSource = ms;
-                ret.EndInit();
-                return ret;
-            }
-        }
-
-        public BitmapSource this[string key]
-        {
-            get { return GetItem(key); }
-            set { AddItem(key, value); }
         }
 
     }

@@ -1,7 +1,7 @@
 ﻿<Window x:Class="FFConverter.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="FFConverter - 0 files"
+        Title="FFConverter"
         Icon="icon.png"
         Height="409"
         ResizeMode="CanMinimize"

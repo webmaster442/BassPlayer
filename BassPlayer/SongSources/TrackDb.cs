@@ -3,6 +3,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
+using System.Windows.Threading;
 using System.Xml.Serialization;
 
 namespace BassPlayer.SongSources
@@ -21,6 +23,7 @@ namespace BassPlayer.SongSources
         {
             string profile = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
             _file = Path.Combine(profile, "BassPlayerLib.xml");
+            if (File.Exists(_file)) Load();
         }
 
         private void Load()
@@ -123,6 +126,22 @@ namespace BassPlayer.SongSources
                 default:
                     return null;
             }
+        }
+
+        public Task ProcessFiles(IEnumerable<string> files)
+        {
+            return Task.Run(() =>
+            {
+                List<TrackData> data = new List<TrackData>(files.Count());
+                foreach (var file in files)
+                {
+                    data.Add(TrackData.CreateFromFile(file));
+                }
+                Dispatcher.CurrentDispatcher.Invoke(() =>
+                {
+                    this.AddRange(data);
+                });
+            });
         }
     }
 }

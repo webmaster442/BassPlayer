@@ -48,6 +48,7 @@ namespace FFConverter
             TbPageDescription.Text = _descriptions[TcPages.SelectedIndex];
             TbPageHeader.Text = _titles[TcPages.SelectedIndex];
             TbFFMpeg.Text = Settings.Default.FFmpegPath;
+            TbOutputFolder.Text = Settings.Default.LastOutDir;
             var files = Environment.GetCommandLineArgs();
             for (int i = 1; i < files.Length; i++)
             {
@@ -58,6 +59,7 @@ namespace FFConverter
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Settings.Default.FFmpegPath = TbFFMpeg.Text;
+            Settings.Default.LastOutDir = TbOutputFolder.Text;
             Settings.Default.Save();
             e.Cancel = false;
         }
@@ -65,7 +67,7 @@ namespace FFConverter
         private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (!_loaded) return;
-            if (TcPages.SelectedIndex == 1)
+            if (TcPages.SelectedIndex == 2)
             {
                 _currentpreset = _presets[LbPresets.SelectedIndex];
                 TbExtension.Text = _currentpreset.Extension;
@@ -78,6 +80,7 @@ namespace FFConverter
         private void BtnBrowse_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.FolderBrowserDialog fbd = new System.Windows.Forms.FolderBrowserDialog();
+            if (Directory.Exists(TbOutputFolder.Text)) fbd.SelectedPath = TbOutputFolder.Text;
             if (fbd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 TbOutputFolder.Text = fbd.SelectedPath;
@@ -130,9 +133,9 @@ namespace FFConverter
         private void BtnFFBrowse_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
+            if (File.Exists(TbFFMpeg.Text)) ofd.FileName = TbFFMpeg.Text;
             ofd.Filter = "ffmpeg.exe | ffmpeg.exe";
             ofd.FilterIndex = 0;
-            ofd.FileName = TbFFMpeg.Text;
             if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 TbFFMpeg.Text = ofd.FileName;
@@ -168,7 +171,5 @@ namespace FFConverter
         {
             _filelist.Clear();
         }
-
-
     }
 }

@@ -8,8 +8,14 @@
              d:DesignHeight="500"
              d:DesignWidth="700">
     <UserControl.CommandBindings>
-        <CommandBinding Command="{x:Static controls:CustomCommands.MediaTest}"
-                        Executed="CommandBinding_Executed"/>
+        <CommandBinding Command="{x:Static controls:CustomCommands.MediaAddFiles}"
+                        Executed="MediaAddFiles_Executed"/>
+        <CommandBinding Command="{x:Static controls:CustomCommands.MediaAddFolder}"
+                        Executed="MediaAddFolder_Executed"/>
+        <CommandBinding Command="{x:Static controls:CustomCommands.MediaRemove}"
+                        Executed="MediaRemove_Executed"/>
+        <CommandBinding Command="{x:Static controls:CustomCommands.MediaBackupLib}"
+                        Executed="MediaBackupLib_Executed"/>
     </UserControl.CommandBindings>
     <Grid>
         <TabControl TabStripPlacement="Left"
@@ -33,5 +39,17 @@
                 </ListBox>
             </TabItem>
         </TabControl>
+        <Grid Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}"
+              x:Name="ProcessProgress"
+              Visibility="Collapsed">
+            <ProgressBar Height="30"
+                         IsIndeterminate="True"
+                         Margin="30,10"
+                         VerticalAlignment="Center"/>
+            <TextBlock Text="Processing..."
+                       VerticalAlignment="Center"
+                       TextAlignment="Center"
+                       FontSize="19" Margin="0,0,0,80"/>
+        </Grid>
     </Grid>
 </UserControl>

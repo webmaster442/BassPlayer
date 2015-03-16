@@ -34,5 +34,17 @@ namespace FFConverter.Properties {
                 this["FFmpegPath"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastOutDir {
+            get {
+                return ((string)(this["LastOutDir"]));
+            }
+            set {
+                this["LastOutDir"] = value;
+            }
+        }
     }
 }

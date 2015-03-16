@@ -36,6 +36,8 @@
                         Executed="ContextCopyToDevice_Executed"/>
         <CommandBinding Command="{x:Static controls:CustomCommands.ContextRefresh}"
                         Executed="ContextRefresh_Executed"/>
+        <CommandBinding Command="{x:Static controls:CustomCommands.ContextConvert}"
+                        Executed="ContextConvert_Executed"/>
     </UserControl.CommandBindings>
     <Grid>
         <Menu VerticalAlignment="Top"
@@ -284,20 +286,11 @@
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="Media Lib">
-                <MenuItem Command="{x:Static controls:CustomCommands.MediaTest}"/>
             </MenuItem>
         </Menu>
-        <TabControl Style="{DynamicResource TabRight}">
+        <TabControl Style="{StaticResource TabRight}">
             <TabItem Header="Sources">
-                <Grid Grid.Row="1"
-                      Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="6*"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition/>
-                    </Grid.RowDefinitions>
+                <Grid Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}">
                     <StackPanel x:Name="Processing"
                                 Visibility="Collapsed"
                                 Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}"
@@ -329,6 +322,7 @@
                                 <ListBox.ContextMenu>
                                     <ContextMenu IsEnabled="{Binding ElementName=TcView, Path=SelectedIndex, ConverterParameter=0, Converter={StaticResource EnableConv}}">
                                         <MenuItem Command="{x:Static controls:CustomCommands.ContextCopyToDevice}"/>
+                                        <MenuItem Command="{x:Static controls:CustomCommands.ContextConvert}"/>
                                         <Separator/>
                                         <MenuItem Header="Sort">
                                             <MenuItem.Icon>
@@ -456,6 +450,7 @@
                                         <MenuItem Command="{x:Static controls:CustomCommands.ContextAddPlaylist}"/>
                                         <Separator/>
                                         <MenuItem Command="{x:Static controls:CustomCommands.ContextCopyToDevice}"/>
+                                        <MenuItem Command="{x:Static controls:CustomCommands.ContextConvert}"/>
                                     </ContextMenu>
                                 </ListBox.ContextMenu>
                             </ListBox>
@@ -538,6 +533,7 @@
                                             <MenuItem Command="{x:Static controls:CustomCommands.ContextAddPlaylist}"/>
                                             <Separator/>
                                             <MenuItem Command="{x:Static controls:CustomCommands.ContextCopyToDevice}"/>
+                                            <MenuItem Command="{x:Static controls:CustomCommands.ContextConvert}"/>
                                         </ContextMenu>
                                     </ListBox.ContextMenu>
                                     <ListBox.ItemTemplate>
@@ -696,6 +692,7 @@
                                             <MenuItem Command="{x:Static controls:CustomCommands.ContextAddPlaylist}"/>
                                             <Separator/>
                                             <MenuItem Command="{x:Static controls:CustomCommands.ContextCopyToDevice}"/>
+                                            <MenuItem Command="{x:Static controls:CustomCommands.ContextConvert}"/>
                                         </ContextMenu>
                                     </ListBox.ContextMenu>
                                 </ListBox>

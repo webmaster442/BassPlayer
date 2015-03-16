@@ -14,18 +14,17 @@ namespace FFConverter
     internal static class PresetCompiler
     {
         private const string pattern = @"\{(.*?)\}\s";
-        private const string attrs = "\\w+\\=\".+\"";
 
         private static Dictionary<string, string> GetAtttrs(string[] parts)
         {
             Dictionary<string, string> dict = new Dictionary<string, string>();
 
-            for (int i = 1; i < parts.Length; i++ )
+            for (int i = 0; i < parts.Length; i++ )
             {
-                if (Regex.IsMatch(parts[i], attrs))
+                if (!parts[i].EndsWith("=")) continue;
+                if (i + 1 < parts.Length)
                 {
-                    string[] r = parts[i].Replace("\"", "").Split('=');
-                    dict.Add(r[0], r[1]);
+                    dict.Add(parts[i].Replace("=", ""), parts[i + 1]);
                 }
             }
             return dict;

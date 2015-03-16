@@ -626,7 +626,10 @@ namespace BassPlayer.Controls
 
         private void ContextRefresh_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-
+            if (TvDirs.SelectedItem == null) return;
+            _files.Clear();
+            TreeViewItem selected = (TreeViewItem)TvDirs.SelectedItem;
+            ListDir(selected.Tag.ToString());
         }
 
         private void ContextAddPlaylist_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -659,6 +662,21 @@ namespace BassPlayer.Controls
 
             Process p = new Process();
             p.StartInfo.FileName = "BassDeviceCopy.exe";
+            p.StartInfo.Arguments = Helpers.Arguments(files);
+            p.StartInfo.UseShellExecute = false;
+            p.Start();
+        }
+
+        private void ContextConvert_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            string[] files = null;
+            if (TcView.SelectedIndex == 0) files = (from PlayListEntry i in LbFiles.SelectedItems select i.FileName).ToArray();
+            else if (TcView.SelectedIndex == 1) files = (from RecentItem i in LbRecent.SelectedItems select i.FilePath).ToArray();
+            else if (TcView.SelectedIndex == 2) files = (from string i in LbFiles.SelectedItems select i).ToArray();
+            else if (TcView.SelectedIndex == 3) files = (from PlayListEntry i in LbLib.SelectedItems select i.FileName).ToArray();
+
+            Process p = new Process();
+            p.StartInfo.FileName = "FFConverter.exe";
             p.StartInfo.Arguments = Helpers.Arguments(files);
             p.StartInfo.UseShellExecute = false;
             p.Start();

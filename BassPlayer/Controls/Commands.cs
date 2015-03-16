@@ -2,6 +2,9 @@
 
 namespace BassPlayer.Controls
 {
+    /// <summary>
+    /// Custom commands for command bindings
+    /// </summary>
     internal static class CustomCommands
     {
         public static readonly RoutedUICommand SortArtistTitle = new RoutedUICommand("By Artist & Title", "SortArtistTitle", typeof(CustomCommands));
@@ -11,8 +14,6 @@ namespace BassPlayer.Controls
         public static readonly RoutedUICommand SortTitle = new RoutedUICommand("By Title", "SortTitle", typeof(CustomCommands));
 
         public static readonly RoutedUICommand SortDate = new RoutedUICommand("By Play Date", "SortDate", typeof(CustomCommands));
-
-        public static readonly RoutedUICommand SortLength = new RoutedUICommand("By Length", "SortLength", typeof(CustomCommands));
 
         public static readonly RoutedUICommand SortFileName = new RoutedUICommand("By File name", "SortFileName", typeof(CustomCommands));
 
@@ -28,8 +29,16 @@ namespace BassPlayer.Controls
 
         public static readonly RoutedUICommand ContextCopyToDevice = new RoutedUICommand("Copy to Device...", "ContextCopyToDevice", typeof(CustomCommands));
 
+        public static readonly RoutedUICommand ContextConvert = new RoutedUICommand("Convert files...", "ContextConvert", typeof(CustomCommands));
+
         public static readonly RoutedUICommand ContextRefresh = new RoutedUICommand("Refresh", "ContextRefresh", typeof(CustomCommands));
 
-        public static readonly RoutedUICommand MediaTest = new RoutedUICommand("Test", "MediaTest", typeof(CustomCommands));
+        public static readonly RoutedUICommand MediaAddFiles = new RoutedUICommand("Add Files...", "MediaAddFiles", typeof(CustomCommands));
+
+        public static readonly RoutedUICommand MediaAddFolder = new RoutedUICommand("Add Folder...", "MediaAddFolder", typeof(CustomCommands));
+
+        public static readonly RoutedUICommand MediaRemove = new RoutedUICommand("Remove Selected item...", "MediaRemove", typeof(CustomCommands));
+
+        public static readonly RoutedUICommand MediaBackupLib = new RoutedUICommand("Backup database...", "MediaBackup", typeof(CustomCommands));
     }
 }
