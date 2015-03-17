@@ -19,6 +19,8 @@ namespace BassPlayer.Controls
 
         public static readonly RoutedUICommand SortRandom = new RoutedUICommand("Random", "SortRandom", typeof(CustomCommands));
 
+        public static readonly RoutedUICommand SortLength = new RoutedUICommand("By Length", "SortLength", typeof(CustomCommands));
+
         public static readonly RoutedUICommand SortReverse = new RoutedUICommand("Reverse", "SortReverse", typeof(CustomCommands));
 
         public static readonly RoutedUICommand ManageDelete = new RoutedUICommand("Delete Selected", "ManageDelete", typeof(CustomCommands));

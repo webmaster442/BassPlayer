@@ -1,10 +1,9 @@
-﻿using System;
+﻿using BassEngine;
+using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Media;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Media.Imaging;
 
 namespace BassPlayer.SongSources
@@ -13,16 +12,18 @@ namespace BassPlayer.SongSources
     /// Album art storage class
     /// </summary>
     [Serializable]
-    public class AlbumArt: IEquatable<AlbumArt>
+    public class AlbumArt
     {
         /// <summary>
         /// Album name
         /// </summary>
-        public string Name { get; set; }
+        [OptionalField]
+        public string Name;
         /// <summary>
         /// Cover as a byte array
         /// </summary>
-        public byte[] Data { get; set; }
+        [OptionalField]
+        public byte[] Data;
 
         /// <summary>
         /// Gets the cover as a bitmapsource
@@ -64,57 +65,116 @@ namespace BassPlayer.SongSources
             return ret;
         }
 
-        public override string ToString()
+        public static AlbumArt Create(KeyValuePair<string, BitmapSource> keypair)
         {
-            return Name;
+            AlbumArt ret = new AlbumArt();
+            ret.Name = keypair.Key;
+            using (var ms = new MemoryStream())
+            {
+                JpegBitmapEncoder jpg = new JpegBitmapEncoder();
+                jpg.QualityLevel = 80;
+                jpg.Frames.Add(BitmapFrame.Create(keypair.Value));
+                jpg.Save(ms);
+                ret.Data = ms.ToArray();
+            }
+            return ret;
         }
 
-        public override int GetHashCode()
+        public AlbumArt()
         {
-            return Name.GetHashCode() ^ Data.GetHashCode();
-        }
-
-        public override bool Equals(object obj)
-        {
-            // STEP 1: Check for null
-            if (obj == null) return false;
-            if (this.GetType() != obj.GetType()) return false;
-            return Equals((AlbumArt)obj);
-        }
-
-        public bool Equals(AlbumArt other)
-        {
-            return this.Name == other.Name && this.Data == other.Data;
+            Name = "";
+            Data = new byte[0];
         }
     }
 
-    internal class AlbumArtStorage
+    internal class AlbumArtStorage: Dictionary<string, BitmapSource>
     {
-        private List<AlbumArt> _albumdata;
+        private string _file;
+        private bool test;
 
-        public AlbumArtStorage()
+        public AlbumArtStorage(string file): base()
         {
-            _albumdata = new List<AlbumArt>();
+            _file = file;
+            if (File.Exists(_file)) Load();
         }
 
-        public void Add(AlbumArt art)
+        public void Save()
         {
-            if (_albumdata.Contains(art))
+            try
             {
-                var index = _albumdata.IndexOf(art);
-                _albumdata[index] = art;
+                BinaryFormatter bf = new BinaryFormatter();
+                using (var stream = File.Create(_file))
+                {
+                    AlbumArt[] array = new AlbumArt[this.Keys.Count];
+                    int i = 0;
+                    foreach (var pair in this)
+                    {
+                        array[i] = AlbumArt.Create(pair);
+                        i++;
+                    }
+                    bf.Serialize(stream, array);
+                }
+            }
+            catch (Exception ex)
+            {
+                Helpers.ErrorDialog(ex, "Cover storage save error");
             }
         }
 
-        public bool ContainsAlbum(string albumname)
+        private void Load()
         {
-            return (from i in _albumdata where i.Name == albumname select i).Count() > 0;
+            try
+            {
+                BinaryFormatter bf = new BinaryFormatter();
+                using (var stream = File.OpenRead(_file))
+                {
+                    AlbumArt[] array = (AlbumArt[])bf.Deserialize(stream);
+                    this.Clear();
+                    foreach (var item in array)
+                    {
+                        this.Add(item.Name, item.Cover);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Helpers.ErrorDialog(ex, "Cover storage load error");
+            }
         }
 
-        public void SyncToDb(Dictionary<string, TrackData> SyncData)
+        public BitmapSource GetCover(TrackData data)
         {
-            foreach (var item in SyncData)
+            try
             {
+                if (this.ContainsKey(data.Album)) return this[data.Album];
+                else
+                {
+                    TagLib.File tags = TagLib.File.Create(data.File);
+                    if (tags.Tag.Pictures.Length > 0)
+                    {
+                        var picture = tags.Tag.Pictures[0].Data;
+                        MemoryStream ms = new MemoryStream(picture.Data);
+                        BitmapImage ret = new BitmapImage();
+                        ret.BeginInit();
+                        ret.StreamSource = ms;
+                        ret.DecodePixelWidth = 200;
+                        ret.CacheOption = BitmapCacheOption.OnLoad;
+                        ret.EndInit();
+                        ms.Close();
+                        this[data.Album] = ret;
+                        return ret;
+                    }
+                    else
+                    {
+                        this[data.Album] = new BitmapImage(new Uri("/BassPlayer;component/Images/audio_file-100.png", UriKind.Relative));
+                        return new BitmapImage(new Uri("/BassPlayer;component/Images/audio_file-100.png", UriKind.Relative));
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Helpers.ErrorDialog(ex, "Can't get cover for " + data.ToString());
+                return new BitmapImage(new Uri("/BassPlayer;component/Images/audio_file-100.png", UriKind.Relative));
             }
         }
     }

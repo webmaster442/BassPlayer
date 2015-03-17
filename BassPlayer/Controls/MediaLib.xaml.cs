@@ -12,13 +12,11 @@ namespace BassPlayer.Controls
     public partial class MediaLib : UserControl
     {
         private TrackDb _db;
-        private AlbumArtStorage _albumarts;
 
         public MediaLib()
         {
             InitializeComponent();
             _db = new TrackDb();
-            _albumarts = new AlbumArtStorage();
         }
 
         private async void MediaAddFiles_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -63,6 +61,11 @@ namespace BassPlayer.Controls
         private void MediaBackupLib_Executed(object sender, ExecutedRoutedEventArgs e)
         {
 
+        }
+
+        public void Save()
+        {
+            _db.Save();
         }
     }
 }

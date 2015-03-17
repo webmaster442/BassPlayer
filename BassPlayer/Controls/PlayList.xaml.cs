@@ -402,6 +402,7 @@ namespace BassPlayer.Controls
         public void SaveRecent()
         {
             _recent.Save();
+            MediaLib.Save();
         }
 
         #endregion
