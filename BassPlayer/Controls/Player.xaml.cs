@@ -122,6 +122,7 @@ namespace BassPlayer.Controls
                 _timer.IsEnabled = (bool)!BtnPlayPause.IsChecked;
                 CoverArt.Source = App.Engine.ImageTag;
                 CoverArtLarge.Source = App.Engine.ImageTag;
+                App.MiniPlayer.SetCover(App.Engine.ImageTag);
                 BtnPlayPause.IsChecked = false;
                 Chapterize();
             }

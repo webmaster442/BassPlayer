@@ -1,0 +1,119 @@
+﻿<UserControl x:Class="BassPlayer.Controls.MediaLibTree"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d"
+             x:Name="Ctrl"
+             d:DesignHeight="600"
+             d:DesignWidth="300">
+    <TreeView x:Name="MediaTree"
+              MouseDown="MediaTree_MouseDown">
+        <TreeViewItem x:Name="NodeAlbums"
+                      Visibility="{Binding ElementName=Ctrl, Path=AlbumsVisible}">
+            <TreeViewItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="../Images/itunes/album.png"
+                           Width="22"
+                           Height="22"/>
+                    <TextBlock Text="Albums"
+                               VerticalAlignment="Center"
+                               Margin="5"/>
+                </StackPanel>
+            </TreeViewItem.Header>
+        </TreeViewItem>
+        <TreeViewItem x:Name="NodeCompilations"
+                      Visibility="{Binding ElementName=Ctrl, Path=CompilationsVisible}">
+            <TreeViewItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="../Images/itunes/album-compilation-50.png"
+                           Width="22"
+                           Height="22"/>
+                    <TextBlock Text="Compilations"
+                               VerticalAlignment="Center"
+                               Margin="5"/>
+                </StackPanel>
+            </TreeViewItem.Header>
+        </TreeViewItem>
+        <TreeViewItem x:Name="NodeArtists"
+                      Visibility="{Binding ElementName=Ctrl, Path=ArtistsVisible}">
+            <TreeViewItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="../Images/itunes/artist-50.png"
+                           Width="22"
+                           Height="22"/>
+                    <TextBlock Text="Artists"
+                               VerticalAlignment="Center"
+                               Margin="5"/>
+                </StackPanel>
+            </TreeViewItem.Header>
+        </TreeViewItem>
+        <TreeViewItem x:Name="NodeGenres"
+                      Visibility="{Binding ElementName=Ctrl, Path=GenresVisible}">
+            <TreeViewItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="../Images/itunes/genres-50.png"
+                           Width="22"
+                           Height="22"/>
+                    <TextBlock Text="Genres"
+                               VerticalAlignment="Center"
+                               Margin="5"/>
+                </StackPanel>
+            </TreeViewItem.Header>
+        </TreeViewItem>
+        <TreeViewItem x:Name="NodePodcasts"
+                      Visibility="{Binding ElementName=Ctrl, Path=PodcastsVisible}">
+            <TreeViewItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="../Images/itunes/podcast-50.png"
+                           Width="22"
+                           Height="22"/>
+                    <TextBlock Text="Podcasts"
+                               VerticalAlignment="Center"
+                               Margin="5"/>
+                </StackPanel>
+            </TreeViewItem.Header>
+        </TreeViewItem>
+        <TreeViewItem x:Name="NodePlaylists"
+                      Visibility="{Binding ElementName=Ctrl, Path=PlaylistsVisible}">
+            <TreeViewItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="../Images/Menu/to_do-50.png"
+                           Width="22"
+                           Height="22"/>
+                    <TextBlock Text="Playlists"
+                               VerticalAlignment="Center"
+                               Margin="5"/>
+                </StackPanel>
+            </TreeViewItem.Header>
+        </TreeViewItem>
+        <TreeViewItem x:Name="NodeSongs"
+                      Visibility="{Binding ElementName=Ctrl, Path=SongsVisible}">
+            <TreeViewItem.Header>
+                <StackPanel Orientation="Horizontal">
+                    <Image Source="../Images/itunes/songs-50.png"
+                           Width="22"
+                           Height="22"/>
+                    <TextBlock Text="Songs"
+                               VerticalAlignment="Center"
+                               Margin="5"/>
+                </StackPanel>
+            </TreeViewItem.Header>
+            <StackPanel Width="216">
+                <Button Content="List all songs"
+                        x:Name="BtnListAll"
+                        Margin="30,5,5,2"
+                        Click="BtnListAll_Click"/>
+                <TextBlock Text="Filter:"
+                           Margin="30,2,0,2"/>
+                <TextBox Margin="30,2,5,8"
+                         x:Name="TbFilter"
+                         Text="{Binding ElementName=Ctrl, Path=FilterString}"/>
+                <Button Content="Aply Filter"
+                        Margin="30,0,5,0"
+                        x:Name="BtnFilter"
+                        Click="BtnFilter_Click"/>
+            </StackPanel>
+        </TreeViewItem>
+    </TreeView>
+</UserControl>

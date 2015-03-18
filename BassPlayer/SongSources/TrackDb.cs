@@ -18,13 +18,13 @@ namespace BassPlayer.SongSources
         }
 
         private string _file;
-        private AlbumArtStorage _covers;
+        private ZipArtStorage _covers;
 
         public TrackDb() : base()
         {
             string profile = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
             _file = Path.Combine(profile, "BassPlayerLib.xml");
-            _covers = new AlbumArtStorage(Path.Combine(profile, "BassPlayerLib.covers"));
+            _covers = new ZipArtStorage(Path.Combine(profile, "BassPlayerLib.covers"));
             if (File.Exists(_file)) Load();
         }
 
