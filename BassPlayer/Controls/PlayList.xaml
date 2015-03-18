@@ -574,114 +574,11 @@
                                     <ColumnDefinition Width="3"/>
                                     <ColumnDefinition/>
                                 </Grid.ColumnDefinitions>
-                                <ScrollViewer Grid.Column="0">
-                                    <StackPanel>
-                                        <Expander>
-                                            <Expander.Header>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <Image Source="../Images/itunes/album.png"
-                                                           Width="22"
-                                                           Height="22"/>
-                                                    <TextBlock Text="Albums"
-                                                               VerticalAlignment="Center"
-                                                               Margin="5"/>
-                                                </StackPanel>
-                                            </Expander.Header>
-                                            <StackPanel x:Name="SpAlbums"/>
-                                        </Expander>
-                                        <Expander>
-                                            <Expander.Header>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <Image Source="../Images/itunes/album-compilation-50.png"
-                                                           Width="22"
-                                                           Height="22"/>
-                                                    <TextBlock Text="Compilations"
-                                                               VerticalAlignment="Center"
-                                                               Margin="5"/>
-                                                </StackPanel>
-                                            </Expander.Header>
-                                            <StackPanel x:Name="SpCompilations"/>
-                                        </Expander>
-                                        <Expander>
-                                            <Expander.Header>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <Image Source="../Images/itunes/artist-50.png"
-                                                           Width="22"
-                                                           Height="22"/>
-                                                    <TextBlock Text="Artists"
-                                                               VerticalAlignment="Center"
-                                                               Margin="5"/>
-                                                </StackPanel>
-                                            </Expander.Header>
-                                            <StackPanel x:Name="SpArtists"/>
-                                        </Expander>
-                                        <Expander>
-                                            <Expander.Header>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <Image Source="../Images/itunes/genres-50.png"
-                                                           Width="22"
-                                                           Height="22"/>
-                                                    <TextBlock Text="Genres"
-                                                               VerticalAlignment="Center"
-                                                               Margin="5"/>
-                                                </StackPanel>
-                                            </Expander.Header>
-                                            <StackPanel x:Name="SpGenres"/>
-                                        </Expander>
-                                        <Expander>
-                                            <Expander.Header>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <Image Source="../Images/itunes/podcast-50.png"
-                                                           Width="22"
-                                                           Height="22"/>
-                                                    <TextBlock Text="Podcasts"
-                                                               VerticalAlignment="Center"
-                                                               Margin="5"/>
-                                                </StackPanel>
-                                            </Expander.Header>
-                                            <StackPanel x:Name="SpPodcasts"/>
-                                        </Expander>
-                                        <Expander>
-                                            <Expander.Header>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <Image Source="../Images/Menu/to_do-50.png"
-                                                           Width="22"
-                                                           Height="22"/>
-                                                    <TextBlock Text="Playlists"
-                                                               VerticalAlignment="Center"
-                                                               Margin="5"/>
-                                                </StackPanel>
-                                            </Expander.Header>
-                                            <StackPanel x:Name="SpPlaylists"/>
-                                        </Expander>
-                                        <Expander>
-                                            <Expander.Header>
-                                                <StackPanel Orientation="Horizontal">
-                                                    <Image Source="../Images/itunes/songs-50.png"
-                                                           Width="22"
-                                                           Height="22"/>
-                                                    <TextBlock Text="Songs"
-                                                               VerticalAlignment="Center"
-                                                               Margin="5"/>
-                                                </StackPanel>
-                                            </Expander.Header>
-                                            <StackPanel>
-                                                <Button Content="List all songs"
-                                                        x:Name="BtnListAll"
-                                                        Click="BtnListAll_Click"
-                                                        Margin="30,5,5,2"/>
-                                                <TextBlock Text="Filter:"
-                                                           Margin="30,2,0,2"/>
-                                                <TextBox Margin="30,2,5,8"
-                                                         x:Name="TbFilter"/>
-                                                <Button Content="Aply Filter"
-                                                        Margin="30,0,5,0"
-                                                        x:Name="BtnFilter"
-                                                        Click="BtnFilter_Click"/>
-                                            </StackPanel>
-                                        </Expander>
-                                    </StackPanel>
-                                </ScrollViewer>
+                                <controls:MediaLibTree Grid.Column="0"
+                                                       x:Name="iTunesTree"
+                                                       ListAllClick="iTunesTree_ListAllClick"
+                                                       FilterClick="iTunesTree_FilterClick"
+                                                       ItemClick="iTunesTree_ItemClick"/>
                                 <GridSplitter Grid.Column="1"
                                               HorizontalAlignment="Stretch"
                                               Background="{StaticResource {x:Static SystemColors.GradientActiveCaptionBrushKey}}"/>

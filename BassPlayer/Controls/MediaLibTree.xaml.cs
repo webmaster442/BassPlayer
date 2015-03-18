@@ -120,6 +120,7 @@ namespace BassPlayer.Controls
                     tag = "Podcasts/";
                     break;
             }
+            if (items == null) return;
             foreach (var item in items)
             {
                 TreeViewItem ti = new TreeViewItem();

@@ -59,12 +59,13 @@ namespace BassPlayer.Controls
             LbRecent.ItemsSource = _recent;
             LbYoutube.ItemsSource = _youtube;
 
-            ListItunesData(SpArtists, _itunes.Artists, "Artists");
-            ListItunesData(SpAlbums, _itunes.Albums, "Albums");
-            ListItunesData(SpCompilations, _itunes.Compilations, "Compilations");
-            ListItunesData(SpGenres, _itunes.Genres, "Genres");
-            ListItunesData(SpPodcasts, _itunes.Podcasts, "Podcasts");
-            ListItunesData(SpPlaylists, _itunes.Playlists, "Playlists");
+            iTunesTree.AddNode(MediaLibTree.Categories.Artists, _itunes.Artists);
+            iTunesTree.AddNode(MediaLibTree.Categories.Albums, _itunes.Albums);
+            iTunesTree.AddNode(MediaLibTree.Categories.Compilations, _itunes.Compilations);
+            iTunesTree.AddNode(MediaLibTree.Categories.Genres, _itunes.Genres);
+            iTunesTree.AddNode(MediaLibTree.Categories.Genres, _itunes.Genres);
+            iTunesTree.AddNode(MediaLibTree.Categories.Podcasts, _itunes.Podcasts);
+            iTunesTree.AddNode(MediaLibTree.Categories.Playlists, _itunes.Playlists);
             TabTunes.IsEnabled = _itunes.isLoaded;
         }
 
@@ -892,41 +893,28 @@ namespace BassPlayer.Controls
 
         #region iTunes
 
-        private void ListItunesData(StackPanel target, string[] items, string linkcat)
-        {
-            if (items == null || target == null) return;
-            foreach (var item in items)
-            {
-                Button b = new Button();
-                b.Content = item;
-                b.Margin = new Thickness(30, 2, 5, 2);
-                b.Click += b_Click;
-                b.ToolTip = string.Format("{0}/{1}", linkcat, item);
-                target.Children.Add(b);
-            }
-        }
-
-        private void b_Click(object sender, RoutedEventArgs e)
-        {
-            var s = ((Button)sender).ToolTip.ToString();
-            _tunes.Clear();
-            var result = _itunes.Filter(s);
-            _tunes.AddRange(result);
-        }
-
-        private void BtnListAll_Click(object sender, RoutedEventArgs e)
+        private void iTunesTree_ListAllClick(object sender, RoutedEventArgs e)
         {
             _tunes.Clear();
             var result = _itunes.Filter("Songs/Songs");
             _tunes.AddRange(result);
         }
 
-        private void BtnFilter_Click(object sender, RoutedEventArgs e)
+        private void iTunesTree_FilterClick(object sender, RoutedEventArgs e)
         {
             _tunes.Clear();
-            var result = _itunes.Search(TbFilter.Text);
+            var result = _itunes.Search(iTunesTree.FilterString);
             _tunes.AddRange(result);
         }
+
+        private void iTunesTree_ItemClick(object sender, RoutedEventArgs e)
+        {
+            var s = ((TreeViewItem)sender).Tag.ToString();
+            _tunes.Clear();
+            var result = _itunes.Filter(s);
+            _tunes.AddRange(result);
+        }
+
         #endregion
 
         private async void Button_Click_1(object sender, RoutedEventArgs e)
