@@ -1,6 +1,9 @@
-﻿using BassPlayer.SongSources;
+﻿using BassEngine;
+using BassPlayer.SongSources;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -12,11 +15,34 @@ namespace BassPlayer.Controls
     public partial class MediaLib : UserControl
     {
         private TrackDb _db;
+        private ObservableCollection<PlayListEntry> _list;
+
+        public event RoutedEventHandler MediaLibSongLoad;
+
+        /// <summary>
+        /// Gets the current Selected PlaylistEntry
+        /// </summary>
+        public PlayListEntry SelectedItem { get; set; }
 
         public MediaLib()
         {
             InitializeComponent();
             _db = new TrackDb();
+            _list = new ObservableCollection<PlayListEntry>();
+            LbMediaLib.ItemsSource = _list;
+            RefreshTree();
+        }
+
+        /// <summary>
+        /// Refreshes tree
+        /// </summary>
+        private void RefreshTree()
+        {
+            MediaTree.ResetNodes();
+            MediaTree.AddNode(MediaLibTree.Categories.Albums, _db.Albums);
+            MediaTree.AddNode(MediaLibTree.Categories.Artists, _db.Artists);
+            MediaTree.AddNode(MediaLibTree.Categories.Genres, _db.Genres);
+            MediaTree.AddNode(MediaLibTree.Categories.Years, _db.Years);
         }
 
         private async void MediaAddFiles_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -31,6 +57,7 @@ namespace BassPlayer.Controls
                 _db.Save();
                 ProcessProgress.Visibility = System.Windows.Visibility.Collapsed;
             }
+            RefreshTree();
         }
 
         private async void MediaAddFolder_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -51,6 +78,7 @@ namespace BassPlayer.Controls
                 _db.Save();
                 ProcessProgress.Visibility = System.Windows.Visibility.Collapsed;
             }
+            RefreshTree();
         }
 
         private void MediaRemove_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -66,6 +94,78 @@ namespace BassPlayer.Controls
         public void Save()
         {
             _db.Save();
+        }
+
+        private void MediaTree_ListAllClick(object sender, System.Windows.RoutedEventArgs e)
+        {
+            _list.Clear();
+            _list.AddRange(_db.Query(TrackDb.QueryType.All, null));
+        }
+
+        private void MediaTree_FilterClick(object sender, System.Windows.RoutedEventArgs e)
+        {
+            _list.Clear();
+            _list.AddRange(_db.Query(TrackDb.QueryType.Search, MediaTree.FilterString));
+        }
+
+        private void MediaTree_ItemClick(object sender, System.Windows.RoutedEventArgs e)
+        {
+            _list.Clear();
+            var s = ((TreeViewItem)sender).Tag.ToString().Split('/');
+            PlayListEntry[] result = null;
+            if (s.Length > 1)
+            {
+                switch (s[0])
+                {
+                    case "Genres":
+                        result = _db.Query(TrackDb.QueryType.Genre, s[1]);
+                        break;
+                    case "Albums":
+                        result = _db.Query(TrackDb.QueryType.Album, s[1]);
+                        break;
+                    case "Artists":
+                        result = _db.Query(TrackDb.QueryType.Artist, s[1]);
+                        break;
+                    case "Years":
+                        result = _db.Query(TrackDb.QueryType.Year, s[1]);
+                        break;
+                }
+            }
+            _list.AddRange(result);
+        }
+
+        private void LbMediaLib_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (MediaLibSongLoad != null)
+            {
+                if (LbMediaLib.SelectedItem != null)
+                {
+                    SelectedItem = _list[LbMediaLib.SelectedIndex];
+                    MediaLibSongLoad(this, null);
+                }
+            }
+        }
+
+        public void NextTrack()
+        {
+            int index = LbMediaLib.SelectedIndex;
+            if ((index + 1) < (LbMediaLib.Items.Count - 1))
+            {
+                index += 1;
+                LbMediaLib.SelectedIndex = index;
+                SelectedItem = _list[LbMediaLib.SelectedIndex];
+            }
+        }
+
+        public void PreviousTrack()
+        {
+            int index = LbMediaLib.SelectedIndex;
+            if ((index - 1) > 0)
+            {
+                index -= 1;
+                LbMediaLib.SelectedIndex = index;
+                SelectedItem = _list[LbMediaLib.SelectedIndex];
+            }
         }
     }
 }

@@ -290,7 +290,8 @@
                 <MenuItem Command="{x:Static controls:CustomCommands.MediaAddFolder}"/>
             </MenuItem>
         </Menu>
-        <TabControl Style="{StaticResource TabRight}">
+        <TabControl Style="{StaticResource TabRight}"
+                    x:Name="MainTab">
             <TabItem Header="Sources">
                 <Grid Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}">
                     <StackPanel x:Name="Processing"
@@ -320,7 +321,7 @@
                             </TabItem.Header>
                             <ListBox x:Name="LbList"
                                      Style="{StaticResource Playlist}"
-                                     MouseDoubleClick="LbList_MouseDoubleClick" Margin="289,394,-289,-394" >
+                                     MouseDoubleClick="LbList_MouseDoubleClick">
                                 <ListBox.ContextMenu>
                                     <ContextMenu IsEnabled="{Binding ElementName=TcView, Path=SelectedIndex, ConverterParameter=0, Converter={StaticResource EnableConv}}">
                                         <MenuItem Command="{x:Static controls:CustomCommands.ContextCopyToDevice}"/>
@@ -688,7 +689,8 @@
                 </Grid>
             </TabItem>
             <TabItem Header="Media Lib">
-                <controls:MediaLib x:Name="MediaLib"/>
+                <controls:MediaLib x:Name="MediaLib"
+                                   MediaLibSongLoad="MediaLibSongLoad"/>
             </TabItem>
         </TabControl>
     </Grid>

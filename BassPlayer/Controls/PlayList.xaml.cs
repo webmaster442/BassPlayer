@@ -234,6 +234,18 @@ namespace BassPlayer.Controls
             }
         }
 
+        private void MediaLibSongLoad(object sender, RoutedEventArgs e)
+        {
+            if (AudioPlayerControls != null)
+            {
+                if (MediaLib.SelectedItem != null)
+                {
+                    AudioPlayerControls.Load(MediaLib.SelectedItem);
+                    _recent.Add(MediaLib.SelectedItem);
+                }
+            }
+        }
+
         private async void LbYoutube_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             if (AudioPlayerControls != null)
@@ -264,100 +276,114 @@ namespace BassPlayer.Controls
         public void DoNextTrack()
         {
             var next = 0;
-            if (TcView.SelectedIndex == 0)
+            if (MainTab.SelectedIndex == 0)
             {
-                //Playlist
-                if (_playlist.Count < 1) return;
-                if (Repeat) next = _index;
-                else if (Shuffle) next = _rgen.Next(0, _playlist.Count);
-                else next = _index + 1;
-                if (next > _playlist.Count - 1) return;
-                AudioPlayerControls.Load(_playlist[next]);
-                _index = next;
+                switch (TcView.SelectedIndex)
+                {
+                    case 0:
+                        //Playlist
+                        if (_playlist.Count < 1) return;
+                        if (Repeat) next = _index;
+                        else if (Shuffle) next = _rgen.Next(0, _playlist.Count);
+                        else next = _index + 1;
+                        if (next > _playlist.Count - 1) return;
+                        AudioPlayerControls.Load(_playlist[next]);
+                        _index = next;
+                        break;
+                    case 1:
+                        //Recent
+                        if (_recent.Count < 1) return;
+                        if (Repeat) next = LbRecent.SelectedIndex;
+                        else if (Shuffle) next = _rgen.Next(0, _recent.Count);
+                        else next = LbRecent.SelectedIndex + 1;
+                        if (next > _recent.Count - 1) return;
+                        AudioPlayerControls.Load(_recent[next]);
+                        LbRecent.SelectedIndex = next;
+                        break;
+                    case 2:
+                        //File Manager
+                        if (_files.Count < 1) return;
+                        if (Repeat) next = LbFiles.SelectedIndex;
+                        else if (Shuffle) next = _rgen.Next(0, _files.Count);
+                        else next = LbFiles.SelectedIndex + 1;
+                        if (next > _files.Count - 1) return;
+                        AudioPlayerControls.Load(_files[next]);
+                        LbFiles.SelectedIndex = next;
+                        _recent.UpdateItemAtIndex(next);
+                        break;
+                    case 3:
+                        //iTunes
+                        if (_tunes.Count < 1) return;
+                        if (Repeat) next = LbLib.SelectedIndex;
+                        else if (Shuffle) next = _rgen.Next(0, _tunes.Count);
+                        else next = LbLib.SelectedIndex + 1;
+                        if (next > _tunes.Count - 1) return;
+                        AudioPlayerControls.Load(_tunes[next]);
+                        LbLib.SelectedIndex = next;
+                        break;
+                }
             }
-            else if (TcView.SelectedIndex == 1)
+            else
             {
-                //Recent
-                if (_recent.Count < 1) return;
-                if (Repeat) next = LbRecent.SelectedIndex;
-                else if (Shuffle) next = _rgen.Next(0, _recent.Count);
-                else next = LbRecent.SelectedIndex + 1;
-                if (next > _recent.Count - 1) return;
-                AudioPlayerControls.Load(_recent[next]);
-                LbRecent.SelectedIndex = next;
-            }
-            else if (TcView.SelectedIndex == 2)
-            {
-                //File Manager
-                if (_files.Count < 1) return;
-                if (Repeat) next = LbFiles.SelectedIndex;
-                else if (Shuffle) next = _rgen.Next(0, _files.Count);
-                else next = LbFiles.SelectedIndex + 1;
-                if (next > _files.Count - 1) return;
-                AudioPlayerControls.Load(_files[next]);
-                LbFiles.SelectedIndex = next;
-                _recent.UpdateItemAtIndex(next);
-            }
-            else if (TcView.SelectedIndex == 3)
-            {
-                //iTunes
-                if (_tunes.Count < 1) return;
-                if (Repeat) next = LbLib.SelectedIndex;
-                else if (Shuffle) next = _rgen.Next(0, _tunes.Count);
-                else next = LbLib.SelectedIndex + 1;
-                if (next > _tunes.Count - 1) return;
-                AudioPlayerControls.Load(_tunes[next]);
-                LbLib.SelectedIndex = next;
+                MediaLib.NextTrack();
+                AudioPlayerControls.Load(MediaLib.SelectedItem);
             }
         }
 
         public void DoPreviousTrack()
         {
             var previous = 0;
-            if (TcView.SelectedIndex == 0)
+            if (MainTab.SelectedIndex == 0)
             {
-                //Playlist
-                if (_playlist.Count < 1) return;
-                if (Repeat) previous = _index;
-                else if (Shuffle) previous = _rgen.Next(0, _playlist.Count);
-                else previous = _index - 1;
-                if (previous < 0) return;
-                AudioPlayerControls.Load(_playlist[previous]);
-                _index = previous;
+                switch (TcView.SelectedIndex)
+                {
+                    case 0:
+                        //Playlist
+                        if (_playlist.Count < 1) return;
+                        if (Repeat) previous = _index;
+                        else if (Shuffle) previous = _rgen.Next(0, _playlist.Count);
+                        else previous = _index - 1;
+                        if (previous < 0) return;
+                        AudioPlayerControls.Load(_playlist[previous]);
+                        _index = previous;
+                        break;
+                    case 1:
+                        //Recent
+                        if (_recent.Count < 1) return;
+                        if (Repeat) previous = LbRecent.SelectedIndex;
+                        else if (Shuffle) previous = _rgen.Next(0, _recent.Count);
+                        else previous = LbRecent.SelectedIndex - 1;
+                        if (previous < 0) return;
+                        AudioPlayerControls.Load(_recent[previous]);
+                        LbRecent.SelectedIndex = previous;
+                        _recent.UpdateItemAtIndex(previous);
+                        break;
+                    case 2:
+                        //File Manager
+                        if (_files.Count < 1) return;
+                        if (Repeat) previous = LbFiles.SelectedIndex;
+                        else if (Shuffle) previous = _rgen.Next(0, _files.Count);
+                        else previous = LbFiles.SelectedIndex - 1;
+                        if (previous < 0) return;
+                        AudioPlayerControls.Load(_files[previous]);
+                        LbFiles.SelectedIndex = previous;
+                        break;
+                    case 3:
+                        //iTunes
+                        if (_tunes.Count < 1) return;
+                        if (Repeat) previous = LbLib.SelectedIndex;
+                        else if (Shuffle) previous = _rgen.Next(0, _tunes.Count);
+                        else previous = LbLib.SelectedIndex - 1;
+                        if (previous < 0) return;
+                        AudioPlayerControls.Load(_tunes[previous]);
+                        LbLib.SelectedIndex = previous;
+                        break;
+                }
             }
-            else if (TcView.SelectedIndex == 1)
+            else
             {
-                //Recent
-                if (_recent.Count < 1) return;
-                if (Repeat) previous = LbRecent.SelectedIndex;
-                else if (Shuffle) previous = _rgen.Next(0, _recent.Count);
-                else previous = LbRecent.SelectedIndex - 1;
-                if (previous < 0) return;
-                AudioPlayerControls.Load(_recent[previous]);
-                LbRecent.SelectedIndex = previous;
-                _recent.UpdateItemAtIndex(previous);
-            }
-            else if (TcView.SelectedIndex == 2)
-            {
-                //File Manager
-                if (_files.Count < 1) return;
-                if (Repeat) previous = LbFiles.SelectedIndex;
-                else if (Shuffle) previous = _rgen.Next(0, _files.Count);
-                else previous = LbFiles.SelectedIndex - 1;
-                if (previous < 0) return;
-                AudioPlayerControls.Load(_files[previous]);
-                LbFiles.SelectedIndex = previous;
-            }
-            else if (TcView.SelectedIndex == 3)
-            {
-                //iTunes
-                if (_tunes.Count < 1) return;
-                if (Repeat) previous = LbLib.SelectedIndex;
-                else if (Shuffle) previous = _rgen.Next(0, _tunes.Count);
-                else previous = LbLib.SelectedIndex - 1;
-                if (previous < 0) return;
-                AudioPlayerControls.Load(_tunes[previous]);
-                LbLib.SelectedIndex = previous;
+                MediaLib.PreviousTrack();
+                AudioPlayerControls.Load(MediaLib.SelectedItem);
             }
         }
 

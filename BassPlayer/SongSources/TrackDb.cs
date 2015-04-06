@@ -9,25 +9,31 @@ using System.Xml.Serialization;
 
 namespace BassPlayer.SongSources
 {
+    /// <summary>
+    /// Simple XML NOSQL database storage
+    /// </summary>
     class TrackDb: List<TrackData>
     {
-
+        /// <summary>
+        /// Query subtype
+        /// </summary>
         public enum QueryType
         {
-            Album, Artist, Year, Genre
+            Album, Artist, Year, Genre, All, Search
         }
 
         private string _file;
-        private ZipArtStorage _covers;
 
         public TrackDb() : base()
         {
             string profile = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
             _file = Path.Combine(profile, "BassPlayerLib.xml");
-            _covers = new ZipArtStorage(Path.Combine(profile, "BassPlayerLib.covers"));
             if (File.Exists(_file)) Load();
         }
 
+        /// <summary>
+        /// Loads the database
+        /// </summary>
         private void Load()
         {
             try
@@ -45,6 +51,9 @@ namespace BassPlayer.SongSources
             }
         }
 
+        /// <summary>
+        /// Save database
+        /// </summary>
         public void Save()
         {
             try
@@ -54,7 +63,6 @@ namespace BassPlayer.SongSources
                 {
                     xs.Serialize(f, this.ToArray());
                 }
-                _covers.Save();
             }
             catch (Exception ex)
             {
@@ -62,6 +70,9 @@ namespace BassPlayer.SongSources
             }
         }
 
+        /// <summary>
+        /// Gets the artists in the db
+        /// </summary>
         public string[] Artists
         {
             get
@@ -72,6 +83,9 @@ namespace BassPlayer.SongSources
             }
         }
 
+        /// <summary>
+        /// Gets the albumns in the db
+        /// </summary>
         public string[] Albums
         {
             get
@@ -82,16 +96,22 @@ namespace BassPlayer.SongSources
             }
         }
 
-        public uint[] Years
+        /// <summary>
+        /// Gets the years in the db
+        /// </summary>
+        public string[] Years
         {
             get
             {
                 return (from i in this.AsParallel()
                         orderby i.Year descending
-                        select i.Year).Distinct().ToArray();
+                        select i.Year).Distinct().Select(x => x.ToString()).ToArray();
             }
         }
 
+        /// <summary>
+        /// Gets the genres in the db
+        /// </summary>
         public string[] Genres
         {
             get
@@ -102,7 +122,13 @@ namespace BassPlayer.SongSources
             }
         }
 
-        public TrackData[] Query(QueryType type, object parameter)
+        /// <summary>
+        /// Returns specific tracks that mach the query in the db
+        /// </summary>
+        /// <param name="type">Query type</param>
+        /// <param name="parameter">Query parameters</param>
+        /// <returns>an array of tracks that match the citeria</returns>
+        public PlayListEntry[] Query(QueryType type, string parameter)
         {
             switch (type)
             {
@@ -110,27 +136,44 @@ namespace BassPlayer.SongSources
                     return (from track in this.AsParallel()
                             where track.Album == (string)parameter
                             orderby track.Disc, track.Track, track.Artist, track.Title
-                            select track).ToArray();
+                            select (PlayListEntry)track).ToArray();
                 case QueryType.Artist:
                     return (from track in this.AsParallel()
                             where track.Artist == (string)parameter
                             orderby track.Title
-                            select track).ToArray();
+                            select (PlayListEntry)track).ToArray();
                 case QueryType.Genre:
                     return (from track in this.AsParallel()
                             where track.Genre == (string)parameter
                             orderby track.Artist, track.Title
-                            select track).ToArray();
+                            select (PlayListEntry)track).ToArray();
                 case QueryType.Year:
                     return (from track in this.AsParallel()
-                            where track.Year == (uint)parameter
+                            where track.Year == Convert.ToUInt32(parameter)
                             orderby track.Artist, track.Title
-                            select track).ToArray();
+                            select (PlayListEntry)track).ToArray();
+                case QueryType.All:
+                    return (from track in this.AsParallel()
+                            orderby track.Artist ascending, track.Title ascending
+                            select (PlayListEntry)track).ToArray();
+                case QueryType.Search:
+                    return (from track in this.AsParallel()
+                            where track.Title.Contains(parameter) ||
+                                  track.Artist.Contains(parameter) ||
+                                  track.Album.Contains(parameter) ||
+                                  track.Genre.Contains(parameter)
+                            orderby track.Artist, track.Album, track.Title, track.Genre
+                            select (PlayListEntry)track).ToArray();
                 default:
                     return null;
             }
         }
 
+        /// <summary>
+        /// Adds files to the DB
+        /// </summary>
+        /// <param name="files">Files to process</param>
+        /// <returns>A processing task</returns>
         public Task ProcessFiles(IEnumerable<string> files)
         {
             return Task.Run(() =>

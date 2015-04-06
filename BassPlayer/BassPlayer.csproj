@@ -110,7 +110,6 @@
     <Compile Include="Controls\MiniPlayer.xaml.cs">
       <DependentUpon>MiniPlayer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SongSources\ZipArtStorage.cs" />
     <Compile Include="SongSources\iTunesData.cs" />
     <Compile Include="Classes\KeyboardHook.cs" />
     <Compile Include="SongSources\RecentPlays.cs" />
@@ -308,6 +307,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\Menu\restore-window-50.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\itunes\Calendar-50.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

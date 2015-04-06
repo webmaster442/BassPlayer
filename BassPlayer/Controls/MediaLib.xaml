@@ -18,27 +18,26 @@
                         Executed="MediaBackupLib_Executed"/>
     </UserControl.CommandBindings>
     <Grid>
-        <TabControl TabStripPlacement="Left"
-                    Background="Transparent">
-            <TabItem Header="Albums"
-                     Background="Transparent">
-                <ListBox>
-                    <ListBox.ItemTemplate>
-                        <DataTemplate>
-                            <StackPanel>
-                                <Image Width="200"
-                                       Height="200"
-                                       Stretch="Uniform"
-                                       Source="{Binding Conver}"/>
-                                <TextBlock TextAlignment="Center"
-                                           TextWrapping="Wrap"
-                                           Text="{Binding AlbumName}"/>
-                            </StackPanel>
-                        </DataTemplate>
-                    </ListBox.ItemTemplate>
-                </ListBox>
-            </TabItem>
-        </TabControl>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="3"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <controls:MediaLibTree Grid.Column="0"
+                               x:Name="MediaTree"
+                               PodcastsVisible="Collapsed"
+                               PlaylistsVisible="Collapsed"
+                               CompilationsVisible="Collapsed"
+                               ListAllClick="MediaTree_ListAllClick"
+                               FilterClick="MediaTree_FilterClick"
+                               ItemClick="MediaTree_ItemClick"/>
+        <GridSplitter Grid.Column="1"
+                      HorizontalAlignment="Stretch"
+                      Background="{StaticResource {x:Static SystemColors.GradientActiveCaptionBrushKey}}"/>
+        <ListBox Grid.Column="2"
+                 Style="{StaticResource Playlist}"
+                 x:Name="LbMediaLib"
+                 MouseDoubleClick="LbMediaLib_MouseDoubleClick"/>
         <Grid Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}"
               x:Name="ProcessProgress"
               Visibility="Collapsed">
