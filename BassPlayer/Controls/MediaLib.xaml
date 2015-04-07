@@ -16,6 +16,8 @@
                         Executed="MediaRemove_Executed"/>
         <CommandBinding Command="{x:Static controls:CustomCommands.MediaBackupLib}"
                         Executed="MediaBackupLib_Executed"/>
+        <CommandBinding Command="{x:Static controls:CustomCommands.MediaRestoreLib}"
+                        Executed="MediaRestoreLib_Executed"/>
     </UserControl.CommandBindings>
     <Grid>
         <Grid.ColumnDefinitions>

@@ -83,12 +83,30 @@ namespace BassPlayer.Controls
 
         private void MediaRemove_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+            if (LbMediaLib.SelectedItems.Count > 0)
+            {
+                List<PlayListEntry> selection = new List<PlayListEntry>(LbMediaLib.SelectedItems.Count);
 
+                while (LbMediaLib.SelectedItems.Count > 0)
+                {
+                    var j = (PlayListEntry)LbMediaLib.SelectedItems[0];
+                    selection.Add(j);
+                    _list.Remove(j);
+                }
+                _db.DeleteItems(selection);
+                RefreshTree();
+            }
         }
 
         private void MediaBackupLib_Executed(object sender, ExecutedRoutedEventArgs e)
         {
+            _db.DoBackup();
+        }
 
+        private void MediaRestoreLib_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            _db.DoResore();
+            RefreshTree();
         }
 
         public void Save()
@@ -149,7 +167,7 @@ namespace BassPlayer.Controls
         public void NextTrack()
         {
             int index = LbMediaLib.SelectedIndex;
-            if ((index + 1) < (LbMediaLib.Items.Count - 1))
+            if ((index + 1) <= (LbMediaLib.Items.Count - 1))
             {
                 index += 1;
                 LbMediaLib.SelectedIndex = index;
@@ -160,7 +178,7 @@ namespace BassPlayer.Controls
         public void PreviousTrack()
         {
             int index = LbMediaLib.SelectedIndex;
-            if ((index - 1) > 0)
+            if ((index - 1) >= 0)
             {
                 index -= 1;
                 LbMediaLib.SelectedIndex = index;

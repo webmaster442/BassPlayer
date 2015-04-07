@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Threading;
 using System.Xml.Serialization;
 
@@ -130,6 +132,7 @@ namespace BassPlayer.SongSources
         /// <returns>an array of tracks that match the citeria</returns>
         public PlayListEntry[] Query(QueryType type, string parameter)
         {
+            if (string.IsNullOrEmpty(parameter)) return null;
             switch (type)
             {
                 case QueryType.Album:
@@ -170,6 +173,19 @@ namespace BassPlayer.SongSources
         }
 
         /// <summary>
+        /// Deletes items from the database
+        /// </summary>
+        /// <param name="entrys">PlaylistEntry to remove</param>
+        public void DeleteItems(IEnumerable<PlayListEntry> entrys)
+        {
+            var query = (from i in this
+                         from j in entrys
+                         where i.File == j.FileName
+                         select i).ToArray();
+            foreach (var item in query) this.Remove(item);
+        }
+
+        /// <summary>
         /// Adds files to the DB
         /// </summary>
         /// <param name="files">Files to process</param>
@@ -188,6 +204,66 @@ namespace BassPlayer.SongSources
                     this.AddRange(data);
                 });
             });
+        }
+
+        /// <summary>
+        /// Backup Database
+        /// </summary>
+        public void DoBackup()
+        {
+            System.Windows.Forms.SaveFileDialog sfd = new System.Windows.Forms.SaveFileDialog();
+            sfd.FileName = string.Format("BassPlayerLibBackup-{0}-{1}-{2}.xml.gz", DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+            if (sfd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                try
+                {
+                    using (var file = File.Create(sfd.FileName))
+                    {
+                        using (var compress = new GZipStream(file, CompressionMode.Compress))
+                        {
+                            XmlSerializer xs = new XmlSerializer(typeof(TrackData[]));
+                            xs.Serialize(compress, this.ToArray());
+                            MessageBox.Show("Backup complete", "Backup", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Helpers.ErrorDialog(ex, "Backup failed");
+                }
+            }
+        }
+
+        /// <summary>
+        /// Restores database
+        /// </summary>
+        public void DoResore()
+        {
+            System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
+            ofd.Filter = "XML Backups|*.xml.gz";
+            ofd.Multiselect = false;
+            if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                try
+                {
+                    using (var file = File.OpenRead(ofd.FileName))
+                    {
+                        using (var compress = new GZipStream(file, CompressionMode.Decompress))
+                        {
+                            this.Clear();
+                            XmlSerializer xs = new XmlSerializer(typeof(TrackData[]));
+                            var array = (TrackData[])xs.Deserialize(compress);
+                            this.AddRange(array);
+                            this.Save();
+                            MessageBox.Show("Restore complete", "Backup", MessageBoxButton.OK, MessageBoxImage.Information);
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Helpers.ErrorDialog(ex, "Restore failed");
+                }
+            }
         }
     }
 }

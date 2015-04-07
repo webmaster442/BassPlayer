@@ -42,5 +42,7 @@ namespace BassPlayer.Controls
         public static readonly RoutedUICommand MediaRemove = new RoutedUICommand("Remove Selected item...", "MediaRemove", typeof(CustomCommands));
 
         public static readonly RoutedUICommand MediaBackupLib = new RoutedUICommand("Backup database...", "MediaBackup", typeof(CustomCommands));
+
+        public static readonly RoutedUICommand MediaRestoreLib = new RoutedUICommand("Restore database...", "MediaRestore", typeof(CustomCommands));
     }
 }

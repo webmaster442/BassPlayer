@@ -66,6 +66,7 @@ namespace BassPlayer.Controls
             iTunesTree.AddNode(MediaLibTree.Categories.Genres, _itunes.Genres);
             iTunesTree.AddNode(MediaLibTree.Categories.Podcasts, _itunes.Podcasts);
             iTunesTree.AddNode(MediaLibTree.Categories.Playlists, _itunes.Playlists);
+            iTunesTree.AddNode(MediaLibTree.Categories.Years, _itunes.Years);
             TabTunes.IsEnabled = _itunes.isLoaded;
         }
 
