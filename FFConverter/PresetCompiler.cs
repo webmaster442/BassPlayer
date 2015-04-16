@@ -13,7 +13,7 @@ namespace FFConverter
     /// </summary>
     internal static class PresetCompiler
     {
-        private const string pattern = @"\{(.*?)\}\s";
+        private const string pattern = @"\{(.*?)\}";
 
         private static Dictionary<string, string> GetAtttrs(string[] parts)
         {
@@ -62,10 +62,10 @@ namespace FFConverter
         {
             target.Children.Clear();
             int matches = 0;
-            string[] tags = Regex.Split(p.CommandLine, pattern);
+            string[] tags = Regex.Split(p.CommandLine, pattern, RegexOptions.CultureInvariant);
             string[] parts;
             Dictionary<string, string> parameters;
-            foreach (var t in tags)
+            foreach (var t in tags.Select(tag => tag.Trim()))
             {
                 if (string.IsNullOrEmpty(t)) continue;
                 parts = SplitArguments(t);

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Controls;
 using System.Linq;
+using System.Globalization;
 
 namespace FFConverter.Controls
 {
@@ -36,23 +37,23 @@ namespace FFConverter.Controls
                 switch (token.Key)
                 {
                     case "min":
-                        SValue.Minimum = Convert.ToDouble(token.Value);
+                        SValue.Minimum = Convert.ToDouble(token.Value, CultureInfo.GetCultureInfo("en-US"));
                         break;
                     case "max":
-                        SValue.Maximum = Convert.ToDouble(token.Value);
+                        SValue.Maximum = Convert.ToDouble(token.Value, CultureInfo.GetCultureInfo("en-US"));
                         break;
                     case "val":
-                        SValue.Value = Convert.ToDouble(token.Value);
+                        SValue.Value = Convert.ToDouble(token.Value, CultureInfo.GetCultureInfo("en-US"));
                         break;
                     case "text":
                         TbDescription.Text = token.Value;
                         break;
                     case "step":
-                        SValue.TickFrequency = Convert.ToDouble(token.Value);
+                        SValue.TickFrequency = Convert.ToDouble(token.Value, CultureInfo.GetCultureInfo("en-US"));
                         SValue.IsSnapToTickEnabled = true;
                         break;
                     case "stops":
-                        var list = (from i in token.Value.Split(';') select Convert.ToDouble(i)).ToArray();
+                        var list = (from i in token.Value.Split(';') select Convert.ToDouble(i, CultureInfo.GetCultureInfo("en-US"))).ToArray();
                         var minval = list.Min();
                         var maxval = list.Max();
                         if (SValue.Minimum > minval) SValue.Minimum = minval;

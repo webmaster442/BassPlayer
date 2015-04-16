@@ -90,6 +90,20 @@ namespace FFConverter
             });
             this.Add(new Preset
             {
+                Name = "M4A Quality mode",
+                Description = "Convert Audio to M4A/AAC based on Quality",
+                CommandLine = "ffmpeg -i {input} -vn -f wav - faac.exe -q {slider text=\"Quality Level:\" min=\"1\" max=\"500\" val=\"500\" step=\"1\"} -o {output} -",
+                Extension = "m4a"
+            });
+            this.Add(new Preset
+            {
+                Name = "M4A Bitrate mode",
+                Description = "Convert Audio to M4A/AAC based on an average bitrate",
+                CommandLine = "ffmpeg -i {input} -vn -f wav - faac.exe -b {slider text=\"Bitrate:\" min=\"8\" stops=\"8;16;32;40;48;56;64;80;96;112;128;160;192;224;256;320\" val=\"256\"} -o {output} -",
+                Extension = "m4a"
+            });
+            this.Add(new Preset
+            {
                 Name = "MP3 CBR",
                 Description = "Mp3 format with Constant bitrate",
                 CommandLine = "ffmpeg -i {input} -vn -acodec mp3 -b:a {slider text=\"Bitrate:\" min=\"8\" stops=\"8;16;32;40;48;56;64;80;96;112;128;160;192;224;256;320\" val=\"192\" unit=\"k\"} {output}",
@@ -101,6 +115,20 @@ namespace FFConverter
                 Description = "Mp3 format with Variable bitrate",
                 CommandLine = "ffmpeg -i {input} -vn -acodec mp3 -q:a {slider text=\"Quality Level:\" min=\"1\" max=\"9\" val=\"7\" step=\"1\"} {output}",
                 Extension = "mp3"
+            });
+            this.Add(new Preset
+            {
+                Name = "AC3",
+                Description = "Dolby Digital AC3 Format",
+                CommandLine = "ffmpeg -i {input} -vn -acodec ac3 -b:a {slider text=\"Bitrate:\" min=\"8\" stops=\"8;16;32;40;48;56;64;80;96;112;128;160;192;224;256;384;448\" val=\"384\" unit=\"k\"} {output} -drc_scale {slider text=\"DRC (Dynamic Range Compression) Level:\" min=\"0.1\" max=\"2\" val=\"0.9\" step=\"0.1\"}",
+                Extension = "ac3"
+            });
+            this.Add(new Preset
+            {
+                Name = "AC3, DVD compatible",
+                Description = "Dolby Digital AC3 Format, DVD compatible, with resampling to 48Khz",
+                CommandLine = "ffmpeg -i {input} -vn -acodec ac3 -b:a {slider text=\"Bitrate:\" min=\"8\" stops=\"8;16;32;40;48;56;64;80;96;112;128;160;192;224;256;384;448\" val=\"384\" unit=\"k\"} {output} -drc_scale {slider text=\"DRC (Dynamic Range Compression) Level:\" min=\"0.1\" max=\"2\" val=\"0.9\" step=\"0.1\"}",
+                Extension = "ac3"
             });
         }
     }

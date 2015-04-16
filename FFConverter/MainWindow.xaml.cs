@@ -171,5 +171,28 @@ namespace FFConverter
         {
             _filelist.Clear();
         }
+
+        private void BtnExit_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void BtnPrevious_Click(object sender, RoutedEventArgs e)
+        {
+            var index = TcPages.SelectedIndex - 1;
+            Dispatcher.Invoke(() => 
+            {
+                if (index > -1) TcPages.SelectedIndex = index;
+            });
+        }
+
+        private void BtnNext_Click(object sender, RoutedEventArgs e)
+        {
+            var index = TcPages.SelectedIndex + 1;
+            Dispatcher.Invoke(() => 
+            {
+                if (index < TcPages.Items.Count) TcPages.SelectedIndex = index;
+            });
+        }
     }
 }

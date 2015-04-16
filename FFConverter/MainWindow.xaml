@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="FFConverter"
         Icon="icon.png"
-        Height="409"
+        Height="435"
         ResizeMode="CanMinimize"
         Width="653"
         Loaded="Window_Loaded"
@@ -13,6 +13,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="80"/>
             <RowDefinition/>
+            <RowDefinition Height="25"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
@@ -205,5 +206,25 @@
                 </Grid>
             </TabItem>
         </TabControl>
+        <StackPanel Grid.Row="2"
+                    Grid.ColumnSpan="2"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+            <Button Content="Exit"
+                    x:Name="BtnExit"
+                    Click="BtnExit_Click"
+                    Width="130"
+                    Margin="10,0"/>
+            <Button Content="Previous"
+                    x:Name="BtnPrevious"
+                    Click="BtnPrevious_Click"
+                    Width="130"
+                    Margin="10,0"/>
+            <Button Content="Next"
+                    x:Name="BtnNext"
+                    Click="BtnNext_Click"
+                    Width="130"
+                    Margin="10,0"/>
+        </StackPanel>
     </Grid>
 </Window>
