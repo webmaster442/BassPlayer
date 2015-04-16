@@ -25,6 +25,12 @@ namespace FFConverter
         public MainWindow()
         {
             InitializeComponent();
+
+            if (String.IsNullOrEmpty(Settings.Default.ConvPath))
+            {
+                string enginedir = System.AppDomain.CurrentDomain.BaseDirectory;
+                Settings.Default.ConvPath = Path.Combine(enginedir, @"Engine\conv");
+            }
             _presets = new PresetManager();
             LbPresets.ItemsSource = _presets;
             LbPresets.SelectedIndex = 0;
@@ -33,7 +39,7 @@ namespace FFConverter
             _titles = new string[] { "Presets", "Input Files", "Preset Options", "Output Options", "Run" };
             _descriptions = new string[] 
             {
-                "Welcome to FFConverter. Select a conversion preset from the list. FFConverter uses the GPL ffmpeg converter.\r\nYou can download a windows build of FFMPEG by clicking on the FFMPEG logo",
+                "Welcome to FFConverter. Select a conversion preset from the list. FFConverter uses the GPL ffmpeg converter & FAAC for AAC/M4A encoding",
                 "Please select the files that you wish to convert.",
                 "Here you can tweak the selected preset options, if the preset has options.",
                 "Here you can specify the output folder and override the output file extension.\r\nWARNING! Overriding the output extension may cause conversion & playback problems",
@@ -47,7 +53,7 @@ namespace FFConverter
             _loaded = true;
             TbPageDescription.Text = _descriptions[TcPages.SelectedIndex];
             TbPageHeader.Text = _titles[TcPages.SelectedIndex];
-            TbFFMpeg.Text = Settings.Default.FFmpegPath;
+            TbConvPath.Text = Settings.Default.ConvPath;
             TbOutputFolder.Text = Settings.Default.LastOutDir;
             var files = Environment.GetCommandLineArgs();
             for (int i = 1; i < files.Length; i++)
@@ -58,7 +64,7 @@ namespace FFConverter
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Settings.Default.FFmpegPath = TbFFMpeg.Text;
+            Settings.Default.ConvPath = TbConvPath.Text;
             Settings.Default.LastOutDir = TbOutputFolder.Text;
             Settings.Default.Save();
             e.Cancel = false;
@@ -89,7 +95,7 @@ namespace FFConverter
 
         private void BtnSaveCmd_Click(object sender, RoutedEventArgs e)
         {
-            if (!File.Exists(Settings.Default.FFmpegPath))
+            if (!File.Exists(Settings.Default.ConvPath))
             {
                 var question =MessageBox.Show("FFMPEG can't be found at the specified path. The Created cmd file will do nothing.\r\nDo you want to continue?", "Warning", MessageBoxButton.YesNo, MessageBoxImage.Warning);
                 if (question == MessageBoxResult.No) return;
@@ -108,7 +114,7 @@ namespace FFConverter
 
         private void BtnRun_Click(object sender, RoutedEventArgs e)
         {
-            if (!File.Exists(Settings.Default.FFmpegPath))
+            if (!File.Exists(Settings.Default.ConvPath))
             {
                 MessageBox.Show("FFMPEG can't be found. Please set FFMPEG path fist at the output options!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 Dispatcher.Invoke(() => { TcPages.SelectedIndex = 3; });
@@ -132,14 +138,19 @@ namespace FFConverter
 
         private void BtnFFBrowse_Click(object sender, RoutedEventArgs e)
         {
-            System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
-            if (File.Exists(TbFFMpeg.Text)) ofd.FileName = TbFFMpeg.Text;
-            ofd.Filter = "ffmpeg.exe | ffmpeg.exe";
-            ofd.FilterIndex = 0;
+            System.Windows.Forms.FolderBrowserDialog ofd = new System.Windows.Forms.FolderBrowserDialog();
+            if (Directory.Exists(TbConvPath.Text)) ofd.SelectedPath = TbConvPath.Text;
             if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
-                TbFFMpeg.Text = ofd.FileName;
-                Settings.Default.FFmpegPath = TbFFMpeg.Text;
+                if (!File.Exists(Path.Combine(ofd.SelectedPath, "ffmpeg.exe")) || !File.Exists(Path.Combine(ofd.SelectedPath, "faac.exe")))
+                {
+                    MessageBox.Show("Invalid path selected. FFMPEG.exe or FAAC.exe not found!");
+                }
+                else
+                {
+                    TbConvPath.Text = ofd.SelectedPath;
+                    Settings.Default.ConvPath = TbConvPath.Text;
+                }
             }
         }
 

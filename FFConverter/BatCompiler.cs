@@ -35,7 +35,7 @@ namespace FFConverter
         /// <param name="deleteself">delete cmd file after execution</param>
         public static void CreateBatFile(Preset p, string[] files, string filename, string outdir, bool deleteself = false)
         {
-            string ffmpeg = Path.GetDirectoryName(FFConverter.Properties.Settings.Default.FFmpegPath);
+            string ffmpeg = Path.GetDirectoryName(FFConverter.Properties.Settings.Default.ConvPath);
 
             string drive = Path.GetPathRoot(ffmpeg).Replace("\\", "");
             int counter = 0;

@@ -26,12 +26,12 @@ namespace FFConverter.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string FFmpegPath {
+        public string ConvPath {
             get {
-                return ((string)(this["FFmpegPath"]));
+                return ((string)(this["ConvPath"]));
             }
             set {
-                this["FFmpegPath"] = value;
+                this["ConvPath"] = value;
             }
         }
         

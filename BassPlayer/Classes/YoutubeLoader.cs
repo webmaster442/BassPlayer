@@ -56,6 +56,8 @@ namespace BassPlayer.Classes
         {
             PlayListEntry ple = new PlayListEntry();
 
+            DownloadUrlResolver.ProxyConfiguration = GetProxyConfig();
+
             var videoinfos = DownloadUrlResolver.GetDownloadUrls("https://www.youtube.com/watch?v=" + item.VideoId);
 
             var video = (from v in videoinfos where v.VideoType == VideoType.Mp4 && v.Resolution == 360 select v).FirstOrDefault();

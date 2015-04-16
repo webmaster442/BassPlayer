@@ -165,7 +165,7 @@
                     <TextBlock Text="FFMpeg Path:"
                                Grid.Row="4"/>
                     <TextBox Grid.Row="5"
-                             x:Name="TbFFMpeg"/>
+                             x:Name="TbConvPath"/>
                     <Button Grid.Column="1"
                             Grid.Row="5"
                             x:Name="BtnFFBrowse"
