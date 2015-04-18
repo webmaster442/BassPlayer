@@ -1,11 +1,10 @@
-﻿using System;
+﻿using FFConverter.Controls;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Text.RegularExpressions;
-using FFConverter.Controls;
+using System.Windows.Controls;
 
 namespace FFConverter
 {
@@ -14,22 +13,44 @@ namespace FFConverter
     /// </summary>
     internal static class PresetCompiler
     {
-        private const string pattern = @"\{(.*?)\}\s";
-        private const string attrs = "\\w+\\=\".+\"";
+        private const string pattern = @"\{(.*?)\}";
 
         private static Dictionary<string, string> GetAtttrs(string[] parts)
         {
             Dictionary<string, string> dict = new Dictionary<string, string>();
 
-            for (int i = 1; i < parts.Length; i++ )
+            for (int i = 0; i < parts.Length; i++ )
             {
-                if (Regex.IsMatch(parts[i], attrs))
+                if (!parts[i].EndsWith("=")) continue;
+                if (i + 1 < parts.Length)
                 {
-                    string[] r = parts[i].Replace("\"", "").Split('=');
-                    dict.Add(r[0], r[1]);
+                    dict.Add(parts[i].Replace("=", ""), parts[i + 1]);
                 }
             }
             return dict;
+        }
+
+        public static string[] SplitArguments(string commandLine)
+        {
+            var parmChars = commandLine.ToCharArray();
+            var inSingleQuote = false;
+            var inDoubleQuote = false;
+            for (var index = 0; index < parmChars.Length; index++)
+            {
+                if (parmChars[index] == '"' && !inSingleQuote)
+                {
+                    inDoubleQuote = !inDoubleQuote;
+                    parmChars[index] = '\n';
+                }
+                if (parmChars[index] == '\'' && !inDoubleQuote)
+                {
+                    inSingleQuote = !inSingleQuote;
+                    parmChars[index] = '\n';
+                }
+                if (!inSingleQuote && !inDoubleQuote && parmChars[index] == ' ')
+                    parmChars[index] = '\n';
+            }
+            return (new string(parmChars)).Split(new[] { '\n' }, StringSplitOptions.RemoveEmptyEntries);
         }
 
         /// <summary>
@@ -41,13 +62,13 @@ namespace FFConverter
         {
             target.Children.Clear();
             int matches = 0;
-            string[] tags = Regex.Split(p.CommandLine, pattern);
+            string[] tags = Regex.Split(p.CommandLine, pattern, RegexOptions.CultureInvariant);
             string[] parts;
             Dictionary<string, string> parameters;
-            foreach (var t in tags)
+            foreach (var t in tags.Select(tag => tag.Trim()))
             {
                 if (string.IsNullOrEmpty(t)) continue;
-                parts = t.Split(' ');
+                parts = SplitArguments(t);
                 switch (parts[0])
                 {
                     case "slider":
@@ -56,6 +77,14 @@ namespace FFConverter
                         opt.InputPattern = "{" + t + "}";
                         opt.SetupFromTokens(parameters);
                         target.Children.Add(opt);
+                        matches++;
+                        break;
+                    case "combo":
+                        parameters = GetAtttrs(parts);
+                        OptionCombo combo = new OptionCombo();
+                        combo.InputPattern = "{" + t + "}";
+                        combo.SetupFromTokens(parameters);
+                        target.Children.Add(combo);
                         matches++;
                         break;
                 }

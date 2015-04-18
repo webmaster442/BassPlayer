@@ -13,6 +13,9 @@ Compiled binary can be downloaded from: https://drive.google.com/folderview?id=0
  - Supports browsing of iTunes database (iTunes required)
  - Supports Windows 7 & 8 Shell features: Taskbar progress & Taskbar preview buttons
  - Supports Keyboard media keys
+ - Media Library
+ - Mini Player view
+ - Audio Converter tools
  
 ## Required tools to compile
  - Visual Studio Community edition

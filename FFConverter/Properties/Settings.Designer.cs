@@ -22,5 +22,29 @@ namespace FFConverter.Properties {
                 return defaultInstance;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string ConvPath {
+            get {
+                return ((string)(this["ConvPath"]));
+            }
+            set {
+                this["ConvPath"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string LastOutDir {
+            get {
+                return ((string)(this["LastOutDir"]));
+            }
+            set {
+                this["LastOutDir"] = value;
+            }
+        }
     }
 }

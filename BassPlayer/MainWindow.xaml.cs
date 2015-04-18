@@ -1,5 +1,6 @@
 ﻿using BassEngine;
 using BassPlayer.Classes;
+using BassPlayer.Controls;
 using BassPlayer.Properties;
 using System;
 using System.Collections.Generic;
@@ -39,28 +40,45 @@ namespace BassPlayer
             }
         }
 
+        private void SetupWindowSize()
+        {
+            double left, top, width, height;
+            left = Settings.Default.WindowLeft;
+            top = Settings.Default.WindowTop;
+            width = Settings.Default.WindowWidth;
+            height = Settings.Default.WindowHeight;
+
+            if (left < SystemParameters.VirtualScreenWidth && left >= 0) this.Left = left;
+            if (top < SystemParameters.VirtualScreenHeight && top >= 0) this.Top = top;
+            if (width < SystemParameters.VirtualScreenWidth && width > 30) this.Width = width;
+            if (height < SystemParameters.VirtualScreenHeight && height > 30) this.Height = height;
+        }
+
+
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            var size = System.Windows.Forms.Screen.PrimaryScreen.Bounds;
-            if (Settings.Default.WindowLeft < size.Width && Settings.Default.WindowLeft >= 0)
-            {
-                this.Left = Settings.Default.WindowLeft;
-            }
-            if (Settings.Default.WindowTop < size.Height && Settings.Default.WindowTop >= 0)
-            {
-                this.Top = Settings.Default.WindowTop;
-            }
             if (IntPtr.Size == 4) this.Title += " | x86";
             else this.Title += " | x64";
+
+            SetupWindowSize();
+            App.MiniPlayer = new MiniPlayer();
+            App.MiniPlayer.NextClick += ThumbNext_Click;
+            App.MiniPlayer.PreviousClick += ThumbPrevious_Click;
+            App.MiniPlayer.PlayClick += ThumbPlayPause_Click;
+            App.MiniPlayer.StopClick += ThumbStop_Click;
+            App.MiniPlayer.MuteClick += ThumbMute_Click;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Settings.Default.WindowLeft = this.Left;
             Settings.Default.WindowTop = this.Top;
+            Settings.Default.WindowWidth = this.Width;
+            Settings.Default.WindowHeight = this.Height;
             Settings.Default.Save();
             Playlist.SaveRecent();
             e.Cancel = false;
+            App.Current.Shutdown();
         }
 
         private void Window_Drop(object sender, DragEventArgs e)

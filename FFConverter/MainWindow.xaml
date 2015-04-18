@@ -1,27 +1,69 @@
 ﻿<Window x:Class="FFConverter.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="FFConverter - 0 files"
-        Height="380"
-        Width="600">
-    <Grid>
-        <TabControl Grid.Row="0"
-                    TabStripPlacement="Bottom"
+        Title="FFConverter"
+        Icon="icon.png"
+        Height="435"
+        ResizeMode="CanMinimize"
+        Width="653"
+        Loaded="Window_Loaded"
+        Closing="Window_Closing">
+    <Grid Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}"
+          Margin="4">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="80"/>
+            <RowDefinition/>
+            <RowDefinition Height="25"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition Width="100"/>
+        </Grid.ColumnDefinitions>
+        <StackPanel Grid.Row="0"
+                    Background="White">
+            <TextBlock Text="Header"
+                       FontSize="14"
+                       FontWeight="Bold"
+                       Margin="5"
+                       x:Name="TbPageHeader"/>
+            <TextBlock Text="Content"
+                       TextWrapping="Wrap"
+                       Margin="8,0,2,0"
+                       FontStyle="Italic"
+                       x:Name="TbPageDescription"/>
+        </StackPanel>
+        <StackPanel Background="White"
+                    Grid.Row="0"
+                    Grid.Column="1">
+            <Image Source="ffmpeg.png"
+                   Stretch="Uniform"
+                   StretchDirection="DownOnly"
+                   Width="80"
+                   Height="80"
+                   Cursor="Hand"
+                   MouseDown="Image_MouseDown"/>
+        </StackPanel>
+        <TabControl Grid.Row="1"
+                    Grid.ColumnSpan="2"
+                    TabStripPlacement="Left"
                     SelectionChanged="TabControl_SelectionChanged"
-                    x:Name="TcPages">
+                    x:Name="TcPages"
+                    Background="Transparent">
+
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <Image Source="Icons\presets-50.png"
                                Width="24"
                                Height="24"/>
-                        <TextBlock Text="Presets" Margin="5,0"/>
+                        <TextBlock Text="Presets" Width="50" Margin="5,0"/>
                     </StackPanel>
                 </TabItem.Header>
-                <ListBox x:Name="LbPresets">
+                <ListBox x:Name="LbPresets"
+                         Background="Transparent">
                     <ListBox.ItemTemplate>
                         <DataTemplate>
-                            <Grid>
+                            <Grid Margin="4">
                                 <Grid.RowDefinitions>
                                     <RowDefinition/>
                                     <RowDefinition/>
@@ -40,10 +82,40 @@
             <TabItem>
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
+                        <Image Source="Icons\File-50.png"
+                               Width="24"
+                               Height="24"/>
+                        <TextBlock Text="Input Files" TextWrapping="Wrap" Width="50" Margin="5,0"/>
+                    </StackPanel>
+                </TabItem.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="27"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Menu Grid.Row="0">
+                        <MenuItem Header="Add Files ..."
+                                  x:Name="AddFiles"
+                                  Click="AddFiles_Click"/>
+                        <MenuItem Header="Remove selected"
+                                  x:Name="RemSelected"
+                                  Click="RemSelected_Click"/>
+                        <MenuItem Header="Remove All"
+                                  x:Name="RemAll"
+                                  Click="RemAll_Click"/>
+                    </Menu>
+                    <ListBox Grid.Row="1"
+                             x:Name="LbFiles"
+                             Background="Transparent"/>
+                </Grid>
+            </TabItem>
+            <TabItem>
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
                         <Image Source="Icons\preset-options-50.png"
                                Width="24"
                                Height="24"/>
-                        <TextBlock Text="Preset options" Margin="5,0"/>
+                        <TextBlock Text="Preset options" TextWrapping="Wrap" Width="50" Margin="5,0"/>
                     </StackPanel>
                 </TabItem.Header>
                 <ScrollViewer>
@@ -57,7 +129,7 @@
                         <Image Source="Icons\output-folder-50.png"
                                Width="24"
                                Height="24"/>
-                        <TextBlock Text="Output folder" Margin="5,0"/>
+                        <TextBlock Text="Output options" TextWrapping="Wrap" Width="50" Margin="5,0"/>
                     </StackPanel>
                 </TabItem.Header>
                 <Grid>
@@ -66,6 +138,8 @@
                         <ColumnDefinition Width="100"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
+                        <RowDefinition Height="25"/>
+                        <RowDefinition/>
                         <RowDefinition Height="25"/>
                         <RowDefinition/>
                         <RowDefinition Height="25"/>
@@ -88,6 +162,15 @@
                     <TextBox Grid.Row="3"
                              x:Name="TbExtension"
                              Grid.ColumnSpan="2"/>
+                    <TextBlock Text="FFMpeg Path:"
+                               Grid.Row="4"/>
+                    <TextBox Grid.Row="5"
+                             x:Name="TbConvPath"/>
+                    <Button Grid.Column="1"
+                            Grid.Row="5"
+                            x:Name="BtnFFBrowse"
+                            Content="Browse ..."
+                            Click="BtnFFBrowse_Click"/>
                 </Grid>
             </TabItem>
             <TabItem>
@@ -96,7 +179,7 @@
                         <Image Source="Icons\run-50.png"
                                Width="24"
                                Height="24"/>
-                        <TextBlock Text="Run" Margin="5,0"/>
+                        <TextBlock Text="Run" Width="50" Margin="5,0"/>
                     </StackPanel>
                 </TabItem.Header>
                 <Grid>
@@ -118,9 +201,30 @@
                             HorizontalAlignment="Center"
                             VerticalAlignment="Top"
                             Height="50"
-                            Width="200"/>
+                            Width="200"
+                            Click="BtnRun_Click"/>
                 </Grid>
             </TabItem>
         </TabControl>
+        <StackPanel Grid.Row="2"
+                    Grid.ColumnSpan="2"
+                    HorizontalAlignment="Right"
+                    Orientation="Horizontal">
+            <Button Content="Exit"
+                    x:Name="BtnExit"
+                    Click="BtnExit_Click"
+                    Width="130"
+                    Margin="10,0"/>
+            <Button Content="Previous"
+                    x:Name="BtnPrevious"
+                    Click="BtnPrevious_Click"
+                    Width="130"
+                    Margin="10,0"/>
+            <Button Content="Next"
+                    x:Name="BtnNext"
+                    Click="BtnNext_Click"
+                    Width="130"
+                    Margin="10,0"/>
+        </StackPanel>
     </Grid>
 </Window>

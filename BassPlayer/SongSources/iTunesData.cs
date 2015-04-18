@@ -26,6 +26,7 @@ namespace BassPlayer.SongSources
         public bool Compilation { get; set; }   // Compilation
         public bool Podcast { get; set; }       // Podcast
         public string AlbumArtist { get; set; } // Album Artist
+        public int Year { get; set; }           // Year
 
     }
 
@@ -79,7 +80,8 @@ namespace BassPlayer.SongSources
                                 Compilation = s.Element("Compilation").ToBool(),
                                 Podcast = s.Element("Podcast").ToBool(),
                                 AlbumArtist = s.Element("AlbumArtist").ToString(string.Empty),
-                                DiscNumber = s.Element("DiscNumber").ToInt(0)
+                                DiscNumber = s.Element("DiscNumber").ToInt(0),
+                                Year = s.Element("Year").ToInt(0)
                             };
 
             return songs;
@@ -142,6 +144,16 @@ namespace BassPlayer.SongSources
                 if (!isLoaded) return null;
                 var q = from song in _xml.Descendants("key").AsParallel() where song.Value == "Playlist ID" select song.ElementsBeforeSelf("string").FirstOrDefault().Value;
                 return (from item in q orderby item ascending select item).ToArray();
+            }
+        }
+
+        public string[] Years
+        {
+            get
+            {
+                if (!isLoaded) return null;
+                var q = (from i in _db orderby i.Year descending select i.Year).Distinct().Select(x => x.ToString());
+                return q.ToArray();
             }
         }
 
@@ -209,6 +221,17 @@ namespace BassPlayer.SongSources
                 case "Songs":
                     return (from i in _db
                             orderby i.Artist, i.Album, i.DiscNumber, i.TrackNumber ascending
+                            select new PlayListEntry
+                            {
+                                Artist = i.Artist,
+                                Title = i.Name,
+                                Time = i.TotalTime / 1000,
+                                FileName = FileFromUrl(i.Location)
+                            }).ToArray();
+                case "Years":
+                    return (from i in _db
+                            orderby i.Artist, i.Name ascending
+                            where i.Year == Convert.ToInt32(parts[1])
                             select new PlayListEntry
                             {
                                 Artist = i.Artist,

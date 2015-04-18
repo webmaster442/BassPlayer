@@ -2,10 +2,55 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:controls="clr-namespace:BassPlayer.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="500" d:DesignWidth="700">
+             d:DesignHeight="500"
+             d:DesignWidth="700">
+    <UserControl.CommandBindings>
+        <CommandBinding Command="{x:Static controls:CustomCommands.MediaAddFiles}"
+                        Executed="MediaAddFiles_Executed"/>
+        <CommandBinding Command="{x:Static controls:CustomCommands.MediaAddFolder}"
+                        Executed="MediaAddFolder_Executed"/>
+        <CommandBinding Command="{x:Static controls:CustomCommands.MediaRemove}"
+                        Executed="MediaRemove_Executed"/>
+        <CommandBinding Command="{x:Static controls:CustomCommands.MediaBackupLib}"
+                        Executed="MediaBackupLib_Executed"/>
+        <CommandBinding Command="{x:Static controls:CustomCommands.MediaRestoreLib}"
+                        Executed="MediaRestoreLib_Executed"/>
+    </UserControl.CommandBindings>
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="220"/>
+            <ColumnDefinition Width="3"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <controls:MediaLibTree Grid.Column="0"
+                               x:Name="MediaTree"
+                               PodcastsVisible="Collapsed"
+                               PlaylistsVisible="Collapsed"
+                               CompilationsVisible="Collapsed"
+                               ListAllClick="MediaTree_ListAllClick"
+                               FilterClick="MediaTree_FilterClick"
+                               ItemClick="MediaTree_ItemClick"/>
+        <GridSplitter Grid.Column="1"
+                      HorizontalAlignment="Stretch"
+                      Background="{StaticResource {x:Static SystemColors.GradientActiveCaptionBrushKey}}"/>
+        <ListBox Grid.Column="2"
+                 Style="{StaticResource Playlist}"
+                 x:Name="LbMediaLib"
+                 MouseDoubleClick="LbMediaLib_MouseDoubleClick"/>
+        <Grid Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}"
+              x:Name="ProcessProgress"
+              Visibility="Collapsed">
+            <ProgressBar Height="30"
+                         IsIndeterminate="True"
+                         Margin="30,10"
+                         VerticalAlignment="Center"/>
+            <TextBlock Text="Processing..."
+                       VerticalAlignment="Center"
+                       TextAlignment="Center"
+                       FontSize="19" Margin="0,0,0,80"/>
+        </Grid>
     </Grid>
 </UserControl>

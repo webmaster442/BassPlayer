@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace BassPlayer.SongSources
 {
     [Serializable]
-    class TrackData : INotifyPropertyChanged
+    public class TrackData : INotifyPropertyChanged
     {
         private string _title, _artist, _album, _file, _genre;
         private uint _year, _playcount, _disc, _track;
@@ -155,6 +151,11 @@ namespace BassPlayer.SongSources
                 FileName = track.File,
             };
             return ret;
+        }
+
+        public override string ToString()
+        {
+            return Artist + " - " + Title;
         }
     }
 }

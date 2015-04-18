@@ -7,7 +7,6 @@
         Height="480"
         Width="854"
         Topmost="{Binding ElementName=Player, Path=AllwaysTop}"
-        ResizeMode="CanMinimize"
         AllowDrop="True"
         Drop="Window_Drop"
         Closing="Window_Closing"
