@@ -617,6 +617,7 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="25"/>
                                     <RowDefinition/>
+                                    <RowDefinition Height="25"/>
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="50"/>
@@ -674,8 +675,21 @@
                                         </DataTemplate>
                                     </ListBox.ItemTemplate>
                                 </ListBox>
+                                <StackPanel Grid.Row="3"
+                                            Grid.ColumnSpan="3"
+                                            Orientation="Horizontal"
+                                            HorizontalAlignment="Right">
+                                    <Button Content="Add to Playlist"
+                                            Margin="5,0"
+                                            x:Name="BtnAddPlaylistYt"
+                                            Click="BtnAddPlaylistYt_Click"/>
+                                    <Button Content="Download video"
+                                            Margin="5,0"
+                                            x:Name="BtnDloadYt"
+                                            Click="BtnDloadYt_Click"/>
+                                </StackPanel>
                                 <Grid Panel.ZIndex="44"
-                                      Grid.RowSpan="2"
+                                      Grid.RowSpan="3"
                                       Grid.ColumnSpan="3"
                                       x:Name="YtProgress"
                                       Visibility="Collapsed"

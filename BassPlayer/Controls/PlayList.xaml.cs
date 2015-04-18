@@ -968,5 +968,29 @@ namespace BassPlayer.Controls
                 e.Handled = true;
             }
         }
+
+        private async void BtnDloadYt_Click(object sender, RoutedEventArgs e)
+        {
+            var index = LbYoutube.SelectedIndex;
+            if (index < 0) return;
+            YtProgress.Visibility = System.Windows.Visibility.Visible;
+            try
+            {
+                var infos = await YoutubeLoader.Infos(_youtube[index]);
+                YoutubeDownload dloaddialog = new YoutubeDownload(_youtube[index].Title);
+                dloaddialog.VideoInfos = infos;
+                dloaddialog.ShowDialog();
+            }
+            catch (Exception ex)
+            {
+                Helpers.ErrorDialog(ex, "Youtube Query failed");
+            }
+            YtProgress.Visibility = System.Windows.Visibility.Collapsed;
+        }
+
+        private void BtnAddPlaylistYt_Click(object sender, RoutedEventArgs e)
+        {
+            if (LbYoutube.SelectedItem != null) LbYoutube_MouseDoubleClick(null, null);
+        }
     }
 }

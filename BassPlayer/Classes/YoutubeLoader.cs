@@ -2,6 +2,7 @@
 using BassPlayer.Properties;
 using BassPlayer.SongSources;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -22,6 +23,9 @@ namespace BassPlayer.Classes
         public BitmapImage Thumbnail { get; set; }
     }
 
+    /// <summary>
+    /// Youtube Downloader & Loader functions
+    /// </summary>
     internal static class YoutubeLoader
     {
         private static ProxyConfig GetProxyConfig()
@@ -70,6 +74,13 @@ namespace BassPlayer.Classes
             return ple;
         }
 
+        private static VideoInfo[] GetInfos(YoutubeItem item)
+        {
+            DownloadUrlResolver.ProxyConfiguration = GetProxyConfig();
+            var videoinfos = DownloadUrlResolver.GetDownloadUrls("https://www.youtube.com/watch?v=" + item.VideoId);
+            return videoinfos.ToArray();
+        }
+
         private static YoutubeItem[] SearchFunction(string s)
         {
             string query = HttpUtility.UrlEncode(s);
@@ -98,14 +109,34 @@ namespace BassPlayer.Classes
             return q.ToArray();
         }
 
+        /// <summary>
+        /// Searches a video and returns found items
+        /// </summary>
+        /// <param name="s">Video to search for</param>
+        /// <returns>results</returns>
         public static Task<YoutubeItem[]> Search(string s)
         {
             return Task.Run(() => SearchFunction(s));
         }
 
+        /// <summary>
+        /// Creates a playlist entry from the selected video
+        /// </summary>
+        /// <param name="item">Selected youtue item</param>
+        /// <returns>A playlist entry</returns>
         public static Task<PlayListEntry> FromYoutubeItem(YoutubeItem item)
         {
             return Task.Run(() => FromYoutubeItemFunction(item));
+        }
+
+        /// <summary>
+        /// Return video infos for download
+        /// </summary>
+        /// <param name="item">Selected item</param>
+        /// <returns>Video infos</returns>
+        public static Task<VideoInfo[]> Infos(YoutubeItem item)
+        {
+            return Task.Run(() => GetInfos(item));
         }
     }
 }

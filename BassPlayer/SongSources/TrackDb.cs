@@ -26,11 +26,14 @@ namespace BassPlayer.SongSources
 
         private string _file;
 
+        private bool _needsave;
+
         public TrackDb() : base()
         {
             string profile = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
             _file = Path.Combine(profile, "BassPlayerLib.xml");
             if (File.Exists(_file)) Load();
+            _needsave = false;
         }
 
         /// <summary>
@@ -58,6 +61,7 @@ namespace BassPlayer.SongSources
         /// </summary>
         public void Save()
         {
+            if (!_needsave) return;
             try
             {
                 XmlSerializer xs = new XmlSerializer(typeof(TrackData[]));
@@ -183,6 +187,7 @@ namespace BassPlayer.SongSources
                          where i.File == j.FileName
                          select i).ToArray();
             foreach (var item in query) this.Remove(item);
+            _needsave = true;
         }
 
         /// <summary>
@@ -202,6 +207,7 @@ namespace BassPlayer.SongSources
                 Dispatcher.CurrentDispatcher.Invoke(() =>
                 {
                     this.AddRange(data);
+                    _needsave = true;
                 });
             });
         }

@@ -307,7 +307,9 @@ namespace BassPlayer.Classes
                 }
                 catch (Exception)
                 {
-                    return new BitmapImage(new Uri("/BassPlayer;component/Images/audio_file-100.png", UriKind.Relative));
+                    if (_file.Contains("googlevideo")) return new BitmapImage(new Uri("/BassPlayer;component/Images/Youtube-100.png", UriKind.Relative));
+                    else if (_file.StartsWith("http://") || _file.StartsWith("https://")) return new BitmapImage(new Uri("/BassPlayer;component/Images/Online-100.png", UriKind.Relative));
+                    else return new BitmapImage(new Uri("/BassPlayer;component/Images/audio_file-100.png", UriKind.Relative));
                 }
             }
         }

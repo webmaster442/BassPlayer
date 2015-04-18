@@ -110,6 +110,9 @@
     <Compile Include="Controls\MiniPlayer.xaml.cs">
       <DependentUpon>MiniPlayer.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\YoutubeDownload.xaml.cs">
+      <DependentUpon>YoutubeDownload.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SongSources\iTunesData.cs" />
     <Compile Include="Classes\KeyboardHook.cs" />
     <Compile Include="SongSources\RecentPlays.cs" />
@@ -163,6 +166,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\Settings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\YoutubeDownload.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -310,6 +317,10 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\itunes\Calendar-50.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\Online-100.png" />
+    <Resource Include="Images\Youtube-100.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
