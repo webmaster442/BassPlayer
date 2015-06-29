@@ -136,7 +136,7 @@
             <Button x:Name="BtnConfigDate"
                     Content="Send Date Configuration"
                     Click="BtnConfigDate_Click"
-                    IsEnabled="{Binding ElementName=CbSerialOutput, Path=IsChecked, Converter={StaticResource ConvNegate}}"/>
+                    IsEnabled="{Binding ElementName=CbSerialOutput, Path=IsChecked}"/>
             
         </StackPanel>
         

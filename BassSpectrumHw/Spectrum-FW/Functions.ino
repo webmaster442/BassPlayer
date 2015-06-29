@@ -87,15 +87,16 @@ __inline void SetLevel()
   HT1632.setBrightness(level);
 }
 
-__inline void SetTime()
+void SetTime()
 {
-  _tm.Year = recv[1];
-  _tm.Month = recv[2];
-  _tm.Day = recv[3];
-  _tm.Hour = recv[4];
-  _tm.Minute = recv[5];
-  _tm.Second = recv[6];
-  RTC.write(_tm);
+  tmElements_t time;
+  time.Year = 2000 + recv[1];
+  time.Month = recv[2];
+  time.Day = recv[3];
+  time.Hour = recv[4];
+  time.Minute = recv[5];
+  time.Second = recv[6];
+  RTC.write(time);
 }
 
 

@@ -84,8 +84,8 @@ namespace BassSpectrumDaemon
                 CbMonitoring.IsChecked = false;
                 return;
             }
-                _spectrum.DeviceName = CbAudioDevices.SelectedItem.ToString();
-                _spectrum.IsEnabled = true;
+            _spectrum.DeviceName = CbAudioDevices.SelectedItem.ToString();
+            _spectrum.IsEnabled = true;
         }
 
         private void CbMonitoring_Unchecked(object sender, RoutedEventArgs e)
@@ -151,11 +151,12 @@ namespace BassSpectrumDaemon
         {
             try
             {
-                var port = SerialPortProvider.ConfigurePort(CbSerialPort.SelectedItem.ToString());
-                port.Write(SerialPortProvider.TimePacket, 0, SerialPortProvider.TimePacket.Length);
-                Thread.Sleep(1000);
-                port.Close();
-                port = null;
+                _spectrum.Serial.Write(SerialPortProvider.TimePacket, 0, SerialPortProvider.TimePacket.Length);
+                Thread.Sleep(200);
+                Dispatcher.Invoke(() =>
+                    {
+                        CbSerialOutput.IsChecked = false;
+                    });
             }
             catch (Exception ex)
             {

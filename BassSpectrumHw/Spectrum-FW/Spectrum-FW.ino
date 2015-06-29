@@ -45,7 +45,7 @@ void setup()
   SetLevel();
 }
 
-char recv[34];
+char recv[34] = {0};
 
 void loop()
 {

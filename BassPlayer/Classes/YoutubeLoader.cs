@@ -86,8 +86,12 @@ namespace BassPlayer.Classes
             string query = HttpUtility.UrlEncode(s);
 
             WebClient wc = Helpers.CreateWebClient(GetProxyConfig());
-            byte[] data = wc.DownloadData("https://gdata.youtube.com/feeds/api/videos?q=" + query);
-            MemoryStream ms = new MemoryStream(data);
+            string data = wc.DownloadString(string.Format("https://gdata.youtube.com/feeds/api/videos?q={0}&alt=json", query));
+            
+            
+
+
+            /*MemoryStream ms = new MemoryStream(data);
 
             XmlReader reader = XmlReader.Create(ms);
 
@@ -106,7 +110,8 @@ namespace BassPlayer.Classes
 
             ms.Close();
 
-            return q.ToArray();
+            return q.ToArray();*/
+            return null;
         }
 
         /// <summary>
