@@ -51,7 +51,8 @@ __inline float Temperature()
 {
   float temp;
   int raw = analogRead(THERMISTOR);
-  long resistance = PADRESISTOR * ((1024.0 / raw) - 1);
+  long resistance = PADRESISTOR * ((1024.0 / (1024-raw)) - 1);
+  Serial.println(raw);
   temp = log(resistance);
   temp = 1 / (0.001129148 + (0.000234125 * temp) + (0.0000000876741 * temp * temp * temp));
   temp = temp - 273.15;  // Convert Kelvin to Celsius
