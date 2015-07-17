@@ -9,10 +9,10 @@ namespace BassSpectrumDaemon.Classes
 {
     internal enum Messages: byte
     {
-        Spectrum = 0xF0,
-        Time = 0xF1,
-        Wave = 0xF2,
-        Level = 0xF4,
+        Spectrum = 0x02,
+        SpectrumInverse = 0x85, 
+        Time = 0x57,
+        Level = 0x49,
     }
 
     internal static class SerialPortProvider

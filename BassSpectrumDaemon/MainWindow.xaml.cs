@@ -92,6 +92,8 @@ namespace BassSpectrumDaemon
         {
             _spectrum.IsEnabled = false;
             this.LelvelIdic.Level = 0;
+
+            if (CbSerialOutput.IsChecked == true)  Dispatcher.Invoke(() =>{CbSerialOutput.IsChecked = false; });
         }
 
         private bool DoExit()
@@ -144,6 +146,7 @@ namespace BassSpectrumDaemon
         {
             if (!_loaded) return;
             if (RbSpectrum.IsChecked == true) _spectrum.DisplayType = Messages.Spectrum;
+            else if (RbSpectrumInverse.IsChecked == true) _spectrum.DisplayType = Messages.SpectrumInverse;
             else if (RbLevels.IsChecked == true) _spectrum.DisplayType = Messages.Level;
         }
 

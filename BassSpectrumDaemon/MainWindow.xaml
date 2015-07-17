@@ -128,6 +128,12 @@
             </RadioButton>
             <RadioButton Checked="ModeSelect"
                          Unchecked="ModeSelect"
+                         x:Name="RbSpectrumInverse">
+                <TextBlock Text="Inverted Spectrum"
+                           Style="{StaticResource GlassText}"/>
+            </RadioButton>
+            <RadioButton Checked="ModeSelect"
+                         Unchecked="ModeSelect"
                          x:Name="RbLevels" Margin="10,0">
                 <TextBlock Text="Levels"
                            Style="{StaticResource GlassText}"/>

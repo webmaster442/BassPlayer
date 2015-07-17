@@ -1,49 +1,49 @@
 /*==================================================================
  Functions
  ===================================================================*/
-__inline void Display(int target, int row, byte leds)
+void Display(int target, int row, byte leds)
 {
   HT1632.renderTarget(target);
   switch (leds)
   {
-  case 0:
-    _displays[target][row] = 0x00;
-    break;
-  case 1:
-    _displays[target][row] = 0x01;
-    break;
-  case 2:
-    _displays[target][row] = 0x03;
-    break;
-  case 3:
-    _displays[target][row] = 0x07;
-    break;
-  case 4:
-    _displays[target][row] = 0x0f;
-    break;
-  case 5:
-    _displays[target][row] = 0x1f;
-    break;
-  case 6:
-    _displays[target][row] = 0x3f;
-    break;
-  case 7:
-    _displays[target][row] = 0x7f;
-    break;
-  case 8:
-    _displays[target][row] = 0xff;
-    break;
+    case 0:
+      _displays[target][row] = 0x00;
+      break;
+    case 1:
+      _displays[target][row] = 0x01;
+      break;
+    case 2:
+      _displays[target][row] = 0x03;
+      break;
+    case 3:
+      _displays[target][row] = 0x07;
+      break;
+    case 4:
+      _displays[target][row] = 0x0f;
+      break;
+    case 5:
+      _displays[target][row] = 0x1f;
+      break;
+    case 6:
+      _displays[target][row] = 0x3f;
+      break;
+    case 7:
+      _displays[target][row] = 0x7f;
+      break;
+    case 8:
+      _displays[target][row] = 0xff;
+      break;
   }
 }
 
 __inline void DoRender()
 {
   HT1632.renderTarget(1);
-  HT1632.SetRamBuffer(_row0, 31);
+  HT1632.SetRamBuffer(_row0, 32);
   //for (int i=0; i<32; i++) HT1632.setRam(i, displays[0][i]);
   HT1632.render();
   HT1632.renderTarget(0);
-  HT1632.SetRamBuffer(_row1, 31);
+  HT1632.SetRamBuffer(_row1, 32);
   //for (int i=0; i<32; i++) HT1632.setRam(i, displays[1][i]);
   HT1632.render();
 }
@@ -66,7 +66,7 @@ __inline void DoTime()
   HT1632.clear();
   HT1632.drawText(_textbuff, 0, 2, FONT_5X4, FONT_5X4_END, FONT_5X4_HEIGHT);
   HT1632.render();
-  
+
   char temp[] = {0};
   floatToString(temp, Temperature(), 2);
   sprintf(_textbuff, "%s °C", temp);

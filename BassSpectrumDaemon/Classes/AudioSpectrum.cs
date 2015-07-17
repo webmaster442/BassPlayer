@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Ports;
+using System.Threading;
 using System.Windows.Threading;
 using Un4seen.Bass;
 using Un4seen.BassWasapi;
@@ -17,6 +18,8 @@ namespace BassSpectrumDaemon.Classes
         private float[] _fftbuffer;
         private int _lastlevel;
         private int _hanctrl;
+        private int _deviceindex = -1;
+        private ushort _runcntr;  
 
         private const int _LINES = 32;
         private byte[] _spectrumbuffer;
@@ -53,6 +56,7 @@ namespace BassSpectrumDaemon.Classes
             _fftbuffer = new float[1024];
             _spectrumbuffer = new byte[_LINES+2];
             _indicator = indicator;
+            _runcntr = 0;
         }
 
         /// <summary>
@@ -117,8 +121,8 @@ namespace BassSpectrumDaemon.Classes
                     if (!_wasapi)
                     {
                         var array = DeviceName.Split(' ');
-                        int devindex = Convert.ToInt32(array[0]);
-                        _wasapi = BassWasapi.BASS_WASAPI_Init(devindex, 0, 0,
+                        _deviceindex = Convert.ToInt32(array[0]);
+                        _wasapi = BassWasapi.BASS_WASAPI_Init(_deviceindex, 0, 0,
                                                               BASSWASAPIInit.BASS_WASAPI_BUFFER,
                                                               1f, 0.05f,
                                                               _process, IntPtr.Zero);
@@ -187,6 +191,7 @@ namespace BassSpectrumDaemon.Classes
                 switch (DisplayType)
                 {
                     case Messages.Spectrum:
+                    case Messages.SpectrumInverse:
                         if (ret > 0) GetSpectrumData();
                         break;
                     case Messages.Level:
@@ -210,6 +215,10 @@ namespace BassSpectrumDaemon.Classes
                     Bass.BASS_Free();
                     _bass = Bass.BASS_Init(0, 44100, BASSInit.BASS_DEVICE_DEFAULT, IntPtr.Zero);
                     _wasapi = false;
+                    _wasapi = BassWasapi.BASS_WASAPI_Init(_deviceindex, 0, 0,
+                                                          BASSWASAPIInit.BASS_WASAPI_BUFFER,
+                                                          1f, 0.05f,
+                                                          _process, IntPtr.Zero);
                 }
             }
             catch (Exception ex)
@@ -218,6 +227,14 @@ namespace BassSpectrumDaemon.Classes
                 _timer.IsEnabled = false;
                 if (_bass) Bass.BASS_Free();
                 if (_wasapi) BassWasapi.BASS_WASAPI_Free();
+            }
+            ++_runcntr;
+            if (_runcntr > 2400)
+            {
+                IsEnabled = false;
+                Thread.Sleep(1);
+                IsEnabled = true;
+                _runcntr = 0;
             }
         }
     }
