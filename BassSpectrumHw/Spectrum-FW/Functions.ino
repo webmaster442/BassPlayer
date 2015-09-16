@@ -38,13 +38,15 @@ void Display(int target, int row, byte leds)
 
 __inline void DoRender()
 {
+  int adc = analogRead(LEVELPOT);
+  int level = map(adc, 0, 1023, 1, 16);
   HT1632.renderTarget(1);
+  HT1632.setBrightness(level);
   HT1632.SetRamBuffer(_row0, 32);
-  //for (int i=0; i<32; i++) HT1632.setRam(i, displays[0][i]);
   HT1632.render();
   HT1632.renderTarget(0);
+  HT1632.setBrightness(level);
   HT1632.SetRamBuffer(_row1, 32);
-  //for (int i=0; i<32; i++) HT1632.setRam(i, displays[1][i]);
   HT1632.render();
 }
 __inline float Temperature()
