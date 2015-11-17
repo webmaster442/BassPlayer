@@ -11,7 +11,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 using System.Xml.Linq;
@@ -28,7 +27,6 @@ namespace BassPlayer.Controls
         private ObservableCollection<PlayListEntry> _playlist;
         private ObservableCollection<PlayListEntry> _tunes;
         private ObservableCollection<string> _files;
-        private ObservableCollection<YoutubeItem> _youtube;
         private RecentPlays _recent;
         private TreeViewItem dummyNode = null;
         private int _index;
@@ -48,7 +46,6 @@ namespace BassPlayer.Controls
             _playlist = new ObservableCollection<PlayListEntry>();
             _tunes = new ObservableCollection<PlayListEntry>();
             _files = new ObservableCollection<string>();
-            _youtube = new ObservableCollection<YoutubeItem>();
             _recent = new RecentPlays();
             _rgen = new Random();
             _itunes = new iTunesData();
@@ -57,7 +54,6 @@ namespace BassPlayer.Controls
             LbFiles.ItemsSource = _files;
             LbLib.ItemsSource = _tunes;
             LbRecent.ItemsSource = _recent;
-            LbYoutube.ItemsSource = _youtube;
 
             iTunesTree.AddNode(MediaLibTree.Categories.Artists, _itunes.Artists);
             iTunesTree.AddNode(MediaLibTree.Categories.Albums, _itunes.Albums);
@@ -244,19 +240,6 @@ namespace BassPlayer.Controls
                     AudioPlayerControls.Load(MediaLib.SelectedItem);
                     _recent.Add(MediaLib.SelectedItem);
                 }
-            }
-        }
-
-        private async void LbYoutube_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            if (AudioPlayerControls != null)
-            {
-                var index = LbYoutube.SelectedIndex;
-                YtProgress.Visibility = System.Windows.Visibility.Visible;
-                PlayListEntry entry = await YoutubeLoader.FromYoutubeItem(_youtube[index]);
-                _playlist.Add(entry);
-                YtProgress.Visibility = System.Windows.Visibility.Collapsed;
-                await Dispatcher.BeginInvoke((Action)(() => TcView.SelectedIndex = 0));
             }
         }
 
@@ -943,54 +926,5 @@ namespace BassPlayer.Controls
         }
 
         #endregion
-
-        private async void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            YtProgress.Visibility = System.Windows.Visibility.Visible;
-            try
-            {
-                var results = await YoutubeLoader.Search(TbYoutubeQuery.Text);
-                _youtube.Clear();
-                _youtube.AddRange(results);
-            }
-            catch (Exception ex)
-            {
-                Helpers.ErrorDialog(ex, "Youtube Query failed");
-            }
-            YtProgress.Visibility = System.Windows.Visibility.Collapsed;
-        }
-
-        private void TbYoutubeQuery_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.Key == Key.Enter)
-            {
-                Button_Click_1(null, null);
-                e.Handled = true;
-            }
-        }
-
-        private async void BtnDloadYt_Click(object sender, RoutedEventArgs e)
-        {
-            var index = LbYoutube.SelectedIndex;
-            if (index < 0) return;
-            YtProgress.Visibility = System.Windows.Visibility.Visible;
-            try
-            {
-                var infos = await YoutubeLoader.Infos(_youtube[index]);
-                YoutubeDownload dloaddialog = new YoutubeDownload(_youtube[index].Title);
-                dloaddialog.VideoInfos = infos;
-                dloaddialog.ShowDialog();
-            }
-            catch (Exception ex)
-            {
-                Helpers.ErrorDialog(ex, "Youtube Query failed");
-            }
-            YtProgress.Visibility = System.Windows.Visibility.Collapsed;
-        }
-
-        private void BtnAddPlaylistYt_Click(object sender, RoutedEventArgs e)
-        {
-            if (LbYoutube.SelectedItem != null) LbYoutube_MouseDoubleClick(null, null);
-        }
     }
 }

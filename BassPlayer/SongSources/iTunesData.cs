@@ -132,7 +132,7 @@ namespace BassPlayer.SongSources
             get
             {
                 if (!isLoaded) return null;
-                var q = (from i in _db orderby i.Genre ascending select i.Genre).Distinct();
+                var q = (from i in _db where !string.IsNullOrEmpty(i.Genre) orderby i.Genre ascending select i.Genre).Distinct();
                 return q.ToArray();
             }
         }
@@ -142,8 +142,9 @@ namespace BassPlayer.SongSources
             get
             {
                 if (!isLoaded) return null;
-                var q = from song in _xml.Descendants("key").AsParallel() where song.Value == "Playlist ID" select song.ElementsBeforeSelf("string").FirstOrDefault().Value;
-                return (from item in q orderby item ascending select item).ToArray();
+                var q1 = from song in _xml.Descendants("key").AsParallel() where song.Value == "Playlist ID" select song.ElementsBeforeSelf("string").FirstOrDefault();
+                var q2 = from q in q1 where q != null select q.Value;
+                return (from item in q2 orderby item ascending select item).ToArray();
             }
         }
 

@@ -74,9 +74,7 @@
     <AssemblyOriginatorKeyFile>BassPlayer.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Bass.Net, Version=2.4.10.4, Culture=neutral, PublicKeyToken=b7566c273e6ef480, processorArchitecture=MSIL">
-      <Private>True</Private>
-    </Reference>
+    <Reference Include="Bass.Net, Version=2.4.11.1, Culture=neutral, PublicKeyToken=b7566c273e6ef480, processorArchitecture=MSIL" />
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -110,15 +108,11 @@
     <Compile Include="Controls\MiniPlayer.xaml.cs">
       <DependentUpon>MiniPlayer.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Controls\YoutubeDownload.xaml.cs">
-      <DependentUpon>YoutubeDownload.xaml</DependentUpon>
-    </Compile>
     <Compile Include="SongSources\iTunesData.cs" />
     <Compile Include="Classes\KeyboardHook.cs" />
     <Compile Include="SongSources\RecentPlays.cs" />
     <Compile Include="SongSources\TrackData.cs" />
     <Compile Include="SongSources\TrackDb.cs" />
-    <Compile Include="Classes\YoutubeLoader.cs" />
     <Compile Include="Controls\AboutDialog.xaml.cs">
       <DependentUpon>AboutDialog.xaml</DependentUpon>
     </Compile>
@@ -166,10 +160,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\Settings.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Controls\YoutubeDownload.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

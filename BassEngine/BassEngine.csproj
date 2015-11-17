@@ -21,6 +21,7 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <RunCodeAnalysis>false</RunCodeAnalysis>
+    <CodeAnalysisIgnoreGeneratedCode>true</CodeAnalysisIgnoreGeneratedCode>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -292,26 +293,6 @@
     <Compile Include="Libs\TagLib\Xmp\XmpNodeType.cs" />
     <Compile Include="Libs\TagLib\Xmp\XmpNodeVisitor.cs" />
     <Compile Include="Libs\TagLib\Xmp\XmpTag.cs" />
-    <Compile Include="Libs\YoutubeExtractor\AacAudioExtractor.cs" />
-    <Compile Include="Libs\YoutubeExtractor\AdaptiveType.cs" />
-    <Compile Include="Libs\YoutubeExtractor\AudioDownloader.cs" />
-    <Compile Include="Libs\YoutubeExtractor\AudioExtractionException.cs" />
-    <Compile Include="Libs\YoutubeExtractor\AudioType.cs" />
-    <Compile Include="Libs\YoutubeExtractor\BigEndianBitConverter.cs" />
-    <Compile Include="Libs\YoutubeExtractor\BitHelper.cs" />
-    <Compile Include="Libs\YoutubeExtractor\Decipherer.cs" />
-    <Compile Include="Libs\YoutubeExtractor\Downloader.cs" />
-    <Compile Include="Libs\YoutubeExtractor\DownloadUrlResolver.cs" />
-    <Compile Include="Libs\YoutubeExtractor\FlvFile.cs" />
-    <Compile Include="Libs\YoutubeExtractor\HttpHelper.cs" />
-    <Compile Include="Libs\YoutubeExtractor\IAudioExtractor.cs" />
-    <Compile Include="Libs\YoutubeExtractor\Mp3AudioExtractor.cs" />
-    <Compile Include="Libs\YoutubeExtractor\ProgressEventArgs.cs" />
-    <Compile Include="Libs\YoutubeExtractor\VideoDownloader.cs" />
-    <Compile Include="Libs\YoutubeExtractor\VideoInfo.cs" />
-    <Compile Include="Libs\YoutubeExtractor\VideoNotAvailableException.cs" />
-    <Compile Include="Libs\YoutubeExtractor\VideoType.cs" />
-    <Compile Include="Libs\YoutubeExtractor\YoutubeParseException.cs" />
     <Compile Include="Engine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ProxyConfig.cs" />
