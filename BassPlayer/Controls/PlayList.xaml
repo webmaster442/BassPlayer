@@ -9,6 +9,9 @@
              Background="Transparent"
              Loaded="UserControl_Loaded"
              d:DesignHeight="400" d:DesignWidth="800">
+    <UserControl.Resources>
+        <Style TargetType="TabItem" x:Key="Default"></Style>
+    </UserControl.Resources>
     <UserControl.CommandBindings>
         <CommandBinding Command="{x:Static controls:CustomCommands.SortArtistTitle}"
                         Executed="SortArtistTitle_Executed"/>
@@ -41,7 +44,7 @@
     </UserControl.CommandBindings>
     <Grid>
         <Menu VerticalAlignment="Top"
-              Background="Transparent">
+              Background="Transparent" Margin="10,5,0,0">
             <MenuItem Header="BassPlayer">
                 <MenuItem.Icon>
                     <Image Width="16"
@@ -314,7 +317,7 @@
                     <TabControl TabStripPlacement="Left"
                                 x:Name="TcView"
                                 Background="{StaticResource {x:Static SystemColors.ControlBrushKey}}" Grid.ColumnSpan="2">
-                        <TabItem Background="Transparent">
+                        <TabItem Background="Transparent" Style="{StaticResource Default}">
                             <TabItem.Header>
                                 <StackPanel>
                                     <Image Source="../Images/Menu/ingredients_list-50.png"
@@ -414,7 +417,7 @@
                                 </ListBox.ContextMenu>
                             </ListBox>
                         </TabItem>
-                        <TabItem x:Name="TabRecent">
+                        <TabItem x:Name="TabRecent"  Style="{StaticResource Default}">
                             <TabItem.Header>
                                 <StackPanel>
                                     <Image Source="../Images/Menu/note_music-50.png"
@@ -463,7 +466,7 @@
                                 </ListBox.ContextMenu>
                             </ListBox>
                         </TabItem>
-                        <TabItem>
+                        <TabItem  Style="{StaticResource Default}">
                             <TabItem.Header>
                                 <StackPanel>
                                     <Image Source="../Images/Menu/stack-50.png"
@@ -564,7 +567,7 @@
                                 </ListBox>
                             </Grid>
                         </TabItem>
-                        <TabItem x:Name="TabTunes">
+                        <TabItem x:Name="TabTunes"  Style="{StaticResource Default}">
                             <TabItem.Header>
                                 <StackPanel>
                                     <Image Source="../Images/Menu/mac_os-50.png"

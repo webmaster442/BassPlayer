@@ -6,6 +6,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="43" d:DesignWidth="400"
              Loaded="UserControl_Loaded">
+    <UserControl.Resources>
+        <Style TargetType="TabItem">
+        </Style>
+    </UserControl.Resources>
     <TabControl TabStripPlacement="Left"
                 x:Name="OSDTab"
                 Background="Transparent"
@@ -23,13 +27,11 @@
                            TextAlignment="Center"
                            FontWeight="Bold"
                            Text="Artist - Title"
-                           Style="{StaticResource GlassText}"
                            x:Name="TitleText"/>
                 <TextBlock Grid.Row="1"
                            VerticalAlignment="Center"
                            TextAlignment="Center"
                            Text="00:00:00 / 00:00:00"
-                           Style="{StaticResource GlassText}"
                            x:Name="TimeText"
                            MouseDown="TimeText_MouseDown"/>
             </Grid>

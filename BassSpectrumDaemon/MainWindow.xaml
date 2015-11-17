@@ -30,12 +30,10 @@
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Row="0"
                    Grid.Column="0"
-                   Text="Audio Output:"
-                   Style="{StaticResource GlassText}"/>
+                   Text="Audio Output:"/>
         <TextBlock Grid.Row="1"
                    Grid.Column="0"
-                   Text="Serial Port:"
-                   Style="{StaticResource GlassText}"/>
+                   Text="Serial Port:"/>
         
         <Button Content="Redetect Ports"
                 Grid.Row="2"
@@ -51,8 +49,7 @@
                   Unchecked="CbSerialOutput_Unchecked"
                   IsEnabled="{Binding ElementName=CbMonitoring, Path=IsChecked}">
             <CheckBox.Content>
-                <TextBlock Style="{StaticResource GlassText}"
-                           Text="Enable Serial Output"/>
+                <TextBlock Text="Enable Serial Output"/>
             </CheckBox.Content>
         </CheckBox>
 
@@ -62,8 +59,7 @@
                   Checked="CbMonitoring_Checked"
                   Unchecked="CbMonitoring_Unchecked">
             <CheckBox.Content>
-                <TextBlock Style="{StaticResource GlassText}"
-                           Text="Enable Output monitoring"/>
+                <TextBlock Text="Enable Output monitoring"/>
             </CheckBox.Content>
         </CheckBox>
 
@@ -79,8 +75,7 @@
         
         <TextBlock Grid.Row="5"
                    Grid.Column="0"
-                   Text="Type:"
-                   Style="{StaticResource GlassText}"/>
+                   Text="Type:"/>
         
         <StackPanel Grid.Row="5"
                     Grid.ColumnSpan="2"
@@ -90,20 +85,17 @@
                          Checked="ModeSelect"
                          Unchecked="ModeSelect"
                          x:Name="RbSpectrum">
-                <TextBlock Text="Spectrum"
-                           Style="{StaticResource GlassText}"/>
+                <TextBlock Text="Spectrum"/>
             </RadioButton>
             <RadioButton Checked="ModeSelect"
                          Unchecked="ModeSelect"
                          x:Name="RbSpectrumInverse">
-                <TextBlock Text="Inverted Spectrum"
-                           Style="{StaticResource GlassText}"/>
+                <TextBlock Text="Inverted Spectrum"/>
             </RadioButton>
             <RadioButton Checked="ModeSelect"
                          Unchecked="ModeSelect"
                          x:Name="RbLevels" Margin="10,0">
-                <TextBlock Text="Levels"
-                           Style="{StaticResource GlassText}"/>
+                <TextBlock Text="Levels"/>
             </RadioButton>
             
             <Button x:Name="BtnConfigDate"

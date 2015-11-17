@@ -7,13 +7,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using MahApps.Metro.Controls;
 
 namespace BassPlayer
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window, IDisposable
+    public partial class MainWindow : MetroWindow, IDisposable
     {
         private KeyboardHook _keyboardhook;
 

@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:BassPlayer.Classes"
              xmlns:local2="clr-namespace:BassPlayer.Controls"
              mc:Ignorable="d" 
-             d:DesignHeight="92" d:DesignWidth="854"
+             d:DesignHeight="100" d:DesignWidth="854"
              x:Name="Control"
              Loaded="UserControl_Loaded">
     <Grid>
@@ -22,7 +22,7 @@
             <ColumnDefinition Width="55"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
-            <RowDefinition Height="25"/>
+            <RowDefinition Height="30"/>
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
@@ -49,8 +49,7 @@
                     Grid.ColumnSpan="6">
             <TextBlock Text="Output Device:"
                        Margin="5,0"
-                       VerticalAlignment="Center"
-                       Style="{StaticResource GlassText}"/>
+                       VerticalAlignment="Center"/>
             <ComboBox Width="180"
                       Margin="5,0"
                       x:Name="CbDeviceList"
@@ -58,8 +57,7 @@
                       SelectionChanged="CbDeviceList_SelectionChanged"/>
             <TextBlock Text="Volume:"
                        Margin="5,0"
-                       VerticalAlignment="Center"
-                       Style="{StaticResource GlassText}"/>
+                       VerticalAlignment="Center"/>
             <Slider Width="300"
                     x:Name="VolSlider"
                     Minimum="0"
