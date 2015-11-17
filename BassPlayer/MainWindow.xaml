@@ -12,39 +12,6 @@
         Closing="Window_Closing"
         Loaded="Window_Loaded"
         Icon="Images/Menu/treble_clef-50.png">
-    <Window.Style>
-        <Style TargetType="{x:Type local2:MainWindow}">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type local2:MainWindow}">
-                        <Grid>
-                            <Border Background="Transparent"
-                                    Margin="{Binding Source={x:Static SystemParameters.WindowNonClientFrameThickness}}">
-                                <ContentPresenter Content="{TemplateBinding Content}" />
-                            </Border>
-                            <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Title}" 
-                                       VerticalAlignment="Top" HorizontalAlignment="Left" 
-                                       Margin="36,8,0,0"/>
-                            <Image Source="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Icon}"
-                                   VerticalAlignment="Top" HorizontalAlignment="Left"
-                                   Margin="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=(WindowChrome.WindowChrome).ResizeBorderThickness}" 
-                                   Width="{Binding Source={x:Static SystemParameters.SmallIconWidth}}"
-                                   WindowChrome.IsHitTestVisibleInChrome="True"/>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="WindowChrome.WindowChrome">
-                <Setter.Value>
-                    <WindowChrome GlassFrameThickness="9,146,9,9"
-                                  CaptionHeight="22"
-                                  ResizeBorderThickness="9"
-                                  NonClientFrameEdges="Bottom"/>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="Background" Value="Transparent"/>
-        </Style>
-    </Window.Style>
     <Window.TaskbarItemInfo>
         <TaskbarItemInfo x:Name="Taskbar" ProgressState="Normal">
             <TaskbarItemInfo.ThumbButtonInfos>
